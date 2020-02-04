@@ -9,6 +9,9 @@ int main(int argc, char **argv)
         return (EXIT_FAILURE); // not enough arguments for function (i.e. no i/o file)
     }
 
+
+    //test for github -------------------------------
+
     long pos_num = 0;
     long element_num = 0;
     long array = NULL;
