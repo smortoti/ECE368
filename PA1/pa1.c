@@ -9,13 +9,11 @@ int main(int argc, char **argv)
         return (EXIT_FAILURE); // not enough arguments for function (i.e. no i/o file)
     }
 
-
-    //test for github -------------------------------
-
     long pos_num = 0;
     long element_num = 0;
-    long array = NULL;
+    long * array = NULL;
     int size = 0;
+    long num_comp = 0;
 
     FILE * fptr = fopen(argv[1], 'rb');
 
@@ -28,4 +26,10 @@ int main(int argc, char **argv)
     fclose(fptr);
 
     array = Array_Load_From_File(argv[1], &size);
+
+    Array_Shellsort(array, size, &num_comp);
+
+    Array_Save_To_File(argv[1], array, size);
+
+    return(0);
 }
