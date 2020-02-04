@@ -15,12 +15,13 @@ long *Array_Load_From_File(char* filename, int* size)
         *size = 0;
         return(long_arr);
     }
+
     long_arr = malloc((sizeof(long)) * (*size)); // Define long_arr to hold the exact amount of long ints in the file
     
     if (long_arr == NULL) // Check if malloc fails
     {
-        printf("malloc failed\n")
-        *size = 0;
+        printf("malloc failed\n");
+        (*size) = 0;
     }
     
     if ((*size) == 0)

@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
     fclose(fptr);
 
-    array = Array_Load_From_File(argv[1], &size);
+    array = Array_Load_From_File(argv[1], &size); // Array sorting
 
     Array_Shellsort(array, size, &num_comp);
 
