@@ -4,7 +4,7 @@
 #include "shell_list.h"
 int main(int argc, char **argv)
 {
-    if (argc != 3)
+    if (argc != 4)
     {
         return (EXIT_FAILURE); // not enough arguments for function (i.e. no i/o file)
     }
@@ -15,14 +15,12 @@ int main(int argc, char **argv)
     int size = 0;
     long num_comp = 0;
 
-    FILE * fptr = fopen(argv[2], "rb");
+    FILE * fptr = fopen(argv[2], "r");
 
     if (fptr == NULL)
     {
         fprintf(stderr, "%s", "fopen fail\n");
     }
-
-    fprintf(stderr, "%s", "fopen success\n");
 
     fseek(fptr, 0, SEEK_END); // Find the position of the eof and use ftell to find the amount of bytes in the file
     pos_num = ftell(fptr);
@@ -44,7 +42,7 @@ int main(int argc, char **argv)
 
     fprintf(stderr, "%s", "array shellsort success\n");
 
-    Array_Save_To_File(argv[1], array, size);
+    Array_Save_To_File(argv[3], array, size);
 
     fprintf(stderr, "%s", "array write success\n");
 

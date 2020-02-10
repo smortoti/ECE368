@@ -41,22 +41,29 @@ void Array_Shellsort(long *array, int size, long *n_comp)
 {
     int i = 0;
     int j = 0;
-    int h = 0;
+    int k = 0;
     long holder = 0;
+    int sequence = 0;
 
-    for (h = 1; h <= (int)(n_comp - 1) / 9; h = 3 * h + 1); // Generates shellsort sequence
-    for ( ; h > 0; h /= 3) 
+    do
     {
-        for (i = h + size; i <= (int)n_comp; i++) // sorting loop
+        sequence = 3 * h + 1;
+    }while(sequence < size);
+
+    sequence = (sequence - 1) / 3;
+
+    for(k = sequence; k > 0; k = (k - 1) / 3)
+    {
+        for(j = k; k < size; k++)
         {
-            j = i;
-            holder = array[i]; // placeholder variable for swapping
-            while (j >= h + size && array[j - h] > holder) // perform the element swap
+            holder = array[j];
+            i = j;
+            while (i >= k && array[i-k] > holder)
             {
-                array[j] = array[j - h];
-                j -= h;
+                array[i] = array[i - k];
+                i = i - k;
             }
-            array[j] = holder;
+            array[i] = holder;
         }
     }
 }

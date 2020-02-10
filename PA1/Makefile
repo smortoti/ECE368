@@ -13,8 +13,8 @@ pa1: $(OBJS)
 testall: test1a test1l test2 test3 test4
 
 test1: pa1
-	./pa1 -a 1K.b output1Ka
-	diff output1Ka 1Ksa.b
+	./pa1 -a examples/1K.b output1Ka
+	diff output1Ka examples/1Ksa.b
 
 test1l: pa1
 	./pa1 1K.b output1Kl
