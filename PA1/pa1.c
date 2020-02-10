@@ -25,11 +25,19 @@ int main(int argc, char **argv)
 
     fclose(fptr);
 
+    fprintf(stdout, "%s", "size success\n");
+
     array = Array_Load_From_File(argv[1], &size); // Array sorting
+
+    fprintf(stdout, "%s", "array load success\n");
 
     Array_Shellsort(array, size, &num_comp);
 
+    fprintf(stdout, "%s", "array shellsort success\n");
+
     Array_Save_To_File(argv[1], array, size);
+
+    fprintf(stdout, "%s", "array write success\n");
 
     return(0);
 }

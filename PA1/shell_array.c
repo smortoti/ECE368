@@ -6,7 +6,7 @@
 
 long *Array_Load_From_File(char* filename, int* size)
 {
-    FILE * fptr = fopen(filename, 'r');
+    FILE * fptr = fopen(filename, "r");
     long * long_arr = NULL;
     
     if (fptr == NULL) // Check if fopen fails
@@ -29,7 +29,7 @@ long *Array_Load_From_File(char* filename, int* size)
         return (long_arr);
     }
     
-    fread(long_arr, sizeof(long), size, fptr); // Reads from file into array
+    fread(long_arr, sizeof(long), *size, fptr); // Reads from file into array
 
     fclose(fptr);
 
@@ -47,7 +47,7 @@ void Array_Shellsort(long *array, int size, long *n_comp)
     for (h = 1; h <= (int)(n_comp - 1) / 9; h = 3 * h + 1); // Generates shellsort sequence
     for ( ; h > 0; h /= 3) 
     {
-        for (i = h + size; i <= n_comp; i++) // sorting loop
+        for (i = h + size; i <= (int)n_comp; i++) // sorting loop
         {
             j = i;
             holder = array[i]; // placeholder variable for swapping
@@ -63,10 +63,10 @@ void Array_Shellsort(long *array, int size, long *n_comp)
 
 int Array_Save_To_File(char * filename, long * array, int size)
 {
-    FILE * fptr = fopen(filename, 'wb');
+    FILE * fptr = fopen(filename, "wb");
     int write_num = 0;
 
-    if (fptr == NULL); // Checks if fopen fails
+    if (fptr == NULL) // Checks if fopen fails
     {
         //fprintf(stderr, 'fopen fail\n');
         size = 0;
