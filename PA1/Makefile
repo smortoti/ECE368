@@ -10,7 +10,7 @@ pa1: $(OBJS)
 .c.o: 
 	$(GCC) -c $*.c 
 
-testall: test1a test1l test2 test3 test4
+testall: test1a test1l test2a test2l
 
 test1a: pa1
 	./pa1 -a examples/1K.b output1Ka
