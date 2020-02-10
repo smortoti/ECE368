@@ -11,7 +11,7 @@ long *Array_Load_From_File(char* filename, int* size)
     
     if (fptr == NULL) // Check if fopen fails
     {
-        printf(stderr, "fopen failed\n");
+     //   fprintf(stderr, "fopen failed\n");
         *size = 0;
         return(long_arr);
     }
@@ -20,7 +20,7 @@ long *Array_Load_From_File(char* filename, int* size)
     
     if (long_arr == NULL) // Check if malloc fails
     {
-        printf(stderr, "malloc failed\n");
+    //    fprintf(stderr, "malloc failed\n");
         (*size) = 0;
     }
     
@@ -44,14 +44,14 @@ void Array_Shellsort(long *array, int size, long *n_comp)
     int h = 0;
     long holder = 0;
 
-    for (h = 1; h <= (n_comp - 1) / 9; h = 3 * h + 1); // Generates shellsort sequence
+    for (h = 1; h <= (int)(n_comp - 1) / 9; h = 3 * h + 1); // Generates shellsort sequence
     for ( ; h > 0; h /= 3) 
     {
         for (i = h + size; i <= n_comp; i++) // sorting loop
         {
             j = i;
             holder = array[i]; // placeholder variable for swapping
-            while (j >= h + size && less(holder, array[j - h])) // perform the element swap
+            while (j >= h + size && array[j - h] > holder) // perform the element swap
             {
                 array[j] = array[j - h];
                 j -= h;
@@ -68,12 +68,13 @@ int Array_Save_To_File(char * filename, long * array, int size)
 
     if (fptr == NULL); // Checks if fopen fails
     {
-        printf(stderr, 'fopen fail\n');
+        //fprintf(stderr, 'fopen fail\n');
+        size = 0;
     }
 
     if (array == NULL) // Checks if array is valid
     {
-        (size) = 0;
+        size = 0;
     }
     
     if ((size) == 0) // Checks valid size
