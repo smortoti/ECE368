@@ -47,22 +47,25 @@ void Array_Shellsort(long *array, int size, long *n_comp)
 
     do
     {
-        sequence = 3 * h + 1;
+        sequence = 3 * sequence + 1;
     }while(sequence < size);
 
     sequence = (sequence - 1) / 3;
 
     for(k = sequence; k > 0; k = (k - 1) / 3)
     {
-        for(j = k; k < size; k++)
+        for(j = k; j < size; j++)
         {
             holder = array[j];
             i = j;
-            while (i >= k && array[i-k] > holder)
+
+            while ((i >= k) && (array[i-k] > holder))
             {
                 array[i] = array[i - k];
                 i = i - k;
+                (*n_comp)++;
             }
+            (*n_comp)++;
             array[i] = holder;
         }
     }

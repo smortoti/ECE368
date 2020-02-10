@@ -26,25 +26,18 @@ int main(int argc, char **argv)
     pos_num = ftell(fptr);
     rewind(fptr);
 
-    fprintf(stderr, "%s", "fseek success\n");
 
     size = pos_num / sizeof(long); // Calculate the amount of long ints in the file
 
     fclose(fptr);
 
-    fprintf(stderr, "%s", "size success\n");
-
     array = Array_Load_From_File(argv[2], &size); // Array sorting
-
-    fprintf(stderr, "%s", "array load success\n");
 
     Array_Shellsort(array, size, &num_comp);
 
-    fprintf(stderr, "%s", "array shellsort success\n");
-
     Array_Save_To_File(argv[3], array, size);
 
-    fprintf(stderr, "%s", "array write success\n");
+    printf("%ld\n", num_comp);
 
     return(0);
 }

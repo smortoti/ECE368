@@ -12,13 +12,17 @@ pa1: $(OBJS)
 
 testall: test1a test1l test2 test3 test4
 
-test1: pa1
+test1a: pa1
 	./pa1 -a examples/1K.b output1Ka
 	diff output1Ka examples/1Ksa.b
 
 test1l: pa1
 	./pa1 1K.b output1Kl
 	diff output1kl 1Ksl.b
+
+test2a: pa1
+	./pa1 -a examples/15.b output15b
+	diff output15b examples/15sa.b
 
 clean: # remove all machine generated files
 	rm -f pa1 *.o output???
