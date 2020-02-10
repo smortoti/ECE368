@@ -34,3 +34,27 @@ long *Array_Load_From_File(char* filename, int* size)
     return(long_arr);
 
 }
+
+void Array_Shellsort(long *array, int size, long *n_comp)
+{
+    int i = 0;
+    int j = 0;
+    int h = 0;
+    long holder = 0;
+
+    for (h = 1; h <= (n_comp - 1) / 9; h = 3 * h + 1);
+    for ( ; h > 0; h /= 3)
+    {
+        for (i = h + size; i <= n_comp; i++)
+        {
+            j = i;
+            holder = array[i];
+            while (j >= h + size && less(holder, array[j - h]))
+            {
+                array[j] = array[j - h];
+                j -= h;
+            }
+            array[j] = holder;
+        }
+    }
+}
