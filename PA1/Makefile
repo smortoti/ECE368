@@ -26,7 +26,5 @@ test2a: pa1
 
 clean: # remove all machine generated files
 	rm -f pa1 *.o output???
-update:
-	git push -u https://drewlew13:IndyJags13@github.com/drewlew13/ECE368.git master
 push:
 	git push origin master
