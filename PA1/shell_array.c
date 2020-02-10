@@ -11,7 +11,7 @@ long *Array_Load_From_File(char* filename, int* size)
     
     if (fptr == NULL) // Check if fopen fails
     {
-        printf("fopen failed\n");
+        printf(stderr, "fopen failed\n");
         *size = 0;
         return(long_arr);
     }
@@ -20,16 +20,18 @@ long *Array_Load_From_File(char* filename, int* size)
     
     if (long_arr == NULL) // Check if malloc fails
     {
-        printf("malloc failed\n");
+        printf(stderr, "malloc failed\n");
         (*size) = 0;
     }
     
-    if ((*size) == 0)
+    if ((*size) == 0) // Check if size is 0
     {
         return (long_arr);
     }
     
-    fread(long_arr, sizeof(long), size, fptr);
+    fread(long_arr, sizeof(long), size, fptr); // Reads from file into array
+
+    fclose(fptr);
 
     return(long_arr);
 
@@ -42,14 +44,14 @@ void Array_Shellsort(long *array, int size, long *n_comp)
     int h = 0;
     long holder = 0;
 
-    for (h = 1; h <= (n_comp - 1) / 9; h = 3 * h + 1);
-    for ( ; h > 0; h /= 3)
+    for (h = 1; h <= (n_comp - 1) / 9; h = 3 * h + 1); // Generates shellsort sequence
+    for ( ; h > 0; h /= 3) 
     {
-        for (i = h + size; i <= n_comp; i++)
+        for (i = h + size; i <= n_comp; i++) // sorting loop
         {
             j = i;
-            holder = array[i];
-            while (j >= h + size && less(holder, array[j - h]))
+            holder = array[i]; // placeholder variable for swapping
+            while (j >= h + size && less(holder, array[j - h])) // perform the element swap
             {
                 array[j] = array[j - h];
                 j -= h;
@@ -57,4 +59,31 @@ void Array_Shellsort(long *array, int size, long *n_comp)
             array[j] = holder;
         }
     }
+}
+
+int Array_Save_To_File(char * filename, long * array, int size)
+{
+    FILE * fptr = fopen(filename, 'wb');
+    int write_num = 0;
+
+    if (fptr == NULL); // Checks if fopen fails
+    {
+        printf(stderr, 'fopen fail\n');
+    }
+
+    if (array == NULL) // Checks if array is valid
+    {
+        (size) = 0;
+    }
+    
+    if ((size) == 0) // Checks valid size
+    {
+        return(fwrite(array, sizeof(long), size, fptr)); // Creates empty output file if any error occurs
+    }
+
+    write_num = fwrite(array, sizeof(long), size, fptr); // Writes to the new output file
+
+    fclose(fptr); // Closes file
+
+    return(write_num);
 }
