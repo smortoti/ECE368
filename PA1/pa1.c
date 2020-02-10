@@ -9,19 +9,24 @@ int main(int argc, char **argv)
         return (EXIT_FAILURE); // not enough arguments for function (i.e. no i/o file)
     }
 
-    long pos_num = 0;
+    int pos_num = 0;
     long element_num = 0;
     long * array = NULL;
     int size = 0;
     long num_comp = 0;
 
-    FILE * fptr = fopen(argv[1], "rb");
+    FILE * fptr = fopen(argv[2], "rb");
+
+    if (fptr == NULL)
+    {
+        fprintf(stderr, "%s", "fopen fail\n");
+    }
 
     fprintf(stderr, "%s", "fopen success\n");
 
     fseek(fptr, 0, SEEK_END); // Find the position of the eof and use ftell to find the amount of bytes in the file
     pos_num = ftell(fptr);
-    fseek(fptr, 0, SEEK_SET);
+    rewind(fptr);
 
     fprintf(stderr, "%s", "fseek success\n");
 
@@ -31,7 +36,7 @@ int main(int argc, char **argv)
 
     fprintf(stderr, "%s", "size success\n");
 
-    array = Array_Load_From_File(argv[1], &size); // Array sorting
+    array = Array_Load_From_File(argv[2], &size); // Array sorting
 
     fprintf(stderr, "%s", "array load success\n");
 
