@@ -15,29 +15,33 @@ int main(int argc, char **argv)
     int size = 0;
     long num_comp = 0;
 
-    FILE * fptr = fopen(argv[1], 'rb');
+    FILE * fptr = fopen(argv[1], "rb");
+
+    fprintf(stderr, "%s", "fopen success\n");
 
     fseek(fptr, 0, SEEK_END); // Find the position of the eof and use ftell to find the amount of bytes in the file
     pos_num = ftell(fptr);
     fseek(fptr, 0, SEEK_SET);
 
+    fprintf(stderr, "%s", "fseek success\n");
+
     size = pos_num / sizeof(long); // Calculate the amount of long ints in the file
 
     fclose(fptr);
 
-    fprintf(stdout, "%s", "size success\n");
+    fprintf(stderr, "%s", "size success\n");
 
     array = Array_Load_From_File(argv[1], &size); // Array sorting
 
-    fprintf(stdout, "%s", "array load success\n");
+    fprintf(stderr, "%s", "array load success\n");
 
     Array_Shellsort(array, size, &num_comp);
 
-    fprintf(stdout, "%s", "array shellsort success\n");
+    fprintf(stderr, "%s", "array shellsort success\n");
 
     Array_Save_To_File(argv[1], array, size);
 
-    fprintf(stdout, "%s", "array write success\n");
+    fprintf(stderr, "%s", "array write success\n");
 
     return(0);
 }
