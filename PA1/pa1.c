@@ -14,6 +14,8 @@ int main(int argc, char **argv)
     long * array = NULL;
     int size = 0;
     long num_comp = 0;
+    Node * list = NULL;
+    int num_written = 0;
 
     FILE * fptr = fopen(argv[2], "r");
 
@@ -36,6 +38,15 @@ int main(int argc, char **argv)
     Array_Shellsort(array, size, &num_comp);
 
     Array_Save_To_File(argv[3], array, size);
+
+    printf("%ld\n", num_comp);
+    num_comp = 0;
+
+    list = List_Load_From_File(argv[2]);
+
+    list = List_Shellsort(list, &num_comp);
+
+    num_written = List_Save_To_File(argv[3], list);
 
     printf("%ld\n", num_comp);
 

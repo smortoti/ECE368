@@ -41,7 +41,7 @@ void Array_Shellsort(long *array, int size, long *n_comp)
 {
     int i = 0;
     int j = 0;
-    int k = 0;
+    long k = 0;
     long holder = 0;
     int sequence = 0;
 

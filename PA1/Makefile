@@ -1,8 +1,7 @@
 WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
-GCC = gcc -g -std=c99 -g $(WARNING) $(ERROR) 
+GCC = gcc -g -std=c99 $(WARNINGFLAGS)
 
-SRCS = shell_array.c pa1.c # shell_list.c - Commented out to test shellsorted array
-OBJS = $(SRCS:%.c=%.o)
+SRCS = shell_array.c shell_list.c pa1.c
 
 pa1: $(OBJS) 
 	$(GCC) $(OBJS) -o pa1
@@ -17,8 +16,7 @@ test1a: pa1
 	diff output1Ka examples/1Ksa.b
 
 test1l: pa1
-	./pa1 1K.b output1Kl
-	diff output1kl 1Ksl.b
+	./pa1 -l examples/1K.b output1Kl
 
 test2a: pa1
 	./pa1 -a examples/15.b output15a
