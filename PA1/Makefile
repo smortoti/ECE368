@@ -21,8 +21,15 @@ test1l: pa1
 	diff output1kl 1Ksl.b
 
 test2a: pa1
-	./pa1 -a examples/15.b output15b
-	diff output15b examples/15sa.b
+	./pa1 -a examples/15.b output15a
+	diff output15a examples/15sa.b
+
+test2l: pa1
+	./pa1 -a examples/15.b output15l
+	diff output15l examples/15sa.b
+
+test1M: pa1
+	./pa1 -a examples/1M.b output1Ma
 
 clean: # remove all machine generated files
 	rm -f pa1 *.o output???
