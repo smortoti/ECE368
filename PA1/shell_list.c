@@ -4,7 +4,7 @@
 #include <string.h>
 #include "shell_list.h"
 
-typedef struct List
+typedef struct List // created a list structure to more efficiently add nodes to the list
 {
     Node * head;
     Node * tail;
@@ -18,7 +18,7 @@ List * addNode(List * headnode, long val)
     newnode -> value = val;
     newnode -> next = NULL;
 
-    if (headnode -> head == NULL)
+    if (headnode -> head == NULL) // Adds node if list structure has no nodes
     {
         headnode -> head = newnode;
         headnode -> tail = newnode;
@@ -27,7 +27,7 @@ List * addNode(List * headnode, long val)
         return(headnode);
     }
 
-    else
+    else // Adds node if list structure already has node
     {
         headnode -> tail -> next = newnode;
         headnode -> tail = headnode -> tail -> next;
@@ -49,9 +49,9 @@ Node * List_Load_From_File(char * filename)
     List * nodelist = malloc(sizeof(List));
     long holder = 0;
 
-    while(fread((void *)holder, sizeof(long), 1, fptr))
+    while(fread((void *)holder, sizeof(long), 1, fptr)) // Reads into node
     {
-        nodelist = addNode(nodelist, holder);
+        nodelist = addNode(nodelist, holder); // Adds node for each value
     }
 
     fclose(fptr);
@@ -83,20 +83,20 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
     long o = 0;
     Node * tempholder2 = NULL;
 
-    while (nodecount -> next != NULL)
+    while (nodecount -> next != NULL) // Finds size of linked list
     {
         nodecount -> next = nodecount;
         counter++;
     }
 
-    do
+    do // Generates sequence
     {
         sequence = 3 * sequence + 1;
     }while(sequence < counter);
 
     sequence = (sequence - 1) / 3;
-
-    for(k = sequence; k > 0; k = (k - 1) / 3)
+    /* Shellsort algorithm using while loops to make up for array indexing. Any array indexing is used with a while loop to progress the linked list. */
+    for(k = sequence; k > 0; k = (k - 1) / 3) 
     {
         while(j < counter)
         {
@@ -145,13 +145,13 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                     tempholder3 = tempholder3 -> next;
                 }
 
-                arraytemp1 -> next = arraytemp2 -> next;
+                arraytemp1 -> next = arraytemp2 -> next; // Swap statements
                 arraytemp2 -> next = tempholder -> next;
                 tempholder2 -> next = arraytemp2;
                 tempholder3 -> next = arraytemp1;
 
                 l = l - k;
-                (*n_comp)++;
+                (*n_comp)++; // Adds to number of comparisons
 
             }
             (*n_comp)++;
@@ -175,7 +175,7 @@ int List_Save_To_File(char * filename, Node * nodelist)
 
     while(fwrite((void *)tempnode -> value, sizeof(long), 1, fptr))
     {
-        tempnode = tempnode -> next;
+        tempnode = tempnode -> next; // writes to file, advances node
         write_num++;
     }
 

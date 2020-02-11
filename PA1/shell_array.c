@@ -45,27 +45,27 @@ void Array_Shellsort(long *array, int size, long *n_comp)
     long holder = 0;
     int sequence = 0;
 
-    do
+    do // Generates the sequence for shellsort
     {
         sequence = 3 * sequence + 1;
     }while(sequence < size);
 
-    sequence = (sequence - 1) / 3;
+    sequence = (sequence - 1) / 3; // Decrements the sequence initially
 
-    for(k = sequence; k > 0; k = (k - 1) / 3)
+    for(k = sequence; k > 0; k = (k - 1) / 3) // Shellsort algorithm
     {
         for(j = k; j < size; j++)
         {
             holder = array[j];
             i = j;
 
-            while ((i >= k) && (array[i-k] > holder))
+            while ((i >= k) && (array[i-k] > holder)) // Swaps elements
             {
                 array[i] = array[i - k];
                 i = i - k;
-                (*n_comp)++;
+                (*n_comp)++; // Adds to number of comparisons
             }
-            (*n_comp)++;
+            (*n_comp)++; // Adds for the last comparison
             array[i] = holder;
         }
     }
@@ -78,7 +78,6 @@ int Array_Save_To_File(char * filename, long * array, int size)
 
     if (fptr == NULL) // Checks if fopen fails
     {
-        //fprintf(stderr, 'fopen fail\n');
         size = 0;
     }
 
