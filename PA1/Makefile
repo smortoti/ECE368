@@ -24,7 +24,7 @@ test2a: pa1
 	./pa1 -a examples/15.b output15a
 	diff output15a examples/15sa.b
 
-test2l: pa1
+test2l: pa1ma
 	./pa1 -a examples/15.b output15l
 	diff output15l examples/15sa.b
 
