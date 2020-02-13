@@ -18,7 +18,7 @@ typedef struct _Node // Dynamic memory for frequency
 
 List * Read_From_File(char * filename);
 
-List * Add_Node(List * head, char chr, long freq);
+List * Add_Node(List * head, char chr);
 
 void Read_Freq(char * filename, List * head);
 
