@@ -20,6 +20,8 @@ List * Read_From_File(char * filename)
         chr_list = Add_Node(chr_list, chr);
     }
 
+    fclose(fptr);
+
     return(chr_list);
 
 }
@@ -56,5 +58,24 @@ List * Add_Node(List * head, char chr)
     newNode -> freq = 1;
 
     return(head);
+
+}
+
+void Read_Freq(char * filename, List * head)
+{
+    FILE * fptr = fopen(filename, "wb");
+    
+    if (fptr == NULL)
+    {
+        fprintf(stderr, "fopen fail\n");
+        return;
+    }
+
+    List * tmpNode = head;
+
+    while(tmpNode -> next != NULL)
+    {
+        fwrite(tmpNode -> freq, sizeof(long), 1, fptr);
+    }
 
 }
