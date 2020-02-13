@@ -29,5 +29,3 @@ test1M: pa1
 
 clean: # remove all machine generated files
 	rm -f pa1 *.o output???
-push:
-	git push origin master
