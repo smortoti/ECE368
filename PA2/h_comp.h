@@ -24,6 +24,8 @@ void Read_Freq(char * filename, List * head);
 
 Tree * Build_Tree(List * head);
 
+Tree * Add_TreeNode(char chr, char * bin_code);
+
 void PreOrder_Traverse(char * filename, Tree * treenode);
 
 void PreOrder_Traverse_Code(char * filename, Tree * treenode);
