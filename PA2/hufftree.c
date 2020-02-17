@@ -156,15 +156,6 @@ Tree * Build_Tree(List * head)
 
     return listToBstBuild(&head, size);
 }
-
-Tree * ListToBST(struct LNode *head) 
-{ 
-    /*Count the number of nodes in Linked List */
-    int n = countLNodes(head); 
-  
-    /* Construct BST */
-    return sortedListToBSTRecur(&head, n); 
-} 
   
 /* The main function that constructs balanced BST and returns root of it. 
        head_ref -->  Pointer to pointer to head node of linked list 
