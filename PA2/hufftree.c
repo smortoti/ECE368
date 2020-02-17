@@ -159,35 +159,35 @@ Tree * Build_Tree(List * head)
     return listToBstBuild(&head, size);
 }
   
-/* The main function that constructs balanced BST and returns root of it. 
+/*/* The main function that constructs balanced BST and returns root of it. 
        head_ref -->  Pointer to pointer to head node of linked list 
-       n  --> No. of nodes in Linked List */
+       n  --> No. of nodes in Linked List
 Tree * listToBstBuild(List ** head_ref, long n) 
 { 
-    /* Base Case */
+    /* Base Case
     if (n <= 0)
     {
         return NULL;
     }  
   
-    /* Recursively construct the left subtree */
+    /* Recursively construct the left subtree 
     Tree * left = listToBstBuild(head_ref, n/2); 
   
     /* Allocate memory for root, and link the above constructed left  
-       subtree with root */
+       subtree with root 
     Tree * root = Add_TreeNode((*head_ref)->chr, NULL); 
     root -> left = left; 
   
-    /* Change head pointer of Linked List for parent recursive calls */
+    /* Change head pointer of Linked List for parent recursive calls
     *head_ref = (*head_ref) -> next; 
   
     /* Recursively construct the right subtree and link it with root  
       The number of nodes in right subtree  is total nodes - nodes in  
-      left subtree - 1 (for root) which is n-n/2-1*/
+      left subtree - 1 (for root) which is n-n/2-1
     root -> right = listToBstBuild(head_ref, n-n/2-1); 
   
     return root; 
-} 
+} */
 
 void PreOrder_Traverse(char * filename, Tree * root)
 {
