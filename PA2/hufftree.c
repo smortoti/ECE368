@@ -81,6 +81,8 @@ void Read_Freq(char * filename, List * head)
         tmpNode = tmpNode -> next;
     }while(tmpNode -> next != NULL);
 
+    fclose(fptr);
+
 }
 
 List * sort_List(List * head)
@@ -186,3 +188,17 @@ Tree * listToBstBuild(List ** head_ref, long n)
   
     return root; 
 } 
+
+void PreOrder_Traverse(char * filename, Tree * root)
+{
+    FILE * fptr = fopen(filename, "wb");
+
+    if (fptr == NULL)
+    {
+        fprintf(stderr, "fopen fail\n");
+        return;
+    }
+
+    
+
+}
