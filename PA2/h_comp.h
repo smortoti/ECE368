@@ -24,6 +24,8 @@ void Read_Freq(char * filename, List * head);
 
 List * sort_List(List * head);
 
+long countNode(List * head);
+
 List * Free_Node(List * head, List * nodeToDelete);
 
 Tree * Build_Tree(List * head);

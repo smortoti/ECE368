@@ -122,20 +122,27 @@ void swap(List * node1, List * node2)
     node2 -> chr = temp -> chr;
 } 
 
+long countNode(List * head)
+{
+    long count = 0;
+    List * tempNode = NULL;
+
+    while(temp != NULL)
+    {
+        temp = temp -> next;
+        count++;
+    }
+
+    return(count);
+}
+
 Tree * Build_Tree(List * head)
 {
     Tree * bin_tree = sizeof(*bin_tree);
     List * tmpNode = head;
-    long size = head -> freq;
+    long size = 0;
 
-    do
-    {
-        tmpNode = tmpNode -> next;
-        if (tmpNode -> freq < size)
-        {
-            size = tmpNode -> freq;
-        }
-    }while(tmpNode -> next != NULL);
+    size = countNode(head);
 
     bin_tree = Add_TreeNode(head, size);
 
