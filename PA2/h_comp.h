@@ -22,6 +22,10 @@ List * Add_Node(List * head, char chr);
 
 void Read_Freq(char * filename, List * head);
 
+List * sort_List(List * head);
+
+List * Free_Node(List * head, List * nodeToDelete);
+
 Tree * Build_Tree(List * head);
 
 Tree * Add_TreeNode(char chr, char * bin_code);

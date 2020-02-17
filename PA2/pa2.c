@@ -13,6 +13,7 @@ int main(int argc, char * argv)
 
     List * chr_freqs = NULL;
     Tree * huff_tree = NULL;
+    List * sortedList = NULL;
 
     chr_freqs = Read_From_File(argv[1]);
 
@@ -23,6 +24,10 @@ int main(int argc, char * argv)
     }
 
     Read_Freq(argv[2], chr_freqs);
+
+    sortedList = malloc(sizeof(List));
+
+    sortedList = sort_List(chr_freqs);
 
     huff_tree = Build_Tree(chr_freqs);
 
