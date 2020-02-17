@@ -17,19 +17,14 @@ typedef struct _Node // Dynamic memory for frequency
 } List;
 
 List * Read_From_File(char * filename);
-
 List * Add_Node(List * head, char chr);
 
 void Read_Freq(char * filename, List * head);
 
 List * sort_List(List * head);
-
 long countNode(List * head);
 
-List * Free_Node(List * head, List * nodeToDelete);
-
 Tree * Build_Tree(List * head);
-
 Tree * Add_TreeNode(char chr, char * bin_code);
 
 void PreOrder_Traverse(char * filename, Tree * treenode);
@@ -38,6 +33,7 @@ void PreOrder_Traverse_Code(char * filename, Tree * treenode);
 
 void Compress(char * filenamein, char * filenameout, Tree * treenode);
 
+List * Free_Node(List * head, List * nodeToDelete);
 List * Destroy_List(List * head);
 
 #endif

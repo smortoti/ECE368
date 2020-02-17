@@ -127,27 +127,71 @@ long countNode(List * head)
     long count = 0;
     List * tempNode = NULL;
 
-    while(temp != NULL)
+    while(tempNode != NULL)
     {
-        temp = temp -> next;
+        tempNode = tempNode -> next;
         count++;
     }
 
     return(count);
 }
 
+Tree * Add_TreeNode(char chr, char * string)
+{
+    Tree * node = malloc(sizeof(*node)); 
+
+    node->chr = chr; 
+    node -> bin_code = string;
+    node -> left = NULL; 
+    node -> right = NULL; 
+  
+    return node; 
+}
+
 Tree * Build_Tree(List * head)
 {
-    Tree * bin_tree = sizeof(*bin_tree);
-    List * tmpNode = head;
     long size = 0;
 
     size = countNode(head);
 
-    bin_tree = Add_TreeNode(head, size);
-
-
-
-
-
+    return listToBstBuild(&head, size);
 }
+
+Tree * ListToBST(struct LNode *head) 
+{ 
+    /*Count the number of nodes in Linked List */
+    int n = countLNodes(head); 
+  
+    /* Construct BST */
+    return sortedListToBSTRecur(&head, n); 
+} 
+  
+/* The main function that constructs balanced BST and returns root of it. 
+       head_ref -->  Pointer to pointer to head node of linked list 
+       n  --> No. of nodes in Linked List */
+Tree * listToBstBuild(List ** head_ref, long n) 
+{ 
+    /* Base Case */
+    if (n <= 0)
+    {
+        return NULL;
+    }  
+  
+    /* Recursively construct the left subtree */
+    Tree * left = listToBstBuild(head_ref, n/2); 
+  
+    /* Allocate memory for root, and link the above constructed left  
+       subtree with root */
+    Tree * root = Add_TreeNode((*head_ref)->chr, NULL); 
+    root -> left = left; 
+  
+    /* Change head pointer of Linked List for parent recursive calls */
+    *head_ref = (*head_ref) -> next; 
+  
+    /* Recursively construct the right subtree and link it with root  
+      The number of nodes in right subtree  is total nodes - nodes in  
+      left subtree - 1 (for root) which is n-n/2-1*/
+    root -> right = listToBstBuild(head_ref, n-n/2-1); 
+  
+    return root; 
+} 
