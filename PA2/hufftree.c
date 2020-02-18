@@ -138,56 +138,39 @@ long countNode(List * head)
     return(count);
 }
 
-Tree * Add_TreeNode(char chr, char * string)
+Tree * Add_TreeNode(List * head, List * head_next)
 {
-    Tree * node = malloc(sizeof(*node)); 
+    Tree * left = malloc(sizeof(Tree)); 
+    Tree * right = malloc(sizeof(Tree));
+    Tree * branch = malloc(sizeof(Tree));
 
-    node->chr = chr; 
-    node -> bin_code = string;
-    node -> left = NULL; 
-    node -> right = NULL; 
+    left -> chr = head -> chr; 
+    left -> bin_code = NULL;
+    left -> freq = head -> freq;
+    left -> left = NULL; 
+    left -> right = NULL; 
+
+    right -> chr = head_next -> chr;
+    right -> bin_code = NULL;
+    right -> freq = head_next -> freq;
+    right -> left = NULL;
+    right -> right = NULL;
+
+    branch -> chr = '\0';
+    branch -> bin_code = NULL;
+    branch -> freq = head -> freq + head_next -> freq;
+    branch -> left = left;
+    branch -> right = right;
+
   
-    return node; 
+    return branch; 
 }
 
 Tree * Build_Tree(List * head)
 {
-    long size = 0;
+    Add_TreeNode(head, head -> next);
 
-    size = countNode(head);
-
-    return listToBstBuild(&head, size);
 }
-  
-/*/* The main function that constructs balanced BST and returns root of it. 
-       head_ref -->  Pointer to pointer to head node of linked list 
-       n  --> No. of nodes in Linked List
-Tree * listToBstBuild(List ** head_ref, long n) 
-{ 
-    /* Base Case
-    if (n <= 0)
-    {
-        return NULL;
-    }  
-  
-    /* Recursively construct the left subtree 
-    Tree * left = listToBstBuild(head_ref, n/2); 
-  
-    /* Allocate memory for root, and link the above constructed left  
-       subtree with root 
-    Tree * root = Add_TreeNode((*head_ref)->chr, NULL); 
-    root -> left = left; 
-  
-    /* Change head pointer of Linked List for parent recursive calls
-    *head_ref = (*head_ref) -> next; 
-  
-    /* Recursively construct the right subtree and link it with root  
-      The number of nodes in right subtree  is total nodes - nodes in  
-      left subtree - 1 (for root) which is n-n/2-1
-    root -> right = listToBstBuild(head_ref, n-n/2-1); 
-  
-    return root; 
-} */
 
 void PreOrder_Traverse(char * filename, Tree * root)
 {
