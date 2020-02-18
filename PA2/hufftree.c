@@ -185,7 +185,7 @@ Tree * Build_Tree(List * head)
 
     while(head != NULL)
     {
-       treeArray[i] = Add_TreeNode(head, head -> next);
+       treeArray[i] = Add_TreeNode(head);
 
        head = Free_Node(head, head);
 
