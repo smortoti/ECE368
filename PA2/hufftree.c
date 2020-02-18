@@ -162,13 +162,56 @@ Tree * Add_TreeNode(List * head, List * head_next)
     branch -> left = left;
     branch -> right = right;
 
-  
     return branch; 
+}
+
+List * Insert_Node(List * head, long freq)
+{
+    List * newNode = malloc(sizeof(*newNode));
+
+    newNode -> freq = freq;
+    newNode -> chr = '\0';
+
+    List * tempNode = head;
+
+    while (newNode -> freq > tempNode -> next -> freq)
+    {
+        tempNode = tempNode -> next;
+    }
+
+    List * holder = NULL;
+
+    if (tempNode -> next != NULL)
+    {
+        List * holder = tempNode -> next;
+    }
+
+    tempNode -> next = newNode;
+    newNode -> next = holder;
+
+    return head;
+
+
+
 }
 
 Tree * Build_Tree(List * head)
 {
-    Add_TreeNode(head, head -> next);
+    long size = countNode(head);
+
+    Tree ** treeArray = malloc(sizeof(Tree *) * size);
+    long i = 0;
+
+    while(head -> next != NULL)
+    {
+       treeArray[i] = Add_TreeNode(head, head -> next);
+       i++;
+
+       head = Free_Node(head, head);
+       head = Free_Node(head, head);
+
+       head = Insert_Node(head, treeArray[i - 1] -> freq)
+    }
 
 }
 

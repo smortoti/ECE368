@@ -17,23 +17,13 @@ typedef struct _Node // Dynamic memory for frequency
     struct _Node * next;
 } List;
 
-typedef struct _Queue
-{
-    long size; // size of queue
-    long capacity; // capacity of queue
-    struct Tree ** array; // array of tree nodes
-} Queue;
-
 List * Read_From_File(char * filename);
 List * Add_Node(List * head, char chr);
 
 void Read_Freq(char * filename, List * head);
 
 List * sort_List(List * head);
-long countNode(List * head);
 
-Queue * Create_Queue(long capacity);
-void minQueue(Queue * queue, long i);
 Tree * Build_Tree(List * head);
 Tree * Add_TreeNode(List * head, List * head_next);
 
