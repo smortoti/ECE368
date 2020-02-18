@@ -183,13 +183,18 @@ Tree * Build_Tree(List * head)
     Tree ** treeArray = malloc(sizeof(Tree *) * size);
     long i = 0;
 
-    while(head != NULL)
+    while(head != NULL) // creates array of tree nodes
     {
        treeArray[i] = Add_TreeNode(head);
 
        head = Free_Node(head, head);
 
        i++;
+    }
+
+    while(size > 1) // realloc array to shrink as tree builds
+    {
+
     }
 
 }
