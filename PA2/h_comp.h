@@ -25,7 +25,7 @@ void Read_Freq(char * filename, List * head);
 List * sort_List(List * head);
 
 Tree * Build_Tree(List * head);
-Tree * Add_TreeNode(List * head, List * head_next);
+Tree * Add_TreeNode(List * head);
 
 void PreOrder_Traverse(char * filename, Tree * treenode);
 

@@ -138,60 +138,41 @@ long countNode(List * head)
     return(count);
 }
 
-Tree * Add_TreeNode(List * head, List * head_next)
+Tree * Add_TreeNode(List * head)
 {
-    Tree * left = malloc(sizeof(Tree)); 
-    Tree * right = malloc(sizeof(Tree));
-    Tree * branch = malloc(sizeof(Tree));
+    Tree * root = malloc(sizeof(Tree));
 
-    left -> chr = head -> chr; 
-    left -> bin_code = NULL;
-    left -> freq = head -> freq;
-    left -> left = NULL; 
-    left -> right = NULL; 
+    root -> freq = head -> freq;
+    root -> chr = head -> chr;
+    root -> bin_code = NULL;
+    root -> left = root -> right = NULL;
 
-    right -> chr = head_next -> chr;
-    right -> bin_code = NULL;
-    right -> freq = head_next -> freq;
-    right -> left = NULL;
-    right -> right = NULL;
-
-    branch -> chr = '\0';
-    branch -> bin_code = NULL;
-    branch -> freq = head -> freq + head_next -> freq;
-    branch -> left = left;
-    branch -> right = right;
-
-    return branch; 
+    return root; 
 }
 
-List * Insert_Node(List * head, long freq)
+List * Free_Node(List * head, List * nodeToDelete)
 {
-    List * newNode = malloc(sizeof(*newNode));
+    List * temp = head;
 
-    newNode -> freq = freq;
-    newNode -> chr = '\0';
+    if (head == nodeToDelete)
+    {   
+        free(head);
 
-    List * tempNode = head;
-
-    while (newNode -> freq > tempNode -> next -> freq)
+        return (temp -> next);
+    }
+    
+    while (temp -> next != nodeToDelete)
     {
-        tempNode = tempNode -> next;
+        temp = temp -> next;
     }
 
-    List * holder = NULL;
+    List * ln = temp -> next;
 
-    if (tempNode -> next != NULL)
-    {
-        List * holder = tempNode -> next;
-    }
+    free(temp -> next);
 
-    tempNode -> next = newNode;
-    newNode -> next = holder;
+    temp -> next = ln -> next;
 
-    return head;
-
-
+    return(head);
 
 }
 
@@ -202,15 +183,13 @@ Tree * Build_Tree(List * head)
     Tree ** treeArray = malloc(sizeof(Tree *) * size);
     long i = 0;
 
-    while(head -> next != NULL)
+    while(head != NULL)
     {
        treeArray[i] = Add_TreeNode(head, head -> next);
+
+       head = Free_Node(head, head);
+
        i++;
-
-       head = Free_Node(head, head);
-       head = Free_Node(head, head);
-
-       head = Insert_Node(head, treeArray[i - 1] -> freq)
     }
 
 }
