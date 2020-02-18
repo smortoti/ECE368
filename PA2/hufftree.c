@@ -138,18 +138,77 @@ void swap(List * node1, List * node2)
     return(count);
 }*/
 
-Tree * Add_TreeNode(List * head)
+Tree * Add_TreeNode(char chr, long freq)
 {
     Tree * root = malloc(sizeof(Tree));
 
-    root -> freq = head -> freq;
-    root -> chr = head -> chr;
+    root -> freq = freq;
+    root -> chr = chr;
     root -> bin_code = NULL;
     root -> left = root -> right = NULL;
 
     return root; 
 }
 
+Tree * Merge_Tree(Tree * node1, Tree * node2)
+{
+    Tree * root = malloc(sizeof(*root));
+
+    root -> left = node1;
+    root -> right = node2;
+    root -> chr = '\0';
+    root -> freq = node1 -> freq + node2 -> freq;
+
+    return root;
+}
+
+TreeList * createTLNode(Tree * root)
+{
+    TreeList * head = malloc(sizeof(TreeList));
+
+    head -> next = NULL;
+    head -> treeptr = root;
+
+    return head;
+}
+
+TreeList * TL_Insert(TreeList * head, TreeList * node)
+{
+    if (head == NULL)
+    {
+        return node;
+    }
+
+    Tree * tn1 = head -> treeptr;
+    Tree * tn2 = node -> treeptr;
+
+    long freq1 = tn1 -> freq;
+    long freq2 = tn2 -> freq;
+
+    if (freq1 > freq2)
+    {
+        node -> next = head;
+        return node;
+    }
+
+    head -> next = TL_Insert(head -> next, node);
+
+    return head;
+}
+
+TreeList * TL_Build(Tree ** treeArray, long size)
+{
+    long i = 0;
+    TreeList * head = NULL;
+    
+    for (i = 0; i < size; i++)
+    {
+        TreeList * node1 = createTLNode(treeArray[i]);
+        head = TL_Insert(head, node1);
+    }
+
+    return head;
+}
 List * Free_Node(List * head, List * nodeToDelete)
 {
     List * temp = head;
@@ -176,7 +235,7 @@ List * Free_Node(List * head, List * nodeToDelete)
 
 }
 
-Tree * createBranch(Tree * node1, Tree * node2)
+/*Tree * createBranch(Tree * node1, Tree * node2)
 {
     Tree * root = malloc(sizeof(*root));
 
@@ -187,16 +246,37 @@ Tree * createBranch(Tree * node1, Tree * node2)
     root -> right = node2;
 
     return root;
-}
+}*/
 
-Tree * Build_Tree(List * head)
+Tree * Build_Tree(TreeList * head)
 {
     long size = countNode(head);
 
     Tree ** treeArray = malloc(sizeof(Tree *) * size);
     long i = 0;
 
-    while(head != NULL) // creates array of tree nodes
+    TreeList * head = TL_Build(treeArray, size);
+
+    while (head -> next != NULL)
+    {
+        TreeList * second = head -> next;
+        TreeList * third = second -> next;
+        Tree * tn1 = head -> treeptr;
+        Tree * tn2 = second -> treeptr;
+
+        free(head);
+        free(second);
+
+        head = third;
+        Tree * mrg = Merge_Tree(tn1, tn2);
+        TreeList * ln = createTLNode(mrg);
+
+        head = TL_Insert(head, ln);
+    }
+
+    return (head -> treeptr);
+    
+    /*while(head != NULL) // creates array of tree nodes
     {
        treeArray[i] = Add_TreeNode(head);
 
@@ -220,7 +300,7 @@ Tree * Build_Tree(List * head)
         treeArray[i] = 0;
         i++;
         size_counter--;
-    }
+    }*/
 
 }
 

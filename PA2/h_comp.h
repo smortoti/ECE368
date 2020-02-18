@@ -30,8 +30,9 @@ void Read_Freq(char * filename, List * head);
 
 List * sort_List(List * head);
 
-Tree * Build_Tree(List * head);
-Tree * Add_TreeNode(List * head);
+Tree * Build_Tree(TreeList * head);
+Tree * Add_TreeNode(char chr, long freq);
+Tree * Merge_Tree(Tree * node1, Tree * node2);
 Tree * createBranch(Tree * node1, Tree * node2);
 
 void PreOrder_Traverse(char * filename, Tree * treenode);
