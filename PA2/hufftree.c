@@ -124,7 +124,7 @@ void swap(List * node1, List * node2)
     node2 -> chr = temp -> chr;
 } 
 
-long countNode(List * head)
+/*long countNode(List * head)
 {
     long count = 0;
     List * tempNode = NULL;
@@ -136,7 +136,7 @@ long countNode(List * head)
     }
 
     return(count);
-}
+}*/
 
 Tree * Add_TreeNode(List * head)
 {
@@ -176,6 +176,19 @@ List * Free_Node(List * head, List * nodeToDelete)
 
 }
 
+Tree * createBranch(Tree * node1, Tree * node2)
+{
+    Tree * root = malloc(sizeof(*root));
+
+    root -> freq = node1 -> freq + node2 -> freq;
+    root -> bin_code = NULL;
+    root -> chr = '\0';
+    root -> left = node1;
+    root -> right = node2;
+
+    return root;
+}
+
 Tree * Build_Tree(List * head)
 {
     long size = countNode(head);
@@ -192,9 +205,21 @@ Tree * Build_Tree(List * head)
        i++;
     }
 
-    while(size > 1) // realloc array to shrink as tree builds
-    {
+    i = 0;
+    long size_counter = size;
+    Tree * tempTree = NULL;
 
+    while(size_counter > 1) // realloc array to shrink as tree builds
+    {
+        tempTree = createBranch(treeArray[i], treeArray[i + 1]);
+        for (int j = i + 1, j < size, j++)
+        {
+            if ()
+        }
+        treeArray[i] = realloc(treeArray[i], sizeof(int));
+        treeArray[i] = 0;
+        i++;
+        size_counter--;
     }
 
 }

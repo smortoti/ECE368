@@ -17,6 +17,12 @@ typedef struct _Node // Dynamic memory for frequency
     struct _Node * next;
 } List;
 
+typedef struct _List
+{
+    struct _List * next;
+    struct Tree * treeptr;
+} TreeList;
+
 List * Read_From_File(char * filename);
 List * Add_Node(List * head, char chr);
 
@@ -26,6 +32,7 @@ List * sort_List(List * head);
 
 Tree * Build_Tree(List * head);
 Tree * Add_TreeNode(List * head);
+Tree * createBranch(Tree * node1, Tree * node2);
 
 void PreOrder_Traverse(char * filename, Tree * treenode);
 

@@ -12,7 +12,7 @@ for (i = 0; i < 4; i++)
 {
     array[i] = i;
 }
-array = realloc(array, 3 * sizeof(int));
+array = realloc((array + 1), 3 * sizeof(int));
 for (i = 0; i < 3; i++)
 {
     printf("%d\n", array[i]);
