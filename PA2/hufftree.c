@@ -44,7 +44,7 @@ List * Add_Node(List * head, char chr)
 
     while(tmpNode -> next != NULL) // checks if the character has already been read
     {
-        if (chr = tmpNode -> chr)
+        if (chr == tmpNode -> chr)
         {
             (tmpNode -> freq)++;
             free(newNode); // New node wasn't used, freed to preserve memory
@@ -77,7 +77,7 @@ void Read_Freq(char * filename, List * head)
     
     do // writes into file, use do while to ensure last node of linked list is written
     {
-        fwrite(tmpNode -> freq, sizeof(long), 1, fptr);
+        fwrite(&(tmpNode -> freq), sizeof(long), 1, fptr);
         tmpNode = tmpNode -> next;
     }while(tmpNode -> next != NULL);
 
@@ -94,7 +94,7 @@ List * sort_List(List * head)
   
     /* Checking for empty list */
     if (head == NULL) 
-        return; 
+        return NULL; 
   
     do // Linked list bubble sort
     { 
@@ -242,13 +242,13 @@ Tree * Build_Tree(TreeList * head)
     Tree ** treeArray = malloc(sizeof(Tree *) * size);
     long i = 0;
 
-    TreeList * head = TL_Build(treeArray, size);
+    TreeList * headTree = TL_Build(treeArray, size);
 
     while (head -> next != NULL)
     {
-        TreeList * second = head -> next;
+        TreeList * second = headTree -> next;
         TreeList * third = second -> next;
-        Tree * tn1 = head -> treeptr;
+        Tree * tn1 = headTree -> treeptr;
         Tree * tn2 = second -> treeptr;
 
         free(head);

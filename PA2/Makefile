@@ -2,6 +2,7 @@ WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
 GCC = gcc -g -std=c99 $(WARNINGFLAGS)
 
 SRCS = hufftree.c pa2.c
+OBJS = $(SRCS:%.c=%.o)
 
 pa2: $(OBJS) 
 	$(GCC) $(OBJS) -o pa2

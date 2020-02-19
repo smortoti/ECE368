@@ -1,5 +1,3 @@
-#ifndef __H_COMP_H__
-#define __H_COMP_H__
 
 typedef struct _Tree // Binary Tree definition
 {
@@ -41,7 +39,7 @@ void PreOrder_Traverse_Code(char * filename, Tree * treenode);
 
 void Compress(char * filenamein, char * filenameout, Tree * treenode);
 
+void swap(List * node1, List * node2);
+
 List * Free_Node(List * head, List * nodeToDelete);
 List * Destroy_List(List * head);
-
-#endif
