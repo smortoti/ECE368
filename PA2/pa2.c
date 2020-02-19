@@ -5,7 +5,7 @@
 
 int main(int argc, char * argv)
 {
-    if (argc != 6)
+    if (argc != 3)
     {
         fprintf(stderr, "%s", "Incorrect number of inputs\n");
         return(EXIT_FAILURE);
@@ -30,6 +30,8 @@ int main(int argc, char * argv)
     sortedList = sort_List(chr_freqs);
 
     huff_tree = Build_Tree(chr_freqs);
+
+    fprintf(stderr, "build tree success\n");
 
     if (huff_tree == NULL)
     {

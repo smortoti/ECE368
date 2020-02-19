@@ -1,7 +1,7 @@
 WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
-GCC = gcc -03 -std=c99 $(WARNINGFLAGS)
+GCC = gcc -g -std=c99 $(WARNINGFLAGS)
 
-SRCS = shell_array.c shell_list.c pa1.c
+SRCS = hufftree.c pa2.c
 
 pa2: $(OBJS) 
 	$(GCC) $(OBJS) -o pa2
@@ -10,8 +10,8 @@ pa2: $(OBJS)
 	$(GCC) -c $*.c 
 
 test1: pa2
-	./pa1 -a examples/1K.b output1Ka
-	diff output1Ka examples/1Ksa.b
+	./pa2  original/gophers freqOutput1
+	diff count/gophers.count freqOutput1
 
 test2: pa2
 	./pa1 -l examples/1K.b output1Kl
