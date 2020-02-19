@@ -29,4 +29,4 @@ test1M: pa1
 	./pa1 -a examples/1M.b output1Ma
 
 clean: # remove all machine generated files
-	rm -f pa1 *.o output???
+	rm -f pa1 *.o freqOutput?
