@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "h_comp.h"
 
-int main(int argc, char * argv)
+int main(int argc, char ** argv)
 {
     if (argc != 3)
     {
@@ -25,9 +25,7 @@ int main(int argc, char * argv)
 
     Read_Freq(argv[2], chr_freqs);
 
-    sortedList = malloc(sizeof(List));
-
-    sortedList = sort_List(chr_freqs);
+    sort_List(chr_freqs);
 
     huff_tree = Build_Tree(chr_freqs);
 
