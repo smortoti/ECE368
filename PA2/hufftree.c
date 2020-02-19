@@ -85,16 +85,15 @@ void Read_Freq(char * filename, List * head)
 
 }
 
-List * sort_List(List * head)
+void sort_List(List * head)
 {
     int swapped;
-    int i; 
     List * ptr1; 
     List * lptr = NULL; 
   
     /* Checking for empty list */
     if (head == NULL) 
-        return NULL; 
+        return; 
   
     do // Linked list bubble sort
     { 
