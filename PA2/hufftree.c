@@ -375,6 +375,6 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
         }
     }
 
-    printCodes(node -> left, ind_left++, ind_right;
+    printCodes(node -> left, ind_left++, ind_right);
     printCodes(node -> right, ind_left, ind_right++);
 }
