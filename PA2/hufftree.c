@@ -94,10 +94,8 @@ void Read_Freq(char * filename, List * head)
     {
         if ((tmpNode -> chr) == i)
         {
-            fprintf(stderr, "freq assign success\n");
             write = fwrite(&(tmpNode -> freq), sizeof(long), 1, fptr);
             i++;
-            fprintf(stderr, "%d\n", i);
         }
         else if (tmpNode -> next == NULL)
         {
@@ -107,15 +105,11 @@ void Read_Freq(char * filename, List * head)
         if (write == 1)
         {
             tmpNode = head;
-            fprintf(stderr, "%d\n", i);
-            fprintf(stderr, "head reassignment success\n");
             write = 0;
         }
         else
         {
-            fprintf(stderr, "next enter\n");
             tmpNode = tmpNode -> next;
-            fprintf(stderr, "next assign success\n");
         }
 
     }
