@@ -339,12 +339,10 @@ Tree * Build_Tree(List * head)
 
     while(tempNode != NULL) // Fills treeArray with tree nodes
     {
-        treeArray[i] = Add_TreeNode(head -> chr, head -> freq);
+        treeArray[i] = Add_TreeNode(tempNode -> chr, tempNode -> freq);
         tempNode = tempNode -> next;
         i++;
     }
-
-  //  fprintf(stderr, "forest success\n");
 
     TreeList * headTree = TL_Build(treeArray, size);
 
@@ -431,15 +429,15 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
     long leftIndex = 0;
     long rightIndex = 0;
 
-    printCodes(root, &leftIndex, &rightIndex);
+    printCodes(root, &leftIndex, &rightIndex, fptr);
  
 }
 
-void printCodes(Tree * node, long * ind_left, long * ind_right)
+void printCodes(Tree * node, long * ind_left, long * ind_right, FILE * filename)
 {
     if (node -> chr != '\0')
     {
-        fprintf(stdout, "%c:", node -> chr);
+        fprintf(filename, "%c:", node -> chr);
     }
 
     if ((node -> left == NULL) && (node -> right == NULL))
@@ -447,11 +445,11 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
         if ((*ind_left) > (*ind_right))
         {
             long i = 0;
-            for (i = *ind_left; i > 0; i--)
+            for (i = (*ind_left); i > 0; i--)
             {
-                fprintf(stdout, "0");
+                fprintf(filename, "0");
             }
-            fprintf(stdout, "\n");
+            fprintf(filename, "\n");
             return;
         }
         else
@@ -459,9 +457,9 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
             long i = 0;
             for (i = *ind_right; i > 0; i--)
             {
-                fprintf(stdout, "1");
+                fprintf(filename, "1");
             }
-            fprintf(stdout, "\n");
+            fprintf(filename, "\n");
             return;
         }
     }
@@ -470,7 +468,7 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
         long i = 0;
         for (i = *ind_left; i > 0; i--)
         {
-            fprintf(stdout, "0");
+            fprintf(filename, "0");
             (*ind_left)--;
         }
     }
@@ -479,13 +477,18 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
         long i = 0;
         for (i = *ind_right; i > 0; i--)
         {
-            fprintf(stdout, "1");
+            fprintf(filename, "1");
             (*ind_right)--;
         }
     }
 
-    printCodes(node -> left, ind_left++, ind_right);
-    printCodes(node -> right, ind_left, ind_right++);
+    (*ind_left)++;
+
+    printCodes(node -> left, ind_left, ind_right, filename);
+
+    (*ind_right)++; 
+
+    printCodes(node -> right, ind_left, ind_right, filename);
 }
 
 void print2DUtil(Tree *root, int space) 

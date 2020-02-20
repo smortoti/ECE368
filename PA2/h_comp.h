@@ -47,7 +47,7 @@ void printTreeNode(FILE * filename, Tree * node);
 
 void PreOrder_Traverse_Code(char * filename, Tree * treenode);
 void PreOrder_Traverse2(Tree * root, char chr);
-void printCodes(Tree * root, long * indl, long * indr);
+void printCodes(Tree * root, long * indl, long * indr, FILE * filename);
 
 void Compress(char * filenamein, char * filenameout, Tree * treenode);
 

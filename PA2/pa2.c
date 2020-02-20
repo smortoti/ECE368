@@ -54,7 +54,7 @@ int main(int argc, char ** argv)
 
     fprintf(stderr, "header write success\n");
 
-   /* PreOrder_Traverse_Code(argv[4], huff_tree);
+    PreOrder_Traverse_Code(argv[4], huff_tree);
 
     fprintf(stderr, "code and write success\n");
 
