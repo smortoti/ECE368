@@ -234,36 +234,68 @@ List * Free_Node(List * head, List * nodeToDelete)
 
 }
 
-Tree * Build_Tree(TreeList * head)
+Tree * Build_Tree(List * head)
 {
     long size = countNode(head);
 
     Tree ** treeArray = malloc(sizeof(Tree *) * size);
+    List * tempNode = head;
     long i = 0;
+
+    while(tempNode != NULL) // Fills treeArray with tree nodes
+    {
+        treeArray[i] = Add_TreeNode(head -> chr, head -> freq);
+        tempNode = tempNode -> next;
+    }
 
     TreeList * headTree = TL_Build(treeArray, size);
 
-    while (head -> next != NULL)
+    while (headTree -> next != NULL)
     {
         TreeList * second = headTree -> next;
         TreeList * third = second -> next;
         Tree * tn1 = headTree -> treeptr;
         Tree * tn2 = second -> treeptr;
 
-        free(head);
+        free(headTree);
         free(second);
 
-        head = third;
-        Tree * mrg = Merge_Tree(tn1, tn2);
+        headTree = third;
+        Tree * mrg = Merge_Tree(tn1, tn2); // branch nodes are created with '\0' as chr value
         TreeList * ln = createTLNode(mrg);
 
-        head = TL_Insert(head, ln);
+        headTree = TL_Insert(head, ln);
     }
 
-    return (head -> treeptr);
+    return (headTree -> treeptr);
 }
 
-void PreOrder_Traverse(char * filename, Tree * root)
+void printTreeNode(Tree * node)
+{
+    if (node -> chr == '\0')
+    {
+        fprintf(stdout, "0");
+    }
+    else
+    {
+        fprintf(stdout, "1%c", node -> chr);
+    }
+}
+
+void PreOrder_Traverse(Tree * node)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+
+    printTreeNode(node);
+    PreOrder_Traverse(node -> left);
+    PreOrder_Traverse(node -> right);
+
+}
+
+void PreOrder_Traverse_Write(char * filename, Tree * root)
 {
     FILE * fptr = fopen(filename, "wb");
 
@@ -273,4 +305,21 @@ void PreOrder_Traverse(char * filename, Tree * root)
         return;
     }
 
+    PreOrder_Traverse(root);
+    
+    fclose(fptr);
+}
+
+void PreOrder_Traverse_Code(char * filename, Tree * root)
+{
+    FILE * fptr = fopen(filename, "wb");
+
+    if (fptr == NULL)
+    {
+        fprintf(stderr, "fopen fail\n");
+    }
+
+    Tree * nodeCode = PreOrder_Traverse2(root, )
+
+    
 }

@@ -31,7 +31,7 @@ void swap(List * node1, List * node2);
 
 long countNode(List * head);
 
-Tree * Build_Tree(TreeList * head);
+Tree * Build_Tree(List * head);
 Tree * Add_TreeNode(char chr, long freq);
 Tree * Merge_Tree(Tree * node1, Tree * node2);
 List * Free_Node(List * head, List * nodeToDelete);
@@ -42,8 +42,12 @@ TreeList * TL_Insert(TreeList * head, TreeList * node);
 TreeList * TL_Build(Tree ** treeArray, long size);
 
 
-void PreOrder_Traverse(char * filename, Tree * treenode);
+void PreOrder_Traverse_Write(char * filename, Tree * treenode);
+void PreOrder_Traverse(Tree * treenode);
+void printPreOrder(Tree * node);
+void printTreeNode(Tree * node);
 
 void PreOrder_Traverse_Code(char * filename, Tree * treenode);
+void PreOrder_Traverse2(Tree * root, char chr);
 
 void Compress(char * filenamein, char * filenameout, Tree * treenode);
