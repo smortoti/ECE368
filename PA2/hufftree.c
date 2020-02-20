@@ -319,9 +319,11 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
         fprintf(stderr, "fopen fail\n");
     }
 
-    Tree * nodeCode = PreOrder_Traverse2(root, );
+    long * leftIndex = sizeof(long);
+    long * rightIndex = sizeof(long);
 
-    
+    printCodes(root, &leftIndex, &rightIndex);
+ 
 }
 
 void printCodes(Tree * node, long * ind_left, long * ind_right)
