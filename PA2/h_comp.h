@@ -1,3 +1,4 @@
+#define COUNT 8
 
 typedef struct _Tree // Binary Tree definition
 {
@@ -43,12 +44,20 @@ TreeList * TL_Build(Tree ** treeArray, long size);
 
 
 void PreOrder_Traverse_Write(char * filename, Tree * treenode);
-void PreOrder_Traverse(Tree * treenode);
+void PreOrder_Traverse(FILE * filename, Tree * treenode);
 void printPreOrder(Tree * node);
-void printTreeNode(Tree * node);
+void printTreeNode(FILE * filename, Tree * node);
 
 void PreOrder_Traverse_Code(char * filename, Tree * treenode);
 void PreOrder_Traverse2(Tree * root, char chr);
 void printCodes(Tree * root, long * indl, long * indr);
 
 void Compress(char * filenamein, char * filenameout, Tree * treenode);
+
+void FrontBackSplit(List * source, List ** frontRef, List ** backRef);
+List * SortedMerge(List * a, List * b);
+void MergeSort(List ** headRef);
+
+// Debugging functions
+void print2DUtil(Tree *root, int space);
+void printLinkedList(List * head);

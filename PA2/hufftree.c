@@ -118,13 +118,89 @@ void Read_Freq(char * filename, List * head)
 
 }
 
-void sort_List(List * head)
+void MergeSort(List ** headRef) 
+{ 
+    List * head = *headRef; 
+    List * a; 
+    List * b; 
+  
+    /* Base case -- length 0 or 1 */
+    if ((head == NULL) || (head -> next == NULL)) 
+    { 
+        return; 
+    } 
+  
+    /* Split head into 'a' and 'b' sublists */
+    FrontBackSplit(head, &a, &b); 
+  
+    /* Recursively sort the sublists */
+    MergeSort(&a); 
+    MergeSort(&b); 
+  
+    /* answer = merge the two sorted lists together */
+    *headRef = SortedMerge(a, b); 
+} 
+
+List * SortedMerge(List * a, List * b) 
+{ 
+    List * result = NULL; 
+  
+    /* Base cases */
+    if (a == NULL)
+    {
+        return b;
+    } 
+    else if (b == NULL) 
+    {
+        return a; 
+    }
+  
+    /* Pick either a or b, and recur */
+    if (a -> freq <= b -> freq) 
+    { 
+        result = a; 
+        result -> next = SortedMerge(a -> next, b); 
+    } 
+    else 
+    { 
+        result = b; 
+        result -> next = SortedMerge(a, b -> next); 
+    } 
+    return result; 
+} 
+
+void FrontBackSplit(List * source, List ** frontRef, List ** backRef) 
+{ 
+    List * fast; 
+    List * slow; 
+    slow = source; 
+    fast = source->next; 
+  
+    /* Advance 'fast' two nodes, and advance 'slow' one node */
+    while (fast != NULL) 
+    { 
+        fast = fast -> next; 
+        if (fast != NULL) 
+        { 
+            slow = slow -> next; 
+            fast = fast -> next; 
+        } 
+    } 
+  
+    /* 'slow' is before the midpoint in the list, so split it in two 
+    at that point. */
+    *frontRef = source; 
+    *backRef = slow -> next; 
+    slow -> next = NULL; 
+} 
+
+/*void sort_List(List * head)
 {
     int swapped;
     List * ptr1; 
     List * lptr = NULL; 
   
-    /* Checking for empty list */
+    /* Checking for empty list 
     if (head == NULL) 
         return; 
   
@@ -154,7 +230,7 @@ void swap(List * node1, List * node2)
     node1 -> chr = node2 -> chr;
     node2 -> freq = temp -> freq; 
     node2 -> chr = temp -> chr;
-} 
+} */
 
 long countNode(List * head)
 {
@@ -209,16 +285,22 @@ TreeList * TL_Insert(TreeList * head, TreeList * node)
 {
     if (head == NULL)
     {
-        fprintf(stderr, "head is NULL\n");
+       // fprintf(stderr, "head is NULL\n");
         return node;
     }
 
-    fprintf(stderr, "entering assign\n");
+ //   fprintf(stderr, "entering assign\n");
+ //   fprintf(stderr, "head: %ld\n", head -> treeptr -> freq);
+    if (node -> treeptr == NULL)
+    {
+        fprintf(stderr, "NULL\n");
+    }
+ //   fprintf(stderr, "node: %ld\n", node -> treeptr -> freq);
 
-    long freq1 = (head -> treeptr -> freq);
-    long freq2 = (node -> treeptr -> freq);
+    long freq1 = (head -> treeptr -> freq); 
+    long freq2 = (node -> treeptr -> freq); // SEG FAULTS HERE, CANNOT FIND A REASON
 
-    fprintf(stderr, "assignment success\n");
+  //  fprintf(stderr, "assignment success\n");
 
     if (freq1 > freq2)
     {
@@ -235,22 +317,26 @@ TreeList * TL_Build(Tree ** treeArray, long size)
 {
     long i = 0;
     TreeList * head = NULL;
-    fprintf(stderr, "%ld\n", size);
+ //   fprintf(stderr, "%ld\n", size);
     
     for (i = 0; i < size; i++)
     {
-        fprintf(stderr, "enter array\n");
-        TreeList * node1 = createTLNode(treeArray[i]);
-        fprintf(stderr, "addnode success\n");
-        if (node1 == NULL)
+   //     fprintf(stderr, "enter array\n");
+        if (treeArray[i] == NULL)
         {
-            fprintf(stderr, "node1 is null\n");
+            fprintf(stderr, "treearray is null\n");
+        }
+        TreeList * node1 = createTLNode(treeArray[i]);
+    //    fprintf(stderr, "addnode success\n");
+        if (node1 -> treeptr == NULL)
+        {
+            fprintf(stderr, "node1 tree is null\n");
         }
         head = TL_Insert(head, node1);
         //fprintf(stderr, "insert success\n");
 
     }
-    fprintf(stderr, "for loop completion\n");
+   // fprintf(stderr, "for loop completion\n");
 
     return head;
 }
@@ -292,13 +378,14 @@ Tree * Build_Tree(List * head)
     {
         treeArray[i] = Add_TreeNode(head -> chr, head -> freq);
         tempNode = tempNode -> next;
+        i++;
     }
 
-    fprintf(stderr, "forest success\n");
+  //  fprintf(stderr, "forest success\n");
 
     TreeList * headTree = TL_Build(treeArray, size);
 
-    fprintf(stderr, "build success\n");
+  //  fprintf(stderr, "build success\n");
 
     if (headTree == NULL)
     {
@@ -316,47 +403,47 @@ Tree * Build_Tree(List * head)
         free(second);
 
         headTree = third;
-        fprintf(stderr, "headtree reassign success\n");
+      //  fprintf(stderr, "headtree reassign success\n");
         Tree * mrg = Merge_Tree(tn1, tn2); // branch nodes are created with '\0' as chr value
-        fprintf(stderr, "merge success\n");
+       // fprintf(stderr, "merge success\n");
         TreeList * ln = createTLNode(mrg);
-        fprintf(stderr, "newnode success\n");
+       // fprintf(stderr, "newnode success\n");
 
         headTree = TL_Insert(headTree, ln);
-        fprintf(stderr, "insert success\n");
+       // fprintf(stderr, "insert success\n");
     }
 
     return (headTree -> treeptr);
 }
 
-void printTreeNode(Tree * node)
+void printTreeNode(FILE * filename, Tree * node)
 {
     if (node -> chr == '\0')
     {
-        fprintf(stdout, "0");
+        fprintf(filename, "0");
     }
     else
     {
-        fprintf(stdout, "1%c", node -> chr);
+        fprintf(filename, "1%c", node -> chr);
     }
 }
 
-void PreOrder_Traverse(Tree * node)
+void PreOrder_Traverse(FILE * filename, Tree * node)
 {
     if (node == NULL)
     {
         return;
     }
 
-    printTreeNode(node);
-    PreOrder_Traverse(node -> left);
-    PreOrder_Traverse(node -> right);
+    printTreeNode(filename, node);
+    PreOrder_Traverse(filename, node -> left);
+    PreOrder_Traverse(filename, node -> right);
 
 }
 
 void PreOrder_Traverse_Write(char * filename, Tree * root)
 {
-    FILE * fptr = fopen(filename, "wb");
+    FILE * fptr = fopen(filename, "w");
 
     if (fptr == NULL)
     {
@@ -364,7 +451,7 @@ void PreOrder_Traverse_Write(char * filename, Tree * root)
         return;
     }
 
-    PreOrder_Traverse(root);
+    PreOrder_Traverse(fptr, root);
     
     fclose(fptr);
 }
@@ -436,4 +523,37 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
 
     printCodes(node -> left, ind_left++, ind_right);
     printCodes(node -> right, ind_left, ind_right++);
+}
+
+void print2DUtil(Tree *root, int space) 
+{ 
+    // Base case 
+    if (root == NULL) 
+        return; 
+  
+    // Increase distance between levels 
+    space += COUNT; 
+  
+    // Process right child first 
+    print2DUtil(root->right, space); 
+  
+    // Print current node after space 
+    // count 
+    fprintf(stderr, "\n"); 
+    for (int i = COUNT; i < space; i++) 
+        fprintf(stderr, " "); 
+    fprintf(stderr, "%ld, %c\n", root->freq, root -> chr); 
+  
+    // Process left child 
+    print2DUtil(root->left, space); 
+} 
+
+void printLinkedList(List * head)
+{
+    List * tmpNode = head;
+    while (tmpNode != NULL)
+    {
+        fprintf(stderr, "chr: %c\nfreq: %ld\n", tmpNode -> chr, tmpNode -> freq);
+        tmpNode = tmpNode -> next;
+    }
 }

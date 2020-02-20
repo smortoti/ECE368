@@ -24,11 +24,17 @@ int main(int argc, char ** argv)
 
     fprintf(stderr, "read success\n");
 
+    printLinkedList(chr_freqs);
+
     Read_Freq(argv[2], chr_freqs);
 
     fprintf(stderr, "freq success\n");
 
+    printLinkedList(chr_freqs);
+
     sort_List(chr_freqs);
+
+    printLinkedList(chr_freqs);
 
     fprintf(stderr, "sort success\n");
 
@@ -42,15 +48,17 @@ int main(int argc, char ** argv)
         return (EXIT_FAILURE);
     }
 
+    print2DUtil(huff_tree, 0);
+
     PreOrder_Traverse_Write(argv[3], huff_tree);
 
     fprintf(stderr, "header write success\n");
 
-    PreOrder_Traverse_Code(argv[4], huff_tree);
+   /* PreOrder_Traverse_Code(argv[4], huff_tree);
 
     fprintf(stderr, "code and write success\n");
 
-    //Compress(argv[1], argv[5], huff_tree);
+    //Compress(argv[1], argv[5], huff_tree);*/
 
     return(EXIT_SUCCESS);
 }
