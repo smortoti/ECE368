@@ -319,7 +319,60 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
         fprintf(stderr, "fopen fail\n");
     }
 
-    Tree * nodeCode = PreOrder_Traverse2(root, )
+    Tree * nodeCode = PreOrder_Traverse2(root, );
 
     
+}
+
+void printCodes(Tree * node, long * ind_left, long * ind_right)
+{
+    if (node -> chr != '\0')
+    {
+        fprintf(stdout, "%c:", node -> chr);
+    }
+
+    if ((node -> left == NULL) && (node -> right == NULL))
+    {
+        if ((*ind_left) > (*ind_right))
+        {
+            long i = 0;
+            for (i = *ind_left; i > 0; i--)
+            {
+                fprintf(stdout, "1");
+            }
+            fprintf(stdout, "\n");
+            return;
+        }
+        else
+        {
+            long i = 0;
+            for (i = *ind_right; i > 0; i--)
+            {
+                fprintf(stdout, "0");
+            }
+            fprintf(stdout, "\n");
+            return;
+        }
+    }
+    if (((*ind_left > (*ind_right - 1)) && (*ind_right > 0)))
+    {
+        long i = 0;
+        for (i = *ind_left; i > 0; i--)
+        {
+            fprintf(stdout, "1");
+            (*ind_left)--;
+        }
+    }
+    else if ((*ind_right > (*ind_left - 1)) && ((*ind_left > 0)))
+    {
+        long i = 0;
+        for (i = *ind_right; i > 0; i--)
+        {
+            fprintf(stdout, "0");
+            (*ind_right)--;
+        }
+    }
+
+    printCodes(node -> left, ind_left++, ind_right;
+    printCodes(node -> right, ind_left, ind_right++);
 }
