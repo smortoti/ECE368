@@ -5,7 +5,7 @@
 
 int main(int argc, char ** argv)
 {
-    if (argc != 3)
+    if (argc != 5)
     {
         fprintf(stderr, "%s", "Incorrect number of inputs\n");
         return(EXIT_FAILURE);
@@ -13,7 +13,6 @@ int main(int argc, char ** argv)
 
     List * chr_freqs = NULL;
     Tree * huff_tree = NULL;
-    List * sortedList = NULL;
 
     chr_freqs = Read_From_File(argv[1]);
 
@@ -23,9 +22,15 @@ int main(int argc, char ** argv)
         return(EXIT_FAILURE);
     }
 
+    fprintf(stderr, "read success\n");
+
     Read_Freq(argv[2], chr_freqs);
 
+    fprintf(stderr, "freq success\n");
+
     sort_List(chr_freqs);
+
+    fprintf(stderr, "sort success\n");
 
     huff_tree = Build_Tree(chr_freqs);
 
@@ -37,10 +42,15 @@ int main(int argc, char ** argv)
         return (EXIT_FAILURE);
     }
 
-    PreOrder_Traverse(argv[3], huff_tree);
+    PreOrder_Traverse_Write(argv[3], huff_tree);
+
+    fprintf(stderr, "header write success\n");
+
     PreOrder_Traverse_Code(argv[4], huff_tree);
 
-    Compress(argv[1], argv[5], huff_tree);
+    fprintf(stderr, "code and write success\n");
+
+    //Compress(argv[1], argv[5], huff_tree);
 
     return(EXIT_SUCCESS);
 }

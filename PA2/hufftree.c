@@ -3,21 +3,27 @@
 #include <string.h>
 #include "h_comp.h"
 
+#define ASCIIMAX 256
+
 List * Read_From_File(char * filename)
 {
-    FILE * fptr = fopen(filename, "rb");
+    FILE * fptr = fopen(filename, "r");
     
     if (fptr == NULL)
     {
         return(NULL);
     }
 
-    List * chr_list = malloc(sizeof(*chr_list));
-    char chr;
+    List * chr_list = NULL;
+    char chr = 'a';
 
-    while ((chr = fgetc(fptr) != EOF)) // creates a new node for 
+    while ((chr != EOF)) // creates a new node for 
     {
-        chr_list = Add_Node(chr_list, chr);
+        chr = fgetc(fptr);
+        if (!feof(fptr))
+        {
+            chr_list = Add_Node(chr_list, chr);
+        }
     }
 
     fclose(fptr);
@@ -41,8 +47,9 @@ List * Add_Node(List * head, char chr)
     }
 
     List * tmpNode = head;
+    List * secondTemp = NULL;
 
-    while(tmpNode -> next != NULL) // checks if the character has already been read
+    while(tmpNode != NULL) // checks if the character has already been read
     {
         if (chr == tmpNode -> chr)
         {
@@ -51,10 +58,15 @@ List * Add_Node(List * head, char chr)
 
             return(head);
         }
+        if (tmpNode -> next == NULL)
+        {
+            secondTemp = tmpNode;
+        }
         tmpNode = tmpNode -> next;
+        
     }
 
-    tmpNode -> next = newNode;
+    secondTemp -> next = newNode;
     newNode -> next = NULL;
     newNode -> chr = chr;
     newNode -> freq = 1;
@@ -74,12 +86,39 @@ void Read_Freq(char * filename, List * head)
     }
 
     List * tmpNode = head;
-    
-    do // writes into file, use do while to ensure last node of linked list is written
+    int i = 0;
+    long zero = 0;
+    int write = 0;
+
+    while(i < ASCIIMAX)
     {
-        fwrite(&(tmpNode -> freq), sizeof(long), 1, fptr);
-        tmpNode = tmpNode -> next;
-    }while(tmpNode -> next != NULL);
+        if ((tmpNode -> chr) == i)
+        {
+            fprintf(stderr, "freq assign success\n");
+            write = fwrite(&(tmpNode -> freq), sizeof(long), 1, fptr);
+            i++;
+            fprintf(stderr, "%d\n", i);
+        }
+        else if (tmpNode -> next == NULL)
+        {
+            write = fwrite(&zero, sizeof(long), 1, fptr);
+            i++;
+        }
+        if (write == 1)
+        {
+            tmpNode = head;
+            fprintf(stderr, "%d\n", i);
+            fprintf(stderr, "head reassignment success\n");
+            write = 0;
+        }
+        else
+        {
+            fprintf(stderr, "next enter\n");
+            tmpNode = tmpNode -> next;
+            fprintf(stderr, "next assign success\n");
+        }
+
+    }
 
     fclose(fptr);
 
@@ -178,8 +217,8 @@ TreeList * TL_Insert(TreeList * head, TreeList * node)
         return node;
     }
 
-    Tree * tn1 = head -> treeptr;
-    Tree * tn2 = node -> treeptr;
+    Tree * tn1 = (head -> treeptr);
+    Tree * tn2 = (node -> treeptr);
 
     long freq1 = tn1 -> freq;
     long freq2 = tn2 -> freq;
@@ -264,7 +303,7 @@ Tree * Build_Tree(List * head)
         Tree * mrg = Merge_Tree(tn1, tn2); // branch nodes are created with '\0' as chr value
         TreeList * ln = createTLNode(mrg);
 
-        headTree = TL_Insert(head, ln);
+        headTree = TL_Insert(headTree, ln);
     }
 
     return (headTree -> treeptr);
@@ -319,8 +358,8 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
         fprintf(stderr, "fopen fail\n");
     }
 
-    long * leftIndex = sizeof(long);
-    long * rightIndex = sizeof(long);
+    long leftIndex = 0;
+    long rightIndex = 0;
 
     printCodes(root, &leftIndex, &rightIndex);
  
@@ -340,7 +379,7 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
             long i = 0;
             for (i = *ind_left; i > 0; i--)
             {
-                fprintf(stdout, "1");
+                fprintf(stdout, "0");
             }
             fprintf(stdout, "\n");
             return;
@@ -350,7 +389,7 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
             long i = 0;
             for (i = *ind_right; i > 0; i--)
             {
-                fprintf(stdout, "0");
+                fprintf(stdout, "1");
             }
             fprintf(stdout, "\n");
             return;
@@ -361,7 +400,7 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
         long i = 0;
         for (i = *ind_left; i > 0; i--)
         {
-            fprintf(stdout, "1");
+            fprintf(stdout, "0");
             (*ind_left)--;
         }
     }
@@ -370,7 +409,7 @@ void printCodes(Tree * node, long * ind_left, long * ind_right)
         long i = 0;
         for (i = *ind_right; i > 0; i--)
         {
-            fprintf(stdout, "0");
+            fprintf(stdout, "1");
             (*ind_right)--;
         }
     }

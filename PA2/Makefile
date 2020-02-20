@@ -1,4 +1,5 @@
 WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
+VAL = valgrind --dsymutil=yes --tool=memcheck --leak-check=full --verbose --show-leak-kinds=all --track-origins=yes
 GCC = gcc -g -std=c99 $(WARNINGFLAGS)
 
 SRCS = hufftree.c pa2.c
@@ -10,8 +11,16 @@ pa2: $(OBJS)
 .c.o: 
 	$(GCC) -c $*.c 
 
+testmemory: pa2
+    $(VAL) --log-file=memcheck1.txt ./pa2 original/gophers freqOutput1 headOutput1 codeOutput1
+
+
+
 test1: pa2
-	./pa2  original/gophers freqOutput1
+	./pa2  original/gophers freqOutput1 headOutput1 codeOutput1
+	diff count/gophers.count freqOutput1 tree/gophers.tree headOutput1 code/gophers.code codeOutput1
+
+checkFreq:
 	diff count/gophers.count freqOutput1
 
 test2: pa2

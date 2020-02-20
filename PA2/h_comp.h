@@ -18,7 +18,7 @@ typedef struct _Node // Dynamic memory for frequency
 typedef struct _List
 {
     struct _List * next;
-    struct Tree * treeptr;
+    Tree * treeptr;
 } TreeList;
 
 List * Read_From_File(char * filename);
