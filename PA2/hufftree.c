@@ -120,23 +120,24 @@ void Read_Freq(char * filename, List * head)
 
 void MergeSort(List ** headRef) 
 { 
+    
     List * head = *headRef; 
     List * a; 
     List * b; 
-  
+    
     /* Base case -- length 0 or 1 */
     if ((head == NULL) || (head -> next == NULL)) 
     { 
         return; 
     } 
-  
+    
     /* Split head into 'a' and 'b' sublists */
     FrontBackSplit(head, &a, &b); 
-  
+
     /* Recursively sort the sublists */
     MergeSort(&a); 
     MergeSort(&b); 
-  
+
     /* answer = merge the two sorted lists together */
     *headRef = SortedMerge(a, b); 
 } 
@@ -174,7 +175,7 @@ void FrontBackSplit(List * source, List ** frontRef, List ** backRef)
     List * fast; 
     List * slow; 
     slow = source; 
-    fast = source->next; 
+    fast = source -> next; 
   
     /* Advance 'fast' two nodes, and advance 'slow' one node */
     while (fast != NULL) 
@@ -193,44 +194,6 @@ void FrontBackSplit(List * source, List ** frontRef, List ** backRef)
     *backRef = slow -> next; 
     slow -> next = NULL; 
 } 
-
-/*void sort_List(List * head)
-{
-    int swapped;
-    List * ptr1; 
-    List * lptr = NULL; 
-  
-    /* Checking for empty list 
-    if (head == NULL) 
-        return; 
-  
-    do // Linked list bubble sort
-    { 
-        swapped = 0; 
-        ptr1 = head; 
-  
-        while (ptr1 -> next != lptr) 
-        { 
-            if (ptr1 -> freq > ptr1 -> next -> freq) 
-            {  
-                swap(ptr1, ptr1 -> next); 
-                swapped = 1; 
-            } 
-            ptr1 = ptr1 -> next; 
-        } 
-        lptr = ptr1; 
-    } 
-    while (swapped); 
-}
-
-void swap(List * node1, List * node2) 
-{ 
-    List * temp = node1; 
-    node1 -> freq = node2 -> freq; 
-    node1 -> chr = node2 -> chr;
-    node2 -> freq = temp -> freq; 
-    node2 -> chr = temp -> chr;
-} */
 
 long countNode(List * head)
 {

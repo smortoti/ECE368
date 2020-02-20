@@ -27,9 +27,6 @@ List * Add_Node(List * head, char chr);
 
 void Read_Freq(char * filename, List * head);
 
-void sort_List(List * head);
-void swap(List * node1, List * node2);
-
 long countNode(List * head);
 
 Tree * Build_Tree(List * head);

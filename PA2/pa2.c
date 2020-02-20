@@ -32,11 +32,11 @@ int main(int argc, char ** argv)
 
     printLinkedList(chr_freqs);
 
-    sort_List(chr_freqs);
-
-    printLinkedList(chr_freqs);
+    MergeSort(&chr_freqs);
 
     fprintf(stderr, "sort success\n");
+
+    printLinkedList(chr_freqs);
 
     huff_tree = Build_Tree(chr_freqs);
 
