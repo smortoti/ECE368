@@ -159,7 +159,8 @@ void swap(List * node1, List * node2)
 long countNode(List * head)
 {
     long count = 0;
-    List * tempNode = NULL;
+
+    List * tempNode = head;
 
     while(tempNode != NULL)
     {
@@ -196,7 +197,7 @@ Tree * Merge_Tree(Tree * node1, Tree * node2)
 
 TreeList * createTLNode(Tree * root)
 {
-    TreeList * head = malloc(sizeof(TreeList));
+    TreeList * head = malloc(sizeof(*head));
 
     head -> next = NULL;
     head -> treeptr = root;
@@ -208,14 +209,16 @@ TreeList * TL_Insert(TreeList * head, TreeList * node)
 {
     if (head == NULL)
     {
+        fprintf(stderr, "head is NULL\n");
         return node;
     }
 
-    Tree * tn1 = (head -> treeptr);
-    Tree * tn2 = (node -> treeptr);
+    fprintf(stderr, "entering assign\n");
 
-    long freq1 = tn1 -> freq;
-    long freq2 = tn2 -> freq;
+    long freq1 = (head -> treeptr -> freq);
+    long freq2 = (node -> treeptr -> freq);
+
+    fprintf(stderr, "assignment success\n");
 
     if (freq1 > freq2)
     {
@@ -232,12 +235,22 @@ TreeList * TL_Build(Tree ** treeArray, long size)
 {
     long i = 0;
     TreeList * head = NULL;
+    fprintf(stderr, "%ld\n", size);
     
     for (i = 0; i < size; i++)
     {
+        fprintf(stderr, "enter array\n");
         TreeList * node1 = createTLNode(treeArray[i]);
+        fprintf(stderr, "addnode success\n");
+        if (node1 == NULL)
+        {
+            fprintf(stderr, "node1 is null\n");
+        }
         head = TL_Insert(head, node1);
+        //fprintf(stderr, "insert success\n");
+
     }
+    fprintf(stderr, "for loop completion\n");
 
     return head;
 }
@@ -281,7 +294,16 @@ Tree * Build_Tree(List * head)
         tempNode = tempNode -> next;
     }
 
+    fprintf(stderr, "forest success\n");
+
     TreeList * headTree = TL_Build(treeArray, size);
+
+    fprintf(stderr, "build success\n");
+
+    if (headTree == NULL)
+    {
+        fprintf(stderr, "headTree alloc fail\n");
+    }
 
     while (headTree -> next != NULL)
     {
@@ -294,10 +316,14 @@ Tree * Build_Tree(List * head)
         free(second);
 
         headTree = third;
+        fprintf(stderr, "headtree reassign success\n");
         Tree * mrg = Merge_Tree(tn1, tn2); // branch nodes are created with '\0' as chr value
+        fprintf(stderr, "merge success\n");
         TreeList * ln = createTLNode(mrg);
+        fprintf(stderr, "newnode success\n");
 
         headTree = TL_Insert(headTree, ln);
+        fprintf(stderr, "insert success\n");
     }
 
     return (headTree -> treeptr);

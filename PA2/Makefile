@@ -11,11 +11,6 @@ pa2: $(OBJS)
 .c.o: 
 	$(GCC) -c $*.c 
 
-testmemory: pa2
-    $(VAL) --log-file=memcheck1.txt ./pa2 original/gophers freqOutput1 headOutput1 codeOutput1
-
-
-
 test1: pa2
 	./pa2  original/gophers freqOutput1 headOutput1 codeOutput1
 	diff count/gophers.count freqOutput1 tree/gophers.tree headOutput1 code/gophers.code codeOutput1
