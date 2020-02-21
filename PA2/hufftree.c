@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include "h_comp.h"
 
 #define ASCIIMAX 256
@@ -448,6 +449,7 @@ void printCodes(Tree * node, long * ind_left, long * ind_right, FILE * filename)
             for (i = (*ind_left); i > 0; i--)
             {
                 fprintf(filename, "0");
+                (*ind_left)--;
             }
             fprintf(filename, "\n");
             return;
@@ -458,6 +460,7 @@ void printCodes(Tree * node, long * ind_left, long * ind_right, FILE * filename)
             for (i = *ind_right; i > 0; i--)
             {
                 fprintf(filename, "1");
+                (*ind_right)--; 
             }
             fprintf(filename, "\n");
             return;
