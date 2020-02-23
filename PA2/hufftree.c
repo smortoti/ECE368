@@ -446,6 +446,7 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
         {
             temp = zero_bin & 0x01;
             zero_bin = zero_bin >> 1;
+            node -> bin_code = zero_bin;
             fprintf(filename, "%d", temp);
         }
         fprintf(filename, "\n");
@@ -456,66 +457,9 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
     depth++;
     printCodes(node -> left, zero_bin, depth, filename);
 
-    zero_bin = zero_bin << 1;
     zero_bin = zero_bin + 0x01;
     printCodes(node -> right, zero_bin, depth, filename);
 
-    /*if (node -> chr != '\0')
-    {
-        fprintf(filename, "%c:", node -> chr);
-    }
-
-    if ((node -> left == NULL) && (node -> right == NULL))
-    {
-        if ((*ind_left) > (*ind_right))
-        {
-            long i = 0;
-            for (i = (*ind_left); i > 0; i--)
-            {
-                fprintf(filename, "0");
-                (*ind_left)--;
-            }
-            fprintf(filename, "\n");
-            return;
-        }
-        else
-        {
-            long i = 0;
-            for (i = *ind_right; i > 0; i--)
-            {
-                fprintf(filename, "1");
-                (*ind_right)--; 
-            }
-            fprintf(filename, "\n");
-            return;
-        }
-    }
-    if (((*ind_left > (*ind_right - 1)) && (*ind_right > 0)))
-    {
-        long i = 0;
-        for (i = *ind_left; i > 0; i--)
-        {
-            fprintf(filename, "0");
-            (*ind_left)--;
-        }
-    }
-    else if ((*ind_right > (*ind_left - 1)) && ((*ind_left > 0)))
-    {
-        long i = 0;
-        for (i = *ind_right; i > 0; i--)
-        {
-            fprintf(filename, "1");
-            (*ind_right)--;
-        }
-    }
-
-    (*ind_left)++;
-
-    printCodes(node -> left, ind_left, ind_right, filename);
-
-    (*ind_right)++; 
-
-    printCodes(node -> right, ind_left, ind_right, filename);*/
 }
 
 void print2DUtil(Tree *root, int space) 
