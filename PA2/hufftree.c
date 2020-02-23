@@ -437,17 +437,18 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
 void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
 {
     long i;
-    unsigned char temp;
+    unsigned char un_chr;
+    long temp = zero_bin;
 
     if ((node -> left == NULL) && (node -> right == NULL))
     {
         fprintf(filename, "%c:", node -> chr);
+        node -> bin_code = zero_bin;
         for(i = 0; i < depth; i++)
         {
-            temp = zero_bin & 0x01;
-            zero_bin = zero_bin >> 1;
-            node -> bin_code = zero_bin;
-            fprintf(filename, "%d", temp);
+            temp = zero_bin >> (depth - (i + 1));
+            un_chr = temp & 0x01;
+            fprintf(filename, "%d", un_chr);
         }
         fprintf(filename, "\n");
         return;
