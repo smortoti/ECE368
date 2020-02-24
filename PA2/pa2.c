@@ -54,11 +54,11 @@ int main(int argc, char ** argv)
 
     fprintf(stderr, "header write success\n");
 
-    List * codeList = PreOrder_Traverse_Code(argv[4], huff_tree);
+    CodeList * codeList = PreOrder_Traverse_Code(argv[4], huff_tree);
 
     fprintf(stderr, "code and write success\n");
 
-    Compress(argv[1], argv[5], huff_tree);
+    Compress(argv[1], argv[5], codeList);
 
     return(EXIT_SUCCESS);
 }

@@ -21,6 +21,14 @@ typedef struct _List
     Tree * treeptr;
 } TreeList;
 
+typedef struct _Code
+{
+    char chr;
+    long code;
+    long length;
+    struct _Code * next;
+} CodeList;
+
 List * Read_From_File(char * filename);
 List * Add_Node(List * head, char chr);
 
@@ -44,11 +52,11 @@ void PreOrder_Traverse(FILE * filename, Tree * treenode);
 void printPreOrder(Tree * node);
 void printTreeNode(FILE * filename, Tree * node);
 
-List * PreOrder_Traverse_Code(char * filename, Tree * treenode);
+CodeList * PreOrder_Traverse_Code(char * filename, Tree * treenode);
 void PreOrder_Traverse2(Tree * root, char chr);
-List * printCodes(Tree * root, long zero, long depth, FILE * filename, List * head);
+CodeList * printCodes(Tree * root, long zero, long depth, FILE * filename, CodeList * head);
 
-List * Add_CodeNode(List * head, char chr, long bin_code);
+CodeList * Add_CodeNode(CodeList * head, char chr, long bin_code, long length);
 void Compress(char * filenamein, char * filenameout, List * codeList);
 
 void FrontBackSplit(List * source, List ** frontRef, List ** backRef);

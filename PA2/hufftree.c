@@ -417,7 +417,7 @@ void PreOrder_Traverse_Write(char * filename, Tree * root)
     fclose(fptr);
 }
 
-List * PreOrder_Traverse_Code(char * filename, Tree * root)
+CodeList * PreOrder_Traverse_Code(char * filename, Tree * root)
 {
     FILE * fptr = fopen(filename, "wb");
 
@@ -429,15 +429,17 @@ List * PreOrder_Traverse_Code(char * filename, Tree * root)
     long zero = 0;
     long depth = 0;
 
-    List * head = NULL;
+    CodeList * head = NULL;
 
     head = printCodes(root, zero, depth, fptr, head);
 
     fclose(fptr);
+
+    return head;
  
 }
 
-List * printCodes(Tree * node, long zero_bin, long depth, FILE * filename, List * head)
+CodeList * printCodes(Tree * node, long zero_bin, long depth, FILE * filename, CodeList * head)
 {
     long i;
     unsigned char un_chr;
@@ -447,7 +449,7 @@ List * printCodes(Tree * node, long zero_bin, long depth, FILE * filename, List 
     {
         fprintf(filename, "%c:", node -> chr);
 
-        head = Add_CodeNode(head, node -> chr, zero_bin);
+        head = Add_CodeNode(head, node -> chr, zero_bin, depth);
 
         for(i = 0; i < depth; i++)
         {
@@ -467,16 +469,17 @@ List * printCodes(Tree * node, long zero_bin, long depth, FILE * filename, List 
     printCodes(node -> right, zero_bin, depth, filename, head);
 }
 
-List * Add_CodeNode(List * head, char chr, long bincode)
+CodeList * Add_CodeNode(CodeList * head, char chr, long bincode, long length)
 {
-    List * newNode = malloc(sizeof(*newNode));
+    CodeList * newNode = malloc(sizeof(*newNode));
 
     if (head == NULL) // checks if list has a head node
     {
         head = newNode;
         head -> next = NULL;
         head -> chr = chr;
-        head -> freq = bincode;
+        head -> code = bincode;
+        head -> length = length;
 
         return(head);
     }
@@ -484,9 +487,10 @@ List * Add_CodeNode(List * head, char chr, long bincode)
     {
         List * temp = head;
 
-        newNode -> freq = bincode;
+        newNode -> code = bincode;
         newNode -> chr = chr;
         newNode -> next = NULL;
+        newNode -> length = length;
 
         while(temp -> next != NULL)
         {
@@ -525,6 +529,7 @@ void Compress(char * filenamein, char * filenameout, List * head)
         {
             temp = temp -> next;
         }
+
     }
 }
 
