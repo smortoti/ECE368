@@ -62,7 +62,7 @@ void makeCodeList(CodeList * codeList, Tree * root);
 
 void Add_CodeNode(CodeList * head, char chr, long bin_code, long length);
 Tree * searchTree(Tree * root, char chr);
-void Compress(char * filenamein, char * filenameout, Tree * root);
+void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree * root);
 
 void FrontBackSplit(List * source, List ** frontRef, List ** backRef);
 List * SortedMerge(List * a, List * b);

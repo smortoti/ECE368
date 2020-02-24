@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
 
    // printCodeList(codeList);
 
-    Compress(argv[1], argv[5], huff_tree);
+    Compress(argv[1], argv[3], argv[5], huff_tree);
 
     fprintf(stderr, "compress success\n");
 

@@ -433,7 +433,7 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
     long zero = 0;
     long depth = 0;
 
-    CodeList * head = NULL;
+   // CodeList * head = NULL;
 
     printCodes(root, zero, depth, fptr);
 
@@ -466,7 +466,7 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
     depth++;
     printCodes(node -> left, zero_bin, depth, filename);
 
-    zero_bin = zero_bin + 0x01;
+    zero_bin = zero_bin | 0x01;
     printCodes(node -> right, zero_bin, depth, filename);
 }
 
@@ -518,29 +518,63 @@ void Add_CodeNode(CodeList * head, char chr, long bincode, long length)
     makeCodeList(codeList, root -> right);
     fprintf(stderr, "went right\n");
 
-}
+}*/
 
 Tree * searchTree(Tree * root, char chr)
 {
     Tree * temp = NULL;
-    if (root -> chr == chr)
+
+    if (root != NULL)
     {
-        return root;
+        if (root -> chr == chr)
+        {
+            return root;
+        }
+        else
+        {
+            temp = searchTree(root -> left, chr);
+            if (temp == NULL)
+            {
+                temp = searchTree(root -> right, chr);
+            }
+            return temp;
+        }
     }
+    else
+    {
+        return NULL;
+    }
+}
 
-    temp = searchTree(root -> left, chr);
-    temp = searchTree(root -> right, chr);
+int reverseBinary(int bin)
+{
+    int BITS = sizeof(bin) * 8; 
+    int reverse = 0, i, temp; 
+  
+    for (i = 0; i < BITS; i++) 
+    { 
+        temp = (bin & (1 << i)); 
+        if(temp) 
+            reverse |= (1 << ((BITS - 1) - i)); 
+    } 
+   
+    return reverse; 
+}
 
-    return ();
-}*/
-
-void Compress(char * filenamein, char * filenameout, Tree * root)
+void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree * root)
 {
     FILE * fptrin = fopen(filenamein, "r");
 
     if (fptrin == NULL)
     {
         fprintf(stderr, "fopen input fail\n");
+    }
+
+    FILE * fptrhead = fopen(filenamehead, "r");
+
+    if (fptrhead == NULL)
+    {
+        fprintf(stderr, "fopen head fail\n");
     }
 
     FILE * fptrout = fopen(filenameout, "w");
@@ -553,45 +587,122 @@ void Compress(char * filenamein, char * filenameout, Tree * root)
     fprintf(stderr, "open success\n");
 
     char chr = 'a';
+    //char chrin = 'b';
     Tree * node = NULL;
     long i;
-    long holder;
-    long holder2;
+    long j;
+    long headOut = 0;
+    long holder = 0;
+    //long holder2 = 0;
     long depth;
-    unsigned char un_chr;
+    long un_chr;
+    long bitCounter = 0;
+    long temp = 0;
+    int binholder = 0;
+
+    fseek(fptrhead, sizeof(long) * 3, SEEK_SET);
+
+    while(!(feof(fptrhead))) // prints header file in binary
+    {
+        chr = fgetc(fptrhead);
+
+        if (chr == EOF)
+        {
+            break;
+        }
+
+        switch (chr)
+        {
+        case '0':
+            headOut = headOut << 1;
+            bitCounter++;
+            break;
+
+        case '1':
+            headOut = headOut << 1;
+            headOut |= 0x01;
+            bitCounter++;
+            break;
+    
+        default:
+            headOut = headOut << 8;
+            headOut |= chr;
+            bitCounter += 8;
+            break;
+        }
+        if (bitCounter > 8)
+        {
+            temp = headOut >> (bitCounter - 8);
+            binholder = reverseBinary(temp);
+            fwrite(&binholder, 1, 1, fptrout);
+        }
+    }
+    if (bitCounter > 0)
+    {
+        headOut = headOut << (8 - bitCounter);
+        binholder = reverseBinary(headOut);
+        fwrite(&binholder, 1, 1, fptrout);
+    }
 
     fprintf(stderr, "assign success\n");
 
     while ((chr != EOF)) // creates a new node for 
     {
-        fprintf(stderr, "loop enter success\n");
+       // fprintf(stderr, "loop enter success\n");
         chr = fgetc(fptrin);
-        fprintf(stderr, "fgetc success\n");
+       // fprintf(stderr, "fgetc success\n");
 
-        // find a way to search/return node from tree
-        Tree * node = searchTree(root, chr);
-
-        fprintf(stderr, "first loop success\n");
-
-        holder = node -> code;
-        fprintf(stderr, "holder success\n");
-        depth = node -> length;
-
-        fprintf(stderr, "loop assign success\n");
-
-        for(i = 0; i < node -> length; i++)
+        if (chr == EOF)
         {
-            holder2 = holder >> (depth - (i + 1));
-            un_chr = holder2 & 0x01;
-            fprintf(fptrout, "%c", un_chr);
+            fprintf(stderr, "EOF break\n");
+            break;
         }
 
-        fprintf(stderr, "second loop success\n");
+        // find a way to search/return node from tree
+        node = searchTree(root, chr);
+
+        if (node == NULL)
+        {
+            fprintf(stderr, "search node is NULL\n");
+        }
+
+      //  fprintf(stderr, "first loop success\n");
+
+        bitCounter = 0;
+        holder = node -> code;
+     //   fprintf(stderr, "holder success\n");
+        depth = node -> length;
+
+      //  fprintf(stderr, "loop assign success\n");
+        for(i = 0; i < depth; i++)
+        {
+            un_chr = holder & 0x01;
+            holder = holder << 1;
+            un_chr = un_chr << 1;
+            bitCounter++;
+        }
+
+        if (bitCounter >= 8)
+        {
+            temp = un_chr >> (bitCounter - 8);
+            fwrite(&temp, 1, 1, fptrout);
+            bitCounter -= 8;
+        }
+
+       // fprintf(stderr, "second loop success\n");
+    }
+
+    if (bitCounter > 0)
+    {
+        temp = reverseBinary(un_chr);
+        temp = un_chr << (8 - bitCounter);
+        fwrite(&temp, 1, 1, fptrout);
     }
 
     fprintf(stderr, "loop success\n");
 
     fclose(fptrin);
+    fclose(fptrhead);
     fclose(fptrout);
 }
 
@@ -640,7 +751,7 @@ void printCodeList(CodeList * head)
 
     while (tmpNode != NULL)
     {
-        fprintf(stderr, "chr: %c\ncode: %d\n", tmpNode -> chr, tmpNode -> code);
+        fprintf(stderr, "chr: %c\ncode: %ld\n", tmpNode -> chr, tmpNode -> code);
         tmpNode = tmpNode -> next;
     }
 }

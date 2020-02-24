@@ -13,9 +13,10 @@ pa2: $(OBJS)
 
 test1: pa2
 	./pa2  original/gophers freqOutput1 headOutput1 codeOutput1 treeOutput1
-	diff count/gophers.count freqOutput1 
+	# diff count/gophers.count freqOutput1 
 	# diff tree/gophers.tree headOutput1 
-	diff code/gophers.code codeOutput1
+	# diff code/gophers.code codeOutput1
+	diff compressed/gophers.hbt treeOutput1
 
 checkFreq:
 	diff count/gophers.count freqOutput1
