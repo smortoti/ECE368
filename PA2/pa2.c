@@ -5,7 +5,7 @@
 
 int main(int argc, char ** argv)
 {
-    if (argc != 5)
+    if (argc != 6)
     {
         fprintf(stderr, "%s", "Incorrect number of inputs\n");
         return(EXIT_FAILURE);
@@ -54,11 +54,15 @@ int main(int argc, char ** argv)
 
     fprintf(stderr, "header write success\n");
 
-    CodeList * codeList = PreOrder_Traverse_Code(argv[4], huff_tree);
+    PreOrder_Traverse_Code(argv[4], huff_tree);
 
     fprintf(stderr, "code and write success\n");
 
-    Compress(argv[1], argv[5], codeList);
+   // CodeList * codeList = makeCodeList(huff_tree);
+
+   // printCodeList(codeList);
+
+    Compress(argv[1], argv[5], huff_tree);
 
     fprintf(stderr, "compress success\n");
 

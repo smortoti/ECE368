@@ -217,6 +217,8 @@ Tree * Add_TreeNode(char chr, long freq)
 
     root -> freq = freq;
     root -> chr = chr;
+    root -> code = 0;
+    root -> length = 0;
     root -> left = root -> right = NULL;
 
     return root; 
@@ -230,6 +232,8 @@ Tree * Merge_Tree(Tree * node1, Tree * node2)
     root -> right = node2;
     root -> chr = '\0';
     root -> freq = node1 -> freq + node2 -> freq;
+    root -> code = 0;
+    root -> length = 0;
 
     return root;
 }
@@ -417,7 +421,7 @@ void PreOrder_Traverse_Write(char * filename, Tree * root)
     fclose(fptr);
 }
 
-CodeList * PreOrder_Traverse_Code(char * filename, Tree * root)
+void PreOrder_Traverse_Code(char * filename, Tree * root)
 {
     FILE * fptr = fopen(filename, "wb");
 
@@ -431,15 +435,12 @@ CodeList * PreOrder_Traverse_Code(char * filename, Tree * root)
 
     CodeList * head = NULL;
 
-    head = printCodes(root, zero, depth, fptr, head);
+    printCodes(root, zero, depth, fptr);
 
     fclose(fptr);
-
-    return head;
- 
 }
 
-CodeList * printCodes(Tree * node, long zero_bin, long depth, FILE * filename, CodeList * head)
+void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
 {
     long i;
     unsigned char un_chr;
@@ -449,7 +450,7 @@ CodeList * printCodes(Tree * node, long zero_bin, long depth, FILE * filename, C
     {
         fprintf(filename, "%c:", node -> chr);
 
-        head = Add_CodeNode(head, node -> chr, zero_bin, depth);
+        node -> code = zero_bin;
 
         for(i = 0; i < depth; i++)
         {
@@ -458,18 +459,18 @@ CodeList * printCodes(Tree * node, long zero_bin, long depth, FILE * filename, C
             fprintf(filename, "%d", un_chr);
         }
         fprintf(filename, "\n");
-        return (head);
+        return;
     }
 
     zero_bin = zero_bin << 1;
     depth++;
-    printCodes(node -> left, zero_bin, depth, filename, head);
+    printCodes(node -> left, zero_bin, depth, filename);
 
     zero_bin = zero_bin + 0x01;
-    printCodes(node -> right, zero_bin, depth, filename, head);
+    printCodes(node -> right, zero_bin, depth, filename);
 }
 
-CodeList * Add_CodeNode(CodeList * head, char chr, long bincode, long length)
+void Add_CodeNode(CodeList * head, char chr, long bincode, long length)
 {
     CodeList * newNode = malloc(sizeof(*newNode));
 
@@ -480,12 +481,10 @@ CodeList * Add_CodeNode(CodeList * head, char chr, long bincode, long length)
         head -> chr = chr;
         head -> code = bincode;
         head -> length = length;
-
-        return(head);
     }
     else
     {
-        List * temp = head;
+        CodeList * temp = head;
 
         newNode -> code = bincode;
         newNode -> chr = chr;
@@ -498,12 +497,44 @@ CodeList * Add_CodeNode(CodeList * head, char chr, long bincode, long length)
         }
 
         temp -> next = newNode;
-
-        return(head);
     }
+
+    return;
+
 }
 
-void Compress(char * filenamein, char * filenameout, List * head)
+/*void makeCodeList(CodeList * codeList, Tree * root)
+{
+
+    if ((root -> left == NULL) && (root -> left == NULL))
+    {
+        fprintf(stderr, "base case entered\n");
+        Add_CodeNode(codeList, root -> chr, root -> code, root -> length);
+        return;
+    }
+
+    makeCodeList(codeList, root -> left);
+    fprintf(stderr, "went left\n");
+    makeCodeList(codeList, root -> right);
+    fprintf(stderr, "went right\n");
+
+}
+
+Tree * searchTree(Tree * root, char chr)
+{
+    Tree * temp = NULL;
+    if (root -> chr == chr)
+    {
+        return root;
+    }
+
+    temp = searchTree(root -> left, chr);
+    temp = searchTree(root -> right, chr);
+
+    return ();
+}*/
+
+void Compress(char * filenamein, char * filenameout, Tree * root)
 {
     FILE * fptrin = fopen(filenamein, "r");
 
@@ -512,28 +543,56 @@ void Compress(char * filenamein, char * filenameout, List * head)
         fprintf(stderr, "fopen input fail\n");
     }
 
-    FILE * fptrout = fopen(filenamein, "w");
+    FILE * fptrout = fopen(filenameout, "w");
 
     if (fptrout == NULL)
     {
         fprintf(stderr, "fopen output fail\n");
     }
 
+    fprintf(stderr, "open success\n");
+
     char chr = 'a';
-    List * temp = head;
+    Tree * node = NULL;
+    long i;
+    long holder;
+    long holder2;
+    long depth;
+    unsigned char un_chr;
+
+    fprintf(stderr, "assign success\n");
 
     while ((chr != EOF)) // creates a new node for 
     {
+        fprintf(stderr, "loop enter success\n");
         chr = fgetc(fptrin);
+        fprintf(stderr, "fgetc success\n");
 
-        while (temp -> chr != chr)
+        // find a way to search/return node from tree
+        Tree * node = searchTree(root, chr);
+
+        fprintf(stderr, "first loop success\n");
+
+        holder = node -> code;
+        fprintf(stderr, "holder success\n");
+        depth = node -> length;
+
+        fprintf(stderr, "loop assign success\n");
+
+        for(i = 0; i < node -> length; i++)
         {
-            temp = temp -> next;
+            holder2 = holder >> (depth - (i + 1));
+            un_chr = holder2 & 0x01;
+            fprintf(fptrout, "%c", un_chr);
         }
 
-        // write to output file here
-
+        fprintf(stderr, "second loop success\n");
     }
+
+    fprintf(stderr, "loop success\n");
+
+    fclose(fptrin);
+    fclose(fptrout);
 }
 
 void print2DUtil(Tree *root, int space) 
@@ -565,6 +624,23 @@ void printLinkedList(List * head)
     while (tmpNode != NULL)
     {
         fprintf(stderr, "chr: %c\nfreq: %ld\n", tmpNode -> chr, tmpNode -> freq);
+        tmpNode = tmpNode -> next;
+    }
+}
+
+void printCodeList(CodeList * head)
+{
+    if (head == NULL)
+    {
+        fprintf(stderr, "codelist is NULL\n");
+        return;
+    }
+
+    CodeList * tmpNode = head;
+
+    while (tmpNode != NULL)
+    {
+        fprintf(stderr, "chr: %c\ncode: %d\n", tmpNode -> chr, tmpNode -> code);
         tmpNode = tmpNode -> next;
     }
 }

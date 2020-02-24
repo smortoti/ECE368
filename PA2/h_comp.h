@@ -4,6 +4,8 @@ typedef struct _Tree // Binary Tree definition
 {
     char chr; // Stores char value
     long freq; // Frequency of char
+    long code;
+    long length;
     struct _Tree * left;
     struct _Tree * right;
 } Tree;
@@ -52,12 +54,15 @@ void PreOrder_Traverse(FILE * filename, Tree * treenode);
 void printPreOrder(Tree * node);
 void printTreeNode(FILE * filename, Tree * node);
 
-CodeList * PreOrder_Traverse_Code(char * filename, Tree * treenode);
+void PreOrder_Traverse_Code(char * filename, Tree * treenode);
 void PreOrder_Traverse2(Tree * root, char chr);
-CodeList * printCodes(Tree * root, long zero, long depth, FILE * filename, CodeList * head);
+void printCodes(Tree * root, long zero, long depth, FILE * filename);
 
-CodeList * Add_CodeNode(CodeList * head, char chr, long bin_code, long length);
-void Compress(char * filenamein, char * filenameout, List * codeList);
+void makeCodeList(CodeList * codeList, Tree * root);
+
+void Add_CodeNode(CodeList * head, char chr, long bin_code, long length);
+Tree * searchTree(Tree * root, char chr);
+void Compress(char * filenamein, char * filenameout, Tree * root);
 
 void FrontBackSplit(List * source, List ** frontRef, List ** backRef);
 List * SortedMerge(List * a, List * b);
@@ -66,3 +71,4 @@ void MergeSort(List ** headRef);
 // Debugging functions
 void print2DUtil(Tree *root, int space);
 void printLinkedList(List * head);
+void printCodeList(CodeList * head);
