@@ -21,7 +21,7 @@ List * Read_From_File(char * filename)
     while ((chr != EOF)) // creates a new node for 
     {
         chr = fgetc(fptr);
-        if (!feof(fptr))
+        if (!feof(fptr) && (chr != '\n'))
         {
             chr_list = Add_Node(chr_list, chr);
         }
@@ -383,13 +383,13 @@ Tree * Build_Tree(List * head)
 
 void printTreeNode(FILE * filename, Tree * node)
 {
-    if (node -> chr == '\0')
+    if ((node -> left == NULL) && (node -> right == NULL))
     {
-        fprintf(filename, "0");
+        fprintf(filename, "1%c", node -> chr);
     }
     else
     {
-        fprintf(filename, "1%c", node -> chr);
+        fprintf(filename, "0");
     }
 }
 
@@ -548,7 +548,7 @@ Tree * searchTree(Tree * root, char chr)
 
 int reverseBinary(int bin)
 {
-    int BITS = sizeof(bin) * 8; 
+    int BITS = 8; 
     int reverse = 0, i, temp; 
   
     for (i = 0; i < BITS; i++) 
@@ -563,6 +563,13 @@ int reverseBinary(int bin)
 
 void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree * root)
 {
+    /* 
+    line 1: a long with the total number of bytes in the file after compression
+    line 2: a long with the total number of bytes in the header
+    line 3: a long with the number of chars in the uncompressed file
+    line 4: header
+    line 5 - end: compressed file
+    */
     FILE * fptrin = fopen(filenamein, "r");
 
     if (fptrin == NULL)
@@ -600,7 +607,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     long temp = 0;
     int binholder = 0;
 
-    fseek(fptrhead, sizeof(long) * 3, SEEK_SET);
+    fseek(fptrout, sizeof(long) * 3, SEEK_SET);
 
     while(!(feof(fptrhead))) // prints header file in binary
     {
@@ -608,37 +615,46 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
         if (chr == EOF)
         {
+            fprintf(stderr, "enter break\n");
             break;
         }
 
         switch (chr)
         {
         case '0':
+            fprintf(stderr, "enter 0\n");
             headOut = headOut << 1;
             bitCounter++;
             break;
 
         case '1':
+            fprintf(stderr, "enter 1\n");
             headOut = headOut << 1;
             headOut |= 0x01;
             bitCounter++;
             break;
     
         default:
+            fprintf(stderr, "enter char\n");
             headOut = headOut << 8;
             headOut |= chr;
             bitCounter += 8;
             break;
         }
-        if (bitCounter > 8)
+        if (bitCounter >= 8)
         {
+            fprintf(stderr, "fwrite to file\n");
             temp = headOut >> (bitCounter - 8);
             binholder = reverseBinary(temp);
             fwrite(&binholder, 1, 1, fptrout);
+            bitCounter -= 8;
+
         }
     }
+
     if (bitCounter > 0)
     {
+        fprintf(stderr, "print extra\n");
         headOut = headOut << (8 - bitCounter);
         binholder = reverseBinary(headOut);
         fwrite(&binholder, 1, 1, fptrout);
@@ -723,7 +739,7 @@ void print2DUtil(Tree *root, int space)
     fprintf(stderr, "\n"); 
     for (int i = COUNT; i < space; i++) 
         fprintf(stderr, " "); 
-    fprintf(stderr, "%ld, %c\n", root->freq, root -> chr); 
+    fprintf(stderr, "%ld, %c:\n", root->freq, root -> chr); 
   
     // Process left child 
     print2DUtil(root->left, space); 
