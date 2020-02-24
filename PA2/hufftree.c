@@ -217,7 +217,6 @@ Tree * Add_TreeNode(char chr, long freq)
 
     root -> freq = freq;
     root -> chr = chr;
-    root -> bin_code = NULL;
     root -> left = root -> right = NULL;
 
     return root; 
@@ -418,7 +417,7 @@ void PreOrder_Traverse_Write(char * filename, Tree * root)
     fclose(fptr);
 }
 
-void PreOrder_Traverse_Code(char * filename, Tree * root)
+List * PreOrder_Traverse_Code(char * filename, Tree * root)
 {
     FILE * fptr = fopen(filename, "wb");
 
@@ -430,11 +429,15 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
     long zero = 0;
     long depth = 0;
 
-    printCodes(root, zero, depth, fptr);
+    List * head = NULL;
+
+    head = printCodes(root, zero, depth, fptr, head);
+
+    fclose(fptr);
  
 }
 
-void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
+List * printCodes(Tree * node, long zero_bin, long depth, FILE * filename, List * head)
 {
     long i;
     unsigned char un_chr;
@@ -443,7 +446,9 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
     if ((node -> left == NULL) && (node -> right == NULL))
     {
         fprintf(filename, "%c:", node -> chr);
-        node -> bin_code = zero_bin;
+
+        head = Add_CodeNode(head, node -> chr, zero_bin);
+
         for(i = 0; i < depth; i++)
         {
             temp = zero_bin >> (depth - (i + 1));
@@ -451,16 +456,76 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
             fprintf(filename, "%d", un_chr);
         }
         fprintf(filename, "\n");
-        return;
+        return (head);
     }
 
     zero_bin = zero_bin << 1;
     depth++;
-    printCodes(node -> left, zero_bin, depth, filename);
+    printCodes(node -> left, zero_bin, depth, filename, head);
 
     zero_bin = zero_bin + 0x01;
-    printCodes(node -> right, zero_bin, depth, filename);
+    printCodes(node -> right, zero_bin, depth, filename, head);
+}
 
+List * Add_CodeNode(List * head, char chr, long bincode)
+{
+    List * newNode = malloc(sizeof(*newNode));
+
+    if (head == NULL) // checks if list has a head node
+    {
+        head = newNode;
+        head -> next = NULL;
+        head -> chr = chr;
+        head -> freq = bincode;
+
+        return(head);
+    }
+    else
+    {
+        List * temp = head;
+
+        newNode -> freq = bincode;
+        newNode -> chr = chr;
+        newNode -> next = NULL;
+
+        while(temp -> next != NULL)
+        {
+            temp = temp -> next;
+        }
+
+        temp -> next = newNode;
+
+        return(head);
+    }
+}
+
+void Compress(char * filenamein, char * filenameout, List * head)
+{
+    FILE * fptrin = fopen(filenamein, "r");
+
+    if (fptrin == NULL)
+    {
+        fprintf(stderr, "fopen input fail\n");
+    }
+
+    FILE * fptrout = fopen(filenamein, "w");
+
+    if (fptrout == NULL)
+    {
+        fprintf(stderr, "fopen output fail\n");
+    }
+
+    char chr = 'a';
+    List * temp = head;
+
+    while ((chr != EOF)) // creates a new node for 
+    {
+        chr = fgetc(fptrin);
+        while (temp -> chr != chr)
+        {
+            temp = temp -> next;
+        }
+    }
 }
 
 void print2DUtil(Tree *root, int space) 
