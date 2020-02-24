@@ -18,11 +18,12 @@ test1: pa2
 	# diff code/gophers.code codeOutput1
 	diff compressed/gophers.hbt treeOutput1
 
+test2: pa2
+	./pa2 original/woods freqOutput2 headOutput2 codeOutput2 treeOutput2
+	diff compressed/woods.hbt treeOutput2
+
 checkFreq:
 	diff count/gophers.count freqOutput1
-
-test2: pa2
-	./pa1 -l examples/1K.b output1Kl
 
 test2a: pa1
 	./pa1 -a examples/15.b output15a

@@ -8,7 +8,7 @@
 
 List * Read_From_File(char * filename)
 {
-    FILE * fptr = fopen(filename, "r");
+    FILE * fptr = fopen(filename, "rb");
     
     if (fptr == NULL)
     {
@@ -18,10 +18,11 @@ List * Read_From_File(char * filename)
     List * chr_list = NULL;
     char chr = 'a';
 
-    while ((chr != EOF)) // creates a new node for 
+    while (!feof(fptr)) // creates a new node for each character read
     {
         chr = fgetc(fptr);
-        if (!feof(fptr) && (chr != '\n'))
+        fprintf(stderr,"%c\n", chr);
+        if (!feof(fptr)) // ensures eof isn't added to nodes
         {
             chr_list = Add_Node(chr_list, chr);
         }
@@ -662,10 +663,13 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
     fprintf(stderr, "assign success\n");
 
+    chr = 'a';
+
     while ((chr != EOF)) // creates a new node for 
     {
        // fprintf(stderr, "loop enter success\n");
         chr = fgetc(fptrin);
+        fprintf(stderr, "character read: %c\n", chr);
        // fprintf(stderr, "fgetc success\n");
 
         if (chr == EOF)
@@ -687,11 +691,12 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         bitCounter = 0;
         holder = node -> code;
      //   fprintf(stderr, "holder success\n");
-        depth = node -> length;
+       // depth = node -> length;
 
       //  fprintf(stderr, "loop assign success\n");
-        for(i = 0; i < depth; i++)
+        for(i = 0; i < node -> length; i++)
         {
+            fprintf(stderr, "enter depth loop\n");
             un_chr = holder & 0x01;
             holder = holder << 1;
             un_chr = un_chr << 1;
@@ -700,7 +705,9 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
         if (bitCounter >= 8)
         {
+            fprintf(stderr, "enter write loop\n");
             temp = un_chr >> (bitCounter - 8);
+            temp = reverseBinary(temp);
             fwrite(&temp, 1, 1, fptrout);
             bitCounter -= 8;
         }
@@ -710,8 +717,10 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
     if (bitCounter > 0)
     {
+        fprintf(stderr, "enter final write\n");
         temp = reverseBinary(un_chr);
         temp = un_chr << (8 - bitCounter);
+        temp = reverseBinary(temp);
         fwrite(&temp, 1, 1, fptrout);
     }
 
