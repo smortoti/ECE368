@@ -525,10 +525,13 @@ void Compress(char * filenamein, char * filenameout, List * head)
     while ((chr != EOF)) // creates a new node for 
     {
         chr = fgetc(fptrin);
+
         while (temp -> chr != chr)
         {
             temp = temp -> next;
         }
+
+        // write to output file here
 
     }
 }

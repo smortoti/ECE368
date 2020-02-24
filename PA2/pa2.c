@@ -60,5 +60,7 @@ int main(int argc, char ** argv)
 
     Compress(argv[1], argv[5], codeList);
 
+    fprintf(stderr, "compress success\n");
+
     return(EXIT_SUCCESS);
 }
