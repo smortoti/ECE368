@@ -375,7 +375,7 @@ Tree * Build_Tree(List * head)
     root -> length = headTree -> treeptr -> length;
 
     TreeList_Destroy(headTree);
-
+    free(treeArray);
     return (root);
 }
 
@@ -475,16 +475,13 @@ Tree * searchTree(Tree * root, char chr)
     {
         if (root -> chr == chr)
         {
-            fprintf(stderr, "comparison\n");
             if (root -> left == NULL && root -> right == NULL)
             {
-                fprintf(stderr, "correct return\n");
                 return root;
             }
         }
         else
         {
-            fprintf(stderr, "else\n");
             temp = searchTree(root -> left, chr);
             if (temp == NULL)
             {
@@ -497,6 +494,7 @@ Tree * searchTree(Tree * root, char chr)
     {
         return NULL;
     }
+    return NULL;
 }
 
 int reverseBinary(int bin)
@@ -611,18 +609,13 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     {
         chr = fgetc(fptrin);
 
-        fprintf(stderr, "node length5:\n");
-
         if (feof(fptrin))
         {
         
         }
         else
         {
-            fprintf(stderr,"segfault\n");
             node = searchTree(root, chr);
-            fprintf(stderr, "node length: %ld\n", node -> length);
-        
 
             if (node == NULL)
             {
@@ -632,13 +625,9 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
             letter = 0;
             letter = letter | node -> code;
 
-            fprintf(stderr, "node length1: %ld\n", node -> length);
-
             codeOutput = codeOutput << node -> length;
             codeOutput |= letter;
             bitCounter += node -> length;
-
-            fprintf(stderr, "node length2: %ld\n", node -> length);
 
             if (bitCounter >= 8)
             {
@@ -646,8 +635,6 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
                 fwrite(&temp, sizeof(char), 1, fptrout);
                 bitCounter -= 8;
             }
-
-            fprintf(stderr, "node length3: %ld\n", node -> length);
 
         }
 
@@ -660,8 +647,6 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         fwrite(&temp, 1, 1, fptrout);
         bitCounter = 0;
     }
-
-    fprintf(stderr, "node length4: %ld\n", node -> length);
 
     fseek(fptrout, 0, SEEK_END);
     pos_end = ftell(fptrout);
@@ -708,6 +693,7 @@ void TreeList_Destroy(TreeList * head)
     while (head != NULL)
     {
         TreeList * temp = head -> next;
+        free(head -> treeptr);
         free (head);
         head = temp;
     }
