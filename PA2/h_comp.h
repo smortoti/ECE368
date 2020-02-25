@@ -23,14 +23,6 @@ typedef struct _List
     Tree * treeptr;
 } TreeList;
 
-typedef struct _Code
-{
-    char chr;
-    long code;
-    long length;
-    struct _Code * next;
-} CodeList;
-
 List * Read_From_File(char * filename);
 List * Add_Node(List * head, char chr);
 
@@ -41,13 +33,14 @@ long countNode(List * head);
 Tree * Build_Tree(List * head);
 Tree * Add_TreeNode(char chr, long freq);
 Tree * Merge_Tree(Tree * node1, Tree * node2);
-List * Free_Node(List * head, List * nodeToDelete);
 
+void List_Destroy(List * head);
+void Tree_Destroy(Tree * root);
+void TreeList_Destroy(TreeList * head);
 
 TreeList * createTLNode(Tree * root);
 TreeList * TL_Insert(TreeList * head, TreeList * node);
 TreeList * TL_Build(Tree ** treeArray, long size);
-
 
 void PreOrder_Traverse_Write(char * filename, Tree * treenode);
 void PreOrder_Traverse(FILE * filename, Tree * treenode);
@@ -58,9 +51,6 @@ void PreOrder_Traverse_Code(char * filename, Tree * treenode);
 void PreOrder_Traverse2(Tree * root, char chr);
 void printCodes(Tree * root, long zero, long depth, FILE * filename);
 
-void makeCodeList(CodeList * codeList, Tree * root);
-
-void Add_CodeNode(CodeList * head, char chr, long bin_code, long length);
 Tree * searchTree(Tree * root, char chr);
 void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree * root);
 
@@ -71,4 +61,4 @@ void MergeSort(List ** headRef);
 // Debugging functions
 void print2DUtil(Tree *root, int space);
 void printLinkedList(List * head);
-void printCodeList(CodeList * head);
+

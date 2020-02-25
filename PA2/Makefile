@@ -11,7 +11,7 @@ pa2: $(OBJS)
 .c.o: 
 	$(GCC) -c $*.c 
 
-testall: test1 test2 test3 test4 test5 test6
+testall: test1 test2 test4 test5 test6
 
 test1: pa2
 	./pa2  original/gophers freqOutput1 headOutput1 codeOutput1 treeOutput1

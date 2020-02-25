@@ -22,25 +22,11 @@ int main(int argc, char ** argv)
         return(EXIT_FAILURE);
     }
 
-    fprintf(stderr, "read success\n");
-
-    printLinkedList(chr_freqs);
-
     Read_Freq(argv[2], chr_freqs);
-
-    fprintf(stderr, "freq success\n");
-
-    printLinkedList(chr_freqs);
 
     MergeSort(&chr_freqs);
 
-    fprintf(stderr, "sort success\n");
-
-    printLinkedList(chr_freqs);
-
     huff_tree = Build_Tree(chr_freqs);
-
-    fprintf(stderr, "build tree success\n");
 
     if (huff_tree == NULL)
     {
@@ -48,23 +34,14 @@ int main(int argc, char ** argv)
         return (EXIT_FAILURE);
     }
 
-    print2DUtil(huff_tree, 0);
-
     PreOrder_Traverse_Write(argv[3], huff_tree);
-
-    fprintf(stderr, "header write success\n");
 
     PreOrder_Traverse_Code(argv[4], huff_tree);
 
-    fprintf(stderr, "code and write success\n");
-
-   // CodeList * codeList = makeCodeList(huff_tree);
-
-   // printCodeList(codeList);
-
     Compress(argv[1], argv[3], argv[5], huff_tree);
 
-    fprintf(stderr, "compress success\n");
+    List_Destroy(chr_freqs);
+    Tree_Destroy(huff_tree);
 
     return(EXIT_SUCCESS);
 }

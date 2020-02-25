@@ -21,7 +21,7 @@ List * Read_From_File(char * filename)
     while (!feof(fptr)) // creates a new node for each character read
     {
         chr = fgetc(fptr);
-        fprintf(stderr,"%c\n", chr);
+
         if (!feof(fptr)) // ensures eof isn't added to nodes
         {
             chr_list = Add_Node(chr_list, chr);
@@ -220,7 +220,8 @@ Tree * Add_TreeNode(char chr, long freq)
     root -> chr = chr;
     root -> code = 0;
     root -> length = 0;
-    root -> left = root -> right = NULL;
+    root -> left = NULL;
+    root -> right = NULL;
 
     return root; 
 }
@@ -253,7 +254,6 @@ TreeList * TL_Insert(TreeList * head, TreeList * node)
 {
     if (head == NULL)
     {
-        fprintf(stderr, "head is NULL\n");
         return node;
     }
 
@@ -365,7 +365,18 @@ Tree * Build_Tree(List * head)
         headTree = TL_Insert(headTree, ln);
     }
 
-    return (headTree -> treeptr);
+    Tree * root = malloc(sizeof(*root));
+
+    root -> chr = headTree -> treeptr -> chr;
+    root -> freq = headTree -> treeptr -> freq;
+    root -> left = headTree -> treeptr -> left;
+    root -> right = headTree -> treeptr -> right;
+    root -> code = headTree -> treeptr -> code;
+    root -> length = headTree -> treeptr -> length;
+
+    TreeList_Destroy(headTree);
+
+    return (root);
 }
 
 void printTreeNode(FILE * filename, Tree * node)
@@ -456,39 +467,6 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
     printCodes(node -> right, zero_bin, depth, filename);
 }
 
-void Add_CodeNode(CodeList * head, char chr, long bincode, long length)
-{
-    CodeList * newNode = malloc(sizeof(*newNode));
-
-    if (head == NULL) // checks if list has a head node
-    {
-        head = newNode;
-        head -> next = NULL;
-        head -> chr = chr;
-        head -> code = bincode;
-        head -> length = length;
-    }
-    else
-    {
-        CodeList * temp = head;
-
-        newNode -> code = bincode;
-        newNode -> chr = chr;
-        newNode -> next = NULL;
-        newNode -> length = length;
-
-        while(temp -> next != NULL)
-        {
-            temp = temp -> next;
-        }
-
-        temp -> next = newNode;
-    }
-
-    return;
-
-}
-
 Tree * searchTree(Tree * root, char chr)
 {
     Tree * temp = NULL;
@@ -497,10 +475,16 @@ Tree * searchTree(Tree * root, char chr)
     {
         if (root -> chr == chr)
         {
-            return root;
+            fprintf(stderr, "comparison\n");
+            if (root -> left == NULL && root -> right == NULL)
+            {
+                fprintf(stderr, "correct return\n");
+                return root;
+            }
         }
         else
         {
+            fprintf(stderr, "else\n");
             temp = searchTree(root -> left, chr);
             if (temp == NULL)
             {
@@ -560,18 +544,9 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         fprintf(stderr, "fopen output fail\n");
     }
 
-    fprintf(stderr, "open success\n");
-
     char chr = 'a';
-    //char chrin = 'b';
     Tree * node = NULL;
-    long i;
-    long j;
     long headOut = 0;
-    long holder = 0;
-    long holder2 = 0;
-    long depth;
-    unsigned int un_chr = 0;
     long bitCounter = 0;
     long temp = 0;
     int binholder = 0;
@@ -579,7 +554,6 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     long letter = 0;
     long pos_end = 0;
     long byteCounter = 0;
-    long char_count = 0;
 
     fseek(fptrout, sizeof(long) * 3, SEEK_SET);
 
@@ -589,27 +563,23 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
         if (chr == EOF)
         {
-           // fprintf(stderr, "enter break\n");
             break;
         }
 
         switch (chr)
         {
         case '0':
-           // fprintf(stderr, "enter 0\n");
             headOut = headOut << 1;
             bitCounter++;
             break;
 
         case '1':
-           // fprintf(stderr, "enter 1\n");
             headOut = headOut << 1;
             headOut |= 0x01;
             bitCounter++;
             break;
     
         default:
-           // fprintf(stderr, "enter char\n");
             headOut = headOut << 8;
             headOut |= chr;
             bitCounter += 8;
@@ -617,7 +587,6 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         }
         if (bitCounter >= 8)
         {
-           // fprintf(stderr, "fwrite to file\n");
             temp = headOut >> (bitCounter - 8);
             binholder = reverseBinary(temp);
             fwrite(&binholder, 1, 1, fptrout);
@@ -629,28 +598,30 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
     if (bitCounter > 0)
     {
-        fprintf(stderr, "print extra\n");
         byteCounter++;
         headOut = headOut << (8 - bitCounter);
         binholder = reverseBinary(headOut);
         fwrite(&binholder, 1, 1, fptrout);
     }
 
-    //fprintf(stderr, "assign success\n");
-
     chr = 'a';
     bitCounter = 0;
-    long sequence = 0;
 
     while ((chr != EOF)) // creates a new node for 
     {
         chr = fgetc(fptrin);
 
+        fprintf(stderr, "node length5:\n");
+
         if (feof(fptrin))
-        {}
+        {
+        
+        }
         else
         {
+            fprintf(stderr,"segfault\n");
             node = searchTree(root, chr);
+            fprintf(stderr, "node length: %ld\n", node -> length);
         
 
             if (node == NULL)
@@ -660,20 +631,23 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
             letter = 0;
             letter = letter | node -> code;
-            //holder2 = node -> code >> (node -> length - 1);
-            fprintf(stderr, "node length:%ld\n", node -> length);
+
+            fprintf(stderr, "node length1: %ld\n", node -> length);
 
             codeOutput = codeOutput << node -> length;
             codeOutput |= letter;
             bitCounter += node -> length;
 
+            fprintf(stderr, "node length2: %ld\n", node -> length);
+
             if (bitCounter >= 8)
             {
                 temp = codeOutput >> (bitCounter - 8);
-                //temp = reverseBinary(temp);
                 fwrite(&temp, sizeof(char), 1, fptrout);
                 bitCounter -= 8;
             }
+
+            fprintf(stderr, "node length3: %ld\n", node -> length);
 
         }
 
@@ -681,13 +655,13 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
     if (bitCounter > 0)
     {
-        fprintf(stderr, "enter final write\n");
-        //sequence = reverseBinary(sequence);
         temp = codeOutput << (8 - bitCounter);
         temp = reverseBinary(temp);
         fwrite(&temp, 1, 1, fptrout);
         bitCounter = 0;
     }
+
+    fprintf(stderr, "node length4: %ld\n", node -> length);
 
     fseek(fptrout, 0, SEEK_END);
     pos_end = ftell(fptrout);
@@ -705,6 +679,38 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     fclose(fptrin);
     fclose(fptrhead);
     fclose(fptrout);
+}
+
+void List_Destroy(List * head)
+{
+    while (head != NULL)
+    {
+        List * temp = head -> next;
+        free (head);
+        head = temp;
+    }
+}
+
+void Tree_Destroy(Tree * root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    Tree_Destroy(root -> left);
+    Tree_Destroy(root -> right);
+
+    free(root);
+}
+
+void TreeList_Destroy(TreeList * head)
+{
+    while (head != NULL)
+    {
+        TreeList * temp = head -> next;
+        free (head);
+        head = temp;
+    }
 }
 
 void print2DUtil(Tree *root, int space) 
@@ -736,23 +742,6 @@ void printLinkedList(List * head)
     while (tmpNode != NULL)
     {
         fprintf(stderr, "chr: %c\nfreq: %ld\n", tmpNode -> chr, tmpNode -> freq);
-        tmpNode = tmpNode -> next;
-    }
-}
-
-void printCodeList(CodeList * head)
-{
-    if (head == NULL)
-    {
-        fprintf(stderr, "codelist is NULL\n");
-        return;
-    }
-
-    CodeList * tmpNode = head;
-
-    while (tmpNode != NULL)
-    {
-        fprintf(stderr, "chr: %c\ncode: %ld\n", tmpNode -> chr, tmpNode -> code);
         tmpNode = tmpNode -> next;
     }
 }
