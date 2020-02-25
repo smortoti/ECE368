@@ -11,30 +11,31 @@ pa2: $(OBJS)
 .c.o: 
 	$(GCC) -c $*.c 
 
+testall: test1 test2 test3 test4 test5 test6
+
 test1: pa2
 	./pa2  original/gophers freqOutput1 headOutput1 codeOutput1 treeOutput1
-	# diff count/gophers.count freqOutput1 
-	# diff tree/gophers.tree headOutput1 
-	# diff code/gophers.code codeOutput1
-	diff compressed/gophers.hbt treeOutput1
+	diff count/gophers.count freqOutput1 
 
 test2: pa2
 	./pa2 original/woods freqOutput2 headOutput2 codeOutput2 treeOutput2
-	diff compressed/woods.hbt treeOutput2
+	diff count/woods.count freqOutput2
 
-checkFreq:
-	diff count/gophers.count freqOutput1
+test3: pa2
+	./pa2 original/binary1 freqOutput3 headOutput3 codeOutput3 treeOutput3
+	diff count/binary1.count freqOutput3
 
-test2a: pa1
-	./pa1 -a examples/15.b output15a
-	diff output15a examples/15sa.b
+test4: pa2
+	./pa2 original/stone freqOutput4 headOutput4 codeOutput4 treeOutput4
+	diff count/stone.count freqOutput4
 
-test2l: pa1
-	./pa1 -a examples/15.b output15l
-	diff output15l examples/15sa.b
+test5: pa2
+	./pa2 original/lorum freqOutput5 headOutput5 codeOutput5 treeOutput5
+	diff count/lorum.count freqOutput5
 
-test1M: pa1
-	./pa1 -a examples/1M.b output1Ma
+test6: pa2
+	./pa2 original/empty freqOutput6 headOutput6 codeOutput6 treeOutput6
+	diff count/empty.count freqOutput6
 
 clean: # remove all machine generated files
 	rm -f pa1 *.o ????Output?

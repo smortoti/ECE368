@@ -576,6 +576,10 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     long temp = 0;
     int binholder = 0;
     long codeOutput = 0;
+    long letter = 0;
+    long pos_end = 0;
+    long byteCounter = 0;
+    long char_count = 0;
 
     fseek(fptrout, sizeof(long) * 3, SEEK_SET);
 
@@ -617,6 +621,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
             temp = headOut >> (bitCounter - 8);
             binholder = reverseBinary(temp);
             fwrite(&binholder, 1, 1, fptrout);
+            byteCounter++;
             bitCounter -= 8;
 
         }
@@ -625,6 +630,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     if (bitCounter > 0)
     {
         fprintf(stderr, "print extra\n");
+        byteCounter++;
         headOut = headOut << (8 - bitCounter);
         binholder = reverseBinary(headOut);
         fwrite(&binholder, 1, 1, fptrout);
@@ -638,74 +644,63 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
     while ((chr != EOF)) // creates a new node for 
     {
-       // fprintf(stderr, "loop enter success\n");
         chr = fgetc(fptrin);
-        fprintf(stderr, "character read: %c\n", chr);
-       // fprintf(stderr, "fgetc success\n");
 
-        if (chr == EOF)
+        if (feof(fptrin))
         {}
         else
         {
-        // find a way to search/return node from tree
-        node = searchTree(root, chr);
+            node = searchTree(root, chr);
+        
+
+            if (node == NULL)
+            {
+                fprintf(stderr, "search node is NULL\n");
+            }
+
+            letter = 0;
+            letter = letter | node -> code;
+            //holder2 = node -> code >> (node -> length - 1);
+            fprintf(stderr, "node length:%ld\n", node -> length);
+
+            codeOutput = codeOutput << node -> length;
+            codeOutput |= letter;
+            bitCounter += node -> length;
+
+            if (bitCounter >= 8)
+            {
+                temp = codeOutput >> (bitCounter - 8);
+                //temp = reverseBinary(temp);
+                fwrite(&temp, sizeof(char), 1, fptrout);
+                bitCounter -= 8;
+            }
+
         }
 
-        if (node == NULL)
-        {
-            fprintf(stderr, "search node is NULL\n");
-        }
-      //  fprintf(stderr, "first loop success\n");
-
-        holder = node -> code;
-        holder2 = node -> code >> (node -> length - 1);
-        fprintf(stderr, "node length:%ld\n", node -> length);
-     //   fprintf(stderr, "holder success\n");
-       // depth = node -> length;
-
-      //  fprintf(stderr, "loop assign success\n");
-        for(i = 0; i < node -> length; i++)
-        {
-            //fprintf(stderr, "enter depth loop\n");
-            un_chr = holder & 0x01;
-            sequence = sequence << 1; // add new element to sequence, currently backwards
-            sequence |= un_chr;
-            //holder2 = holder;
-            // holder2 = holder2 >> (node -> length - (i + 1));
-            holder = holder >> 1;
-            bitCounter++;
-        }
-        sequence = reverseBinary(sequence);
-        for(i = 0; i < node -> length; i++)
-        {
-            codeOutput = codeOutput << 1;
-            holder2 = sequence & 0x01;
-            codeOutput |= holder2;
-        }
-
-        if (bitCounter >= 8)
-        {
-            //fprintf(stderr, "enter write loop\n");
-            temp = sequence >> (bitCounter - 8);
-            //temp = reverseBinary(temp);
-            fwrite(&temp, sizeof(char), 1, fptrout);
-            bitCounter -= 8;
-        }
-
-       // fprintf(stderr, "second loop success\n");
     }
 
     if (bitCounter > 0)
     {
         fprintf(stderr, "enter final write\n");
         //sequence = reverseBinary(sequence);
-        temp = sequence << (8 - bitCounter);
+        temp = codeOutput << (8 - bitCounter);
         temp = reverseBinary(temp);
         fwrite(&temp, 1, 1, fptrout);
         bitCounter = 0;
     }
 
-    fprintf(stderr, "loop success\n");
+    fseek(fptrout, 0, SEEK_END);
+    pos_end = ftell(fptrout);
+
+    fseek(fptrout, 0, SEEK_SET);
+    fwrite(&pos_end, sizeof(long), 1, fptrout);
+
+    fwrite(&byteCounter, sizeof(long), 1, fptrout);
+
+    fseek(fptrin, 0, SEEK_END);
+    pos_end = ftell(fptrin);
+
+    fwrite(&pos_end, sizeof(long), 1, fptrout);
 
     fclose(fptrin);
     fclose(fptrhead);
