@@ -253,22 +253,18 @@ TreeList * TL_Insert(TreeList * head, TreeList * node)
 {
     if (head == NULL)
     {
-       // fprintf(stderr, "head is NULL\n");
+        fprintf(stderr, "head is NULL\n");
         return node;
     }
 
- //   fprintf(stderr, "entering assign\n");
- //   fprintf(stderr, "head: %ld\n", head -> treeptr -> freq);
     if (node -> treeptr == NULL)
     {
         fprintf(stderr, "NULL\n");
     }
- //   fprintf(stderr, "node: %ld\n", node -> treeptr -> freq);
+
 
     long freq1 = (head -> treeptr -> freq); 
-    long freq2 = (node -> treeptr -> freq); // SEG FAULTS HERE, CANNOT FIND A REASON
-
-  //  fprintf(stderr, "assignment success\n");
+    long freq2 = (node -> treeptr -> freq); 
 
     if (freq1 > freq2)
     {
@@ -285,26 +281,22 @@ TreeList * TL_Build(Tree ** treeArray, long size)
 {
     long i = 0;
     TreeList * head = NULL;
- //   fprintf(stderr, "%ld\n", size);
     
     for (i = 0; i < size; i++)
     {
-   //     fprintf(stderr, "enter array\n");
         if (treeArray[i] == NULL)
         {
             fprintf(stderr, "treearray is null\n");
         }
         TreeList * node1 = createTLNode(treeArray[i]);
-    //    fprintf(stderr, "addnode success\n");
+
         if (node1 -> treeptr == NULL)
         {
             fprintf(stderr, "node1 tree is null\n");
         }
         head = TL_Insert(head, node1);
-        //fprintf(stderr, "insert success\n");
 
     }
-   // fprintf(stderr, "for loop completion\n");
 
     return head;
 }
@@ -351,8 +343,6 @@ Tree * Build_Tree(List * head)
 
     TreeList * headTree = TL_Build(treeArray, size);
 
-  //  fprintf(stderr, "build success\n");
-
     if (headTree == NULL)
     {
         fprintf(stderr, "headTree alloc fail\n");
@@ -369,14 +359,10 @@ Tree * Build_Tree(List * head)
         free(second);
 
         headTree = third;
-      //  fprintf(stderr, "headtree reassign success\n");
         Tree * mrg = Merge_Tree(tn1, tn2); // branch nodes are created with '\0' as chr value
-       // fprintf(stderr, "merge success\n");
         TreeList * ln = createTLNode(mrg);
-       // fprintf(stderr, "newnode success\n");
 
         headTree = TL_Insert(headTree, ln);
-       // fprintf(stderr, "insert success\n");
     }
 
     return (headTree -> treeptr);
@@ -434,8 +420,6 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
     long zero = 0;
     long depth = 0;
 
-   // CodeList * head = NULL;
-
     printCodes(root, zero, depth, fptr);
 
     fclose(fptr);
@@ -452,6 +436,7 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
         fprintf(filename, "%c:", node -> chr);
 
         node -> code = zero_bin;
+        node -> length = depth;
 
         for(i = 0; i < depth; i++)
         {
@@ -503,23 +488,6 @@ void Add_CodeNode(CodeList * head, char chr, long bincode, long length)
     return;
 
 }
-
-/*void makeCodeList(CodeList * codeList, Tree * root)
-{
-
-    if ((root -> left == NULL) && (root -> left == NULL))
-    {
-        fprintf(stderr, "base case entered\n");
-        Add_CodeNode(codeList, root -> chr, root -> code, root -> length);
-        return;
-    }
-
-    makeCodeList(codeList, root -> left);
-    fprintf(stderr, "went left\n");
-    makeCodeList(codeList, root -> right);
-    fprintf(stderr, "went right\n");
-
-}*/
 
 Tree * searchTree(Tree * root, char chr)
 {
@@ -601,12 +569,13 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     long j;
     long headOut = 0;
     long holder = 0;
-    //long holder2 = 0;
+    long holder2 = 0;
     long depth;
-    long un_chr;
+    unsigned int un_chr = 0;
     long bitCounter = 0;
     long temp = 0;
     int binholder = 0;
+    long codeOutput = 0;
 
     fseek(fptrout, sizeof(long) * 3, SEEK_SET);
 
@@ -616,27 +585,27 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
         if (chr == EOF)
         {
-            fprintf(stderr, "enter break\n");
+           // fprintf(stderr, "enter break\n");
             break;
         }
 
         switch (chr)
         {
         case '0':
-            fprintf(stderr, "enter 0\n");
+           // fprintf(stderr, "enter 0\n");
             headOut = headOut << 1;
             bitCounter++;
             break;
 
         case '1':
-            fprintf(stderr, "enter 1\n");
+           // fprintf(stderr, "enter 1\n");
             headOut = headOut << 1;
             headOut |= 0x01;
             bitCounter++;
             break;
     
         default:
-            fprintf(stderr, "enter char\n");
+           // fprintf(stderr, "enter char\n");
             headOut = headOut << 8;
             headOut |= chr;
             bitCounter += 8;
@@ -644,7 +613,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         }
         if (bitCounter >= 8)
         {
-            fprintf(stderr, "fwrite to file\n");
+           // fprintf(stderr, "fwrite to file\n");
             temp = headOut >> (bitCounter - 8);
             binholder = reverseBinary(temp);
             fwrite(&binholder, 1, 1, fptrout);
@@ -661,9 +630,11 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         fwrite(&binholder, 1, 1, fptrout);
     }
 
-    fprintf(stderr, "assign success\n");
+    //fprintf(stderr, "assign success\n");
 
     chr = 'a';
+    bitCounter = 0;
+    long sequence = 0;
 
     while ((chr != EOF)) // creates a new node for 
     {
@@ -673,42 +644,51 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
        // fprintf(stderr, "fgetc success\n");
 
         if (chr == EOF)
+        {}
+        else
         {
-            fprintf(stderr, "EOF break\n");
-            break;
-        }
-
         // find a way to search/return node from tree
         node = searchTree(root, chr);
+        }
 
         if (node == NULL)
         {
             fprintf(stderr, "search node is NULL\n");
         }
-
       //  fprintf(stderr, "first loop success\n");
 
-        bitCounter = 0;
         holder = node -> code;
+        holder2 = node -> code >> (node -> length - 1);
+        fprintf(stderr, "node length:%ld\n", node -> length);
      //   fprintf(stderr, "holder success\n");
        // depth = node -> length;
 
       //  fprintf(stderr, "loop assign success\n");
         for(i = 0; i < node -> length; i++)
         {
-            fprintf(stderr, "enter depth loop\n");
+            //fprintf(stderr, "enter depth loop\n");
             un_chr = holder & 0x01;
-            holder = holder << 1;
-            un_chr = un_chr << 1;
+            sequence = sequence << 1; // add new element to sequence, currently backwards
+            sequence |= un_chr;
+            //holder2 = holder;
+            // holder2 = holder2 >> (node -> length - (i + 1));
+            holder = holder >> 1;
             bitCounter++;
+        }
+        sequence = reverseBinary(sequence);
+        for(i = 0; i < node -> length; i++)
+        {
+            codeOutput = codeOutput << 1;
+            holder2 = sequence & 0x01;
+            codeOutput |= holder2;
         }
 
         if (bitCounter >= 8)
         {
-            fprintf(stderr, "enter write loop\n");
-            temp = un_chr >> (bitCounter - 8);
-            temp = reverseBinary(temp);
-            fwrite(&temp, 1, 1, fptrout);
+            //fprintf(stderr, "enter write loop\n");
+            temp = sequence >> (bitCounter - 8);
+            //temp = reverseBinary(temp);
+            fwrite(&temp, sizeof(char), 1, fptrout);
             bitCounter -= 8;
         }
 
@@ -718,10 +698,11 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     if (bitCounter > 0)
     {
         fprintf(stderr, "enter final write\n");
-        temp = reverseBinary(un_chr);
-        temp = un_chr << (8 - bitCounter);
+        //sequence = reverseBinary(sequence);
+        temp = sequence << (8 - bitCounter);
         temp = reverseBinary(temp);
         fwrite(&temp, 1, 1, fptrout);
+        bitCounter = 0;
     }
 
     fprintf(stderr, "loop success\n");
