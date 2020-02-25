@@ -18,8 +18,7 @@ int main(int argc, char ** argv)
 
     if (chr_freqs == NULL)
     {
-        fprintf(stderr, "List failure\n" );
-        return(EXIT_FAILURE);
+        fprintf(stderr, "List NULL\n" );
     }
 
     Read_Freq(argv[2], chr_freqs);
@@ -31,7 +30,6 @@ int main(int argc, char ** argv)
     if (huff_tree == NULL)
     {
         fprintf(stderr, "Tree failure\n");
-        return (EXIT_FAILURE);
     }
 
     PreOrder_Traverse_Write(argv[3], huff_tree);

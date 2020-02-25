@@ -87,6 +87,14 @@ void Read_Freq(char * filename, List * head)
         return;
     }
 
+    if (head == NULL)
+    {
+        fclose(fptr);
+        return;
+    }
+
+
+
     List * tmpNode = head;
     int i = 0;
     long zero = 0;
@@ -346,6 +354,7 @@ Tree * Build_Tree(List * head)
     if (headTree == NULL)
     {
         fprintf(stderr, "headTree alloc fail\n");
+        return NULL;
     }
 
     while (headTree -> next != NULL)
@@ -414,6 +423,12 @@ void PreOrder_Traverse_Write(char * filename, Tree * root)
         return;
     }
 
+    if (root == NULL)
+    {
+        fclose(fptr);
+        return;
+    }
+
     PreOrder_Traverse(fptr, root);
     
     fclose(fptr);
@@ -426,6 +441,13 @@ void PreOrder_Traverse_Code(char * filename, Tree * root)
     if (fptr == NULL)
     {
         fprintf(stderr, "fopen fail\n");
+        return;
+    }
+
+    if (root == NULL)
+    {
+        fclose(fptr);
+        return;
     }
 
     long zero = 0;
@@ -540,6 +562,14 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     if (fptrout == NULL)
     {
         fprintf(stderr, "fopen output fail\n");
+    }
+
+    if (root == NULL)
+    {
+        fclose(fptrin);
+        fclose(fptrhead);
+        fclose(fptrout);
+        return;
     }
 
     char chr = 'a';
