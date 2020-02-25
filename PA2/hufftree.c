@@ -8,7 +8,7 @@
 
 List * Read_From_File(char * filename)
 {
-    FILE * fptr = fopen(filename, "rb");
+    FILE * fptr = fopen(filename, "rb"); // opens file
     
     if (fptr == NULL)
     {
@@ -34,7 +34,7 @@ List * Read_From_File(char * filename)
 
 }
 
-List * Add_Node(List * head, char chr)
+List * Add_Node(List * head, char chr) // adds new node with char chr to linked list
 {
     List * newNode = malloc(sizeof(*newNode));
 
@@ -55,20 +55,20 @@ List * Add_Node(List * head, char chr)
     {
         if (chr == tmpNode -> chr)
         {
-            (tmpNode -> freq)++;
+            (tmpNode -> freq)++; // incremented freq of character
             free(newNode); // New node wasn't used, freed to preserve memory
 
             return(head);
         }
         if (tmpNode -> next == NULL)
         {
-            secondTemp = tmpNode;
+            secondTemp = tmpNode; // reassignment
         }
         tmpNode = tmpNode -> next;
         
     }
 
-    secondTemp -> next = newNode;
+    secondTemp -> next = newNode; // assigns new node to end of list
     newNode -> next = NULL;
     newNode -> chr = chr;
     newNode -> freq = 1;
@@ -100,26 +100,26 @@ void Read_Freq(char * filename, List * head)
     long zero = 0;
     int write = 0;
 
-    while(i < ASCIIMAX)
+    while(i < ASCIIMAX) // checks for all ascii values
     {
         if ((tmpNode -> chr) == i)
         {
-            write = fwrite(&(tmpNode -> freq), sizeof(long), 1, fptr);
+            write = fwrite(&(tmpNode -> freq), sizeof(long), 1, fptr); // writes if character exists in list
             i++;
         }
-        else if (tmpNode -> next == NULL)
+        else if (tmpNode -> next == NULL) // writes last of list
         {
             write = fwrite(&zero, sizeof(long), 1, fptr);
             i++;
         }
-        if (write == 1)
+        if (write == 1) // reassignment after writing
         {
             tmpNode = head;
             write = 0;
         }
         else
         {
-            tmpNode = tmpNode -> next;
+            tmpNode = tmpNode -> next; // increment list
         }
 
     }
@@ -128,27 +128,27 @@ void Read_Freq(char * filename, List * head)
 
 }
 
-void MergeSort(List ** headRef) 
+void MergeSort(List ** headRef) // Merge sort character linked list
 { 
     
     List * head = *headRef; 
     List * a; 
     List * b; 
     
-    /* Base case -- length 0 or 1 */
+    // Base case -- length 0 or 1 
     if ((head == NULL) || (head -> next == NULL)) 
     { 
         return; 
     } 
     
-    /* Split head into 'a' and 'b' sublists */
+    // Split head into 'a' and 'b' sublists 
     FrontBackSplit(head, &a, &b); 
 
-    /* Recursively sort the sublists */
+    // Recursively sort the sublists 
     MergeSort(&a); 
     MergeSort(&b); 
 
-    /* answer = merge the two sorted lists together */
+    // answer = merge the two sorted lists together 
     *headRef = SortedMerge(a, b); 
 } 
 
@@ -156,7 +156,7 @@ List * SortedMerge(List * a, List * b)
 { 
     List * result = NULL; 
   
-    /* Base cases */
+    // Base cases 
     if (a == NULL)
     {
         return b;
@@ -166,7 +166,7 @@ List * SortedMerge(List * a, List * b)
         return a; 
     }
   
-    /* Pick either a or b, and recur */
+    // Pick either a or b, and recur 
     if (a -> freq <= b -> freq) 
     { 
         result = a; 
@@ -187,7 +187,7 @@ void FrontBackSplit(List * source, List ** frontRef, List ** backRef)
     slow = source; 
     fast = source -> next; 
   
-    /* Advance 'fast' two nodes, and advance 'slow' one node */
+    // Advance 'fast' two nodes, and advance 'slow' one node 
     while (fast != NULL) 
     { 
         fast = fast -> next; 
@@ -205,7 +205,7 @@ void FrontBackSplit(List * source, List ** frontRef, List ** backRef)
     slow -> next = NULL; 
 } 
 
-long countNode(List * head)
+long countNode(List * head) // counts linked list nodes
 {
     long count = 0;
 
@@ -220,7 +220,7 @@ long countNode(List * head)
     return(count);
 }
 
-Tree * Add_TreeNode(char chr, long freq)
+Tree * Add_TreeNode(char chr, long freq) // adds a node to the binary tree
 {
     Tree * root = malloc(sizeof(Tree));
 
@@ -234,7 +234,7 @@ Tree * Add_TreeNode(char chr, long freq)
     return root; 
 }
 
-Tree * Merge_Tree(Tree * node1, Tree * node2)
+Tree * Merge_Tree(Tree * node1, Tree * node2) // merges two tree nodes from the forest into the tree
 {
     Tree * root = malloc(sizeof(*root));
 
@@ -248,7 +248,7 @@ Tree * Merge_Tree(Tree * node1, Tree * node2)
     return root;
 }
 
-TreeList * createTLNode(Tree * root)
+TreeList * createTLNode(Tree * root) // creates a treeList node to bridge between linked list and tree
 {
     TreeList * head = malloc(sizeof(*head));
 
@@ -258,7 +258,7 @@ TreeList * createTLNode(Tree * root)
     return head;
 }
 
-TreeList * TL_Insert(TreeList * head, TreeList * node)
+TreeList * TL_Insert(TreeList * head, TreeList * node) // inserts treelist node
 {
     if (head == NULL)
     {
@@ -274,7 +274,7 @@ TreeList * TL_Insert(TreeList * head, TreeList * node)
     long freq1 = (head -> treeptr -> freq); 
     long freq2 = (node -> treeptr -> freq); 
 
-    if (freq1 > freq2)
+    if (freq1 > freq2) // ensures sorted order
     {
         node -> next = head;
         return node;
@@ -285,12 +285,12 @@ TreeList * TL_Insert(TreeList * head, TreeList * node)
     return head;
 }
 
-TreeList * TL_Build(Tree ** treeArray, long size)
+TreeList * TL_Build(Tree ** treeArray, long size) // builds tree list
 {
     long i = 0;
     TreeList * head = NULL;
     
-    for (i = 0; i < size; i++)
+    for (i = 0; i < size; i++) // creates forest of tree nodes
     {
         if (treeArray[i] == NULL)
         {
@@ -302,13 +302,13 @@ TreeList * TL_Build(Tree ** treeArray, long size)
         {
             fprintf(stderr, "node1 tree is null\n");
         }
-        head = TL_Insert(head, node1);
+        head = TL_Insert(head, node1); 
 
     }
 
     return head;
 }
-List * Free_Node(List * head, List * nodeToDelete)
+List * Free_Node(List * head, List * nodeToDelete) // node to free from linked list
 {
     List * temp = head;
 
@@ -334,7 +334,7 @@ List * Free_Node(List * head, List * nodeToDelete)
 
 }
 
-Tree * Build_Tree(List * head)
+Tree * Build_Tree(List * head) // builds binary tree from forest
 {
     long size = countNode(head);
 
@@ -357,7 +357,7 @@ Tree * Build_Tree(List * head)
         return NULL;
     }
 
-    while (headTree -> next != NULL)
+    while (headTree -> next != NULL) // recurses through to build nodes under the root
     {
         TreeList * second = headTree -> next;
         TreeList * third = second -> next;
@@ -383,7 +383,7 @@ Tree * Build_Tree(List * head)
     root -> code = headTree -> treeptr -> code;
     root -> length = headTree -> treeptr -> length;
 
-    TreeList_Destroy(headTree);
+    TreeList_Destroy(headTree); // frees treelist memory
     free(treeArray);
     return (root);
 }
@@ -400,7 +400,7 @@ void printTreeNode(FILE * filename, Tree * node)
     }
 }
 
-void PreOrder_Traverse(FILE * filename, Tree * node)
+void PreOrder_Traverse(FILE * filename, Tree * node) // preorder traversal
 {
     if (node == NULL)
     {
@@ -413,7 +413,7 @@ void PreOrder_Traverse(FILE * filename, Tree * node)
 
 }
 
-void PreOrder_Traverse_Write(char * filename, Tree * root)
+void PreOrder_Traverse_Write(char * filename, Tree * root) // writes header using preorder traversal
 {
     FILE * fptr = fopen(filename, "w");
 
@@ -434,7 +434,7 @@ void PreOrder_Traverse_Write(char * filename, Tree * root)
     fclose(fptr);
 }
 
-void PreOrder_Traverse_Code(char * filename, Tree * root)
+void PreOrder_Traverse_Code(char * filename, Tree * root) // writes codes using preorder traversal
 {
     FILE * fptr = fopen(filename, "wb");
 
@@ -464,16 +464,16 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
     unsigned char un_chr;
     long temp = zero_bin;
 
-    if ((node -> left == NULL) && (node -> right == NULL))
+    if ((node -> left == NULL) && (node -> right == NULL)) // print leaf node
     {
         fprintf(filename, "%c:", node -> chr);
 
         node -> code = zero_bin;
         node -> length = depth;
 
-        for(i = 0; i < depth; i++)
+        for(i = 0; i < depth; i++) // add one bit at a time
         {
-            temp = zero_bin >> (depth - (i + 1));
+            temp = zero_bin >> (depth - (i + 1)); // use binary to store codes
             un_chr = temp & 0x01;
             fprintf(filename, "%d", un_chr);
         }
@@ -489,7 +489,7 @@ void printCodes(Tree * node, long zero_bin, long depth, FILE * filename)
     printCodes(node -> right, zero_bin, depth, filename);
 }
 
-Tree * searchTree(Tree * root, char chr)
+Tree * searchTree(Tree * root, char chr) // searches binary tree for a node and returns it
 {
     Tree * temp = NULL;
 
@@ -519,7 +519,7 @@ Tree * searchTree(Tree * root, char chr)
     return NULL;
 }
 
-int reverseBinary(int bin)
+int reverseBinary(int bin) // reverses a binary sequence
 {
     int BITS = 8; 
     int reverse = 0, i, temp; 
@@ -583,7 +583,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     long pos_end = 0;
     long byteCounter = 0;
 
-    fseek(fptrout, sizeof(long) * 3, SEEK_SET);
+    fseek(fptrout, sizeof(long) * 3, SEEK_SET); // sets offset for lines 1-3 of output
 
     while(!(feof(fptrhead))) // prints header file in binary
     {
@@ -594,7 +594,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
             break;
         }
 
-        switch (chr)
+        switch (chr) // uses switch to read header
         {
         case '0':
             headOut = headOut << 1;
@@ -615,7 +615,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         }
         if (bitCounter >= 8)
         {
-            temp = headOut >> (bitCounter - 8);
+            temp = headOut >> (bitCounter - 8); // use bit storage for output
             binholder = reverseBinary(temp);
             fwrite(&binholder, 1, 1, fptrout);
             byteCounter++;
@@ -624,7 +624,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         }
     }
 
-    if (bitCounter > 0)
+    if (bitCounter > 0) // prints remaining bits
     {
         byteCounter++;
         headOut = headOut << (8 - bitCounter);
@@ -635,7 +635,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     chr = 'a';
     bitCounter = 0;
 
-    while ((chr != EOF)) // creates a new node for 
+    while ((chr != EOF)) // reads input and prints code using tree
     {
         chr = fgetc(fptrin);
 
@@ -645,7 +645,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
         }
         else
         {
-            node = searchTree(root, chr);
+            node = searchTree(root, chr); // searches through tree for char
 
             if (node == NULL)
             {
@@ -653,13 +653,13 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
             }
 
             letter = 0;
-            letter = letter | node -> code;
+            letter = letter | node -> code; // storage in binary sequence
 
             codeOutput = codeOutput << node -> length;
             codeOutput |= letter;
             bitCounter += node -> length;
 
-            if (bitCounter >= 8)
+            if (bitCounter >= 8) // prints byte
             {
                 temp = codeOutput >> (bitCounter - 8);
                 fwrite(&temp, sizeof(char), 1, fptrout);
@@ -670,13 +670,15 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
 
     }
 
-    if (bitCounter > 0)
+    if (bitCounter > 0) // prints remaining bits
     {
         temp = codeOutput << (8 - bitCounter);
         temp = reverseBinary(temp);
         fwrite(&temp, 1, 1, fptrout);
         bitCounter = 0;
     }
+    
+    // fseek is used to arrange for various output lines
 
     fseek(fptrout, 0, SEEK_END);
     pos_end = ftell(fptrout);
@@ -696,6 +698,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
     fclose(fptrout);
 }
 
+// Memory freeing functions
 void List_Destroy(List * head)
 {
     while (head != NULL)
