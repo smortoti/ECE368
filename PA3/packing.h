@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 typedef struct _Tree
 {
     int label;
@@ -19,7 +17,10 @@ typedef struct _List
 
 
 Tree * buildTreeFromPostOrder(char * filename); // builds tree from given postorder traversal
-List * createNode(List * head, int label, int width, int height)
+List * createNode(List * head, int label, int width, int height);
+
+Tree ** LLtoArray(List * head, int * size);
+void freeLL(List * head);
 
 void * printPreOrder(char * filename, Tree * root); // prints tree with preorder traversal
 
