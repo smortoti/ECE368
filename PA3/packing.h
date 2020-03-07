@@ -22,7 +22,7 @@ List * createNode(List * head, int label, int width, int height);
 Tree ** LLtoArray(List * head, int * size);
 void freeLL(List * head);
 
-void * printPreOrder(char * filename, Tree * root); // prints tree with preorder traversal
+void printPreOrder(char * filename, Tree * root); // prints tree with preorder traversal
 
 void Pack(Tree * root); // packs tree
 

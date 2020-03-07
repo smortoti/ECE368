@@ -171,3 +171,32 @@ Tree * constructTree (Tree ** treeArray, int size)
     int postIndex = size - 1; 
     return constructTreeUtil(treeArray, &postIndex, treeArray[postIndex], INT_MIN, INT_MAX, size); 
 } 
+
+void printPreOrder(char * filename, Tree * root)
+{
+    FILE * fptr = fopen(filename, 'w');
+
+    printTreeNode(fptr, root);
+
+    fclose(fptr);
+
+}
+
+printTreeNode(FILE * fptr, Tree * root)
+{
+    if(root == NULL)
+    {
+        return;
+    }
+    if(root -> label == 'V' || root -> label == 'H')
+    {
+        fprintf(fptr, "%c\n", root -> label);
+    }
+    else
+    {
+        fprintf(fptr, "%d(%d, %d)\n");
+    }
+
+    printTreeNode(fptr, root -> left);
+    printTreeNode(fptr, root -> right);
+}
