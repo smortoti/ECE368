@@ -24,6 +24,7 @@ Tree * buildTreeFromPostOrder(char * filename)
     Tree ** treeArray = NULL;
     int size = 0;
     Tree * tree = NULL;
+    int * upper_bound = NULL;
 
     /* Read will have form of 
         %d ( %d , %d ) \n
@@ -50,11 +51,38 @@ Tree * buildTreeFromPostOrder(char * filename)
     }
 
     treeArray = LLtoArray(head, &size);
-    tree = constructTree(treeArray, size);
+
+    upper_bound = size - 1;
+
+    tree = constructTree(treeArray, &upper_bound);
     
     fclose(fptr);
 
     return(tree);
+}
+
+Tree ** LLtoArray(List * head, int * size)
+{
+    List * temp = head;
+    while(temp -> next != NULL)
+    {
+        temp = temp -> next;
+        (*size)++;
+    }
+    Tree ** treeArray = malloc(sizeof(*treeArray) * (*size));
+    int i = 0;
+    temp = head;
+    for(i = 0; i < (*size - 1); i++)
+    {
+        treeArray[i] -> label = temp -> label;
+        treeArray[i] -> height = temp -> height;
+        treeArray[i] -> width = temp -> width;
+        treeArray[i] -> nodeLabel = temp -> nodeLabel;
+        treeArray[i] -> left = treeArray[i] -> right = NULL;
+        temp = temp -> next;
+    }
+    freeLL(head);
+    return(treeArray);
 }
 
 List * createNode(List * head, int label, int width, int height)
@@ -66,6 +94,7 @@ List * createNode(List * head, int label, int width, int height)
         temp -> label = label;
         temp -> height = height;
         temp -> width = width;
+        temp -> nodeLabel = 'B';
         temp -> next = NULL;
         temp -> previous = NULL;
 
@@ -85,6 +114,14 @@ List * createNode(List * head, int label, int width, int height)
     newNode -> label = label;
     newNode -> height = height;
     newNode -> width = width;
+    if (height == 0 && width == 0)
+    {
+        newNode -> nodeLabel = 'B'
+    }
+    else
+    {
+        newNode -> nodeLabel = 'L'
+    }
     newNode -> next = NULL;
     newNode -> previous = temp;
     temp -> next = newNode;
@@ -113,61 +150,30 @@ void freeNode(List * toDelete)
     temp2 -> previous = temp;
 }
 
-/*Tree ** LLtoArray(List * head, int * size)
+Tree * constructTree(Tree ** treeArray, int * upper_bound)
 {
-    List * temp = head;
+    Tree * root = treeArray[(*upper_bound)];
 
-    while(temp -> next != NULL)
+    if (root -> nodeLabel == 'B')
     {
-        temp = temp -> next;
-        (*size)++;
-    }
-
-    Tree ** treeArray = malloc(sizeof(*treeArray) * (*size));
-
-    int i = 0;
-    temp = head;
-
-    for(i = 0; i < (*size - 1); i++)
-    {
-        treeArray[i] -> label = temp -> label;
-        treeArray[i] -> height = temp -> height;
-        treeArray[i] -> width = temp -> width;
-        treeArray[i] -> left = treeArray[i] -> right = NULL;
-        temp = temp -> next;
-    }
-
-    freeLL(head);
-
-    return(treeArray);
-}*/
-
-Tree * constructTree(List * head, Tree * root)
-{
-    List * temp = head;
-
-    if (root == NULL)
-    {
-        while(temp -> next != NULL)
+        if (treeArray[(*upper_bound - 1)] == 'B')
         {
-            temp = temp -> next;
+            (*upper_bound)--;
+            root -> right = constructTree(treeArray, upper_bound);
+        }
+        else
+        {
+            (*upper_bound)--
+            root -> right = treeArray[(upper_bound)];
         }
 
-        root = createTreeNode(root, temp -> label, temp -> width, temp -> height);
-        freeNode(temp);
-        return root;
-
     }
 
-    if ((temp -> previous -> label != ('V' || 'H')) && (temp -> previous -> previous -> label != ('V' || 'H')))
-    {
-        return root;
-    }
 
-    if (temp -> previous -> label == ('V' || 'H'))
-    {
-        root -> right = 
-    }
+
+
+
+
 }
 
 void printPreOrder(char * filename, Tree * root)

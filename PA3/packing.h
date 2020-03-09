@@ -3,6 +3,7 @@ typedef struct _Tree
     int label;
     int height;
     int width;
+    char nodeLabel;
     struct _Tree * left;
     struct _Tree * right;
 } Tree;
@@ -12,6 +13,7 @@ typedef struct _List
     int label;
     int height;
     int width;
+    char nodeLabel;
     struct _List * next;
     struct _List * previous;
 } List;
