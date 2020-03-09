@@ -55,6 +55,7 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
 
     if (treeArray == NULL)
     {
+        fclose(fptr);
         return NULL;
     }
 
