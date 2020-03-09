@@ -14,4 +14,6 @@ int main(int argc, char ** argv)
     printDimensions(argv[3], tree);
 
     Pack(argv[4], tree);
+
+    destroyTree(tree);
 }

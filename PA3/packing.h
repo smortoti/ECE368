@@ -38,3 +38,5 @@ void printDimensions(char * filename, Tree * root);
 void printDimHelper(FILE * fptr, Tree * root);
 
 void print2DUtil(Tree *root, int space);
+
+void destroyTree(Tree * root);

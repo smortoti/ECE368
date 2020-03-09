@@ -61,6 +61,8 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
     (*upper_bound) = size - 1;
 
     tree = constructTree(treeArray, upper_bound);
+
+    free(treeArray);
     
     fclose(fptr);
 
@@ -161,15 +163,6 @@ void freeLL(List * head)
         temp = temp -> next;
     }
     free(head);
-}
-
-void freeNode(List * toDelete)
-{
-    List * temp = toDelete -> previous;
-    List * temp2 = toDelete -> next;
-    free(toDelete);
-    temp -> next = temp2;
-    temp2 -> previous = temp;
 }
 
 Tree * constructTree(Tree ** treeArray, int * upper_bound)
@@ -332,6 +325,18 @@ void PackHelper(FILE * fptr, Tree * root, int xorigin, int yorigin)
         fprintf(fptr, "%d((%d,%d)(%d,%d))\n", root -> label, root -> width, root -> height, xorigin, yorigin);
     }
     
+}
+
+void destroyTree(Tree * root)
+{
+    if (root -> left == NULL && root -> right == NULL)
+    {
+        free(root);
+        return;
+    }
+    destroyTree(root -> left);
+    destroyTree(root -> right);
+    free(root);
 }
 
 void print2DUtil(Tree *root, int space) 
