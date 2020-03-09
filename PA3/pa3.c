@@ -9,6 +9,12 @@ int main(int argc, char ** argv)
 
     tree = buildTreeFromPostOrder(argv[1], &upper_bound);
 
+    if (tree == NULL)
+    {
+        fprintf(stderr, "EMPTY FILE\n");
+        return(EXIT_FAILURE);
+    }
+
     printPreOrder(argv[2], tree);
 
     printDimensions(argv[3], tree);
@@ -16,4 +22,6 @@ int main(int argc, char ** argv)
     Pack(argv[4], tree);
 
     destroyTree(tree);
+
+    return (EXIT_SUCCESS);
 }

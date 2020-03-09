@@ -24,11 +24,6 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
     int size = 1;
     Tree * tree = NULL;
 
-    /* Read will have form of 
-        %d ( %d , %d ) \n
-    or
-        &d \n
-    */ 
     while(!(feof(fptr)))
     {
         readTemp = fgetc(fptr);
@@ -58,6 +53,11 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
 
     treeArray = LLtoArray(head, &size);
 
+    if (treeArray == NULL)
+    {
+        return NULL;
+    }
+
     (*upper_bound) = size - 1;
 
     tree = constructTree(treeArray, upper_bound);
@@ -72,6 +72,11 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
 Tree ** LLtoArray(List * head, int * size)
 {
     List * temp = head;
+
+    if (head == NULL)
+    {
+        return NULL;
+    }
     
     while(temp -> next != NULL)
     {

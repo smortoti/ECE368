@@ -1,5 +1,5 @@
 WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
-VAL = valgrind --dsymutil=yes --tool=memcheck --leak-check=full --verbose --show-leak-kinds=all --track-origins=yes
+VAL = valgrind --leak-check=full --leak-check=full --show-leak-kinds=all
 GCC = gcc -g -O3 -std=c99 $(WARNINGFLAGS)
 
 SRCS = packing.c pa3.c
@@ -11,7 +11,10 @@ pa3: $(OBJS)
 .c.o: 
 	$(GCC) -c $*.c 
 
-testall: test1 test2 test4 test5 test6
+testall: test1 test2 test3
+
+testmemory: pa3
+    $(VAL) --log-file=memcheck1.txt ./pa3 examples/empty.po 3Outputpr 3Outputdi 3Outputpc
 
 test1: pa3
 	./pa3 examples/3.po 3Outputpr 3Outputdi 3Outputpc
@@ -28,17 +31,8 @@ test2: pa3
 test3: pa3
 	./pa3 examples/1K.po KOutputpr KOutputdi KOutputpc
 
-test4: pa2
-	./pa2 original/stone freqOutput4 headOutput4 codeOutput4 treeOutput4
-	diff count/stone.count freqOutput4
-
-test5: pa2
-	./pa2 original/lorum freqOutput5 headOutput5 codeOutput5 treeOutput5
-	diff count/lorum.count freqOutput5
-
-test6: pa2
-	./pa2 original/empty freqOutput6 headOutput6 codeOutput6 treeOutput6
-	diff count/empty.count freqOutput6
+test4: pa3
+	./pa3 examples/empty.po EOutputpr EOutputdi EOutputpc
 
 clean: # remove all machine generated files
 	rm -f pa1 *.o ?Output??
