@@ -5,7 +5,7 @@
 #include "packing.h"
 #define COUNT 10
 
-Tree * buildTreeFromPostOrder(char * filename)
+Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
 {
     FILE * fptr = fopen(filename, "r");
 
@@ -17,14 +17,12 @@ Tree * buildTreeFromPostOrder(char * filename)
     int readTemp = 0;
     List * head = NULL;
     int position = 0;
-    int i = 0;
     int label = 0;
     int width = 0;
     int height = 0;
     Tree ** treeArray = NULL;
-    int size = 0;
+    int size = 1;
     Tree * tree = NULL;
-    int * upper_bound = NULL;
 
     /* Read will have form of 
         %d ( %d , %d ) \n
@@ -36,7 +34,10 @@ Tree * buildTreeFromPostOrder(char * filename)
         readTemp = fgetc(fptr);
         if (readTemp == 'H' || readTemp == 'V')
         {
-            head = createNode(head, readTemp, 0, 0);
+            if(!(feof(fptr)))
+            {
+                head = createNode(head, readTemp, 0, 0);
+            }
         }
         else
         {
@@ -44,17 +45,27 @@ Tree * buildTreeFromPostOrder(char * filename)
             {
                 position = ftell(fptr);
                 fseek(fptr, (long) (position - 1), SEEK_SET);
-                fscanf(fptr, "%d(%d, %d)\n", &label, &width, &height);
-                head = createNode(head, label, width, height);
+                fscanf(fptr, "%d(%d,%d)\n", &label, &width, &height);
+                if(readTemp != '\n')
+                {
+                    head = createNode(head, label, width, height);
+                }
+
             }
         }    
     }
 
+    fprintf(stderr, "enter array\n");
+
     treeArray = LLtoArray(head, &size);
 
-    upper_bound = size - 1;
+    fprintf(stderr, "array success\n");
 
-    tree = constructTree(treeArray, &upper_bound);
+    (*upper_bound) = size - 1;
+
+    fprintf(stderr, "assign success: %d\n", (*upper_bound));
+
+    tree = constructTree(treeArray, upper_bound);
     
     fclose(fptr);
 
@@ -64,22 +75,31 @@ Tree * buildTreeFromPostOrder(char * filename)
 Tree ** LLtoArray(List * head, int * size)
 {
     List * temp = head;
+    
     while(temp -> next != NULL)
     {
         temp = temp -> next;
         (*size)++;
     }
+
     Tree ** treeArray = malloc(sizeof(*treeArray) * (*size));
+    if (treeArray == NULL)
+    {
+        fprintf(stderr, "treeArray is NULL\n");
+    }
     int i = 0;
     temp = head;
-    for(i = 0; i < (*size - 1); i++)
+
+    for(i = 0; i < (*size); i++)
     {
+        treeArray[i] = malloc(sizeof(*treeArray[i]));
         treeArray[i] -> label = temp -> label;
         treeArray[i] -> height = temp -> height;
         treeArray[i] -> width = temp -> width;
         treeArray[i] -> nodeLabel = temp -> nodeLabel;
         treeArray[i] -> left = treeArray[i] -> right = NULL;
         temp = temp -> next;
+        fprintf(stderr, "label: %d\n", treeArray[i] -> label);
     }
     freeLL(head);
     return(treeArray);
@@ -87,6 +107,7 @@ Tree ** LLtoArray(List * head, int * size)
 
 List * createNode(List * head, int label, int width, int height)
 {
+    fprintf(stderr, "height: %d, width: %d\n", height, width);
     if (head == NULL)
     {
         List * temp = malloc(sizeof(*temp));
@@ -94,7 +115,14 @@ List * createNode(List * head, int label, int width, int height)
         temp -> label = label;
         temp -> height = height;
         temp -> width = width;
-        temp -> nodeLabel = 'B';
+        if (height == 0 && width == 0)
+        {
+            temp -> nodeLabel = 'B';
+        }
+        else
+        {
+            temp -> nodeLabel = 'L';
+        }
         temp -> next = NULL;
         temp -> previous = NULL;
 
@@ -114,13 +142,16 @@ List * createNode(List * head, int label, int width, int height)
     newNode -> label = label;
     newNode -> height = height;
     newNode -> width = width;
+
     if (height == 0 && width == 0)
     {
-        newNode -> nodeLabel = 'B'
+        newNode -> nodeLabel = 'B';
+        fprintf(stderr, "enter branch\n");
     }
     else
     {
-        newNode -> nodeLabel = 'L'
+        newNode -> nodeLabel = 'L';
+        fprintf(stderr, "enter leaf\n");
     }
     newNode -> next = NULL;
     newNode -> previous = temp;
@@ -154,31 +185,72 @@ Tree * constructTree(Tree ** treeArray, int * upper_bound)
 {
     Tree * root = treeArray[(*upper_bound)];
 
-    if (root -> nodeLabel == 'B')
+    if (root == NULL)
     {
-        if (treeArray[(*upper_bound - 1)] == 'B')
+        fprintf(stderr, "NULL\n");
+    }
+
+    fprintf(stderr, "nodeLabel: %c\n", treeArray[(*upper_bound)] -> nodeLabel);
+
+    if ((root -> nodeLabel) == 'B')
+    {
+        if (treeArray[(*upper_bound - 1)] -> nodeLabel == 'B')
         {
             (*upper_bound)--;
+            fprintf(stderr, "ub: %d\n", (*upper_bound));
             root -> right = constructTree(treeArray, upper_bound);
         }
         else
         {
-            (*upper_bound)--
-            root -> right = treeArray[(upper_bound)];
+            (*upper_bound)--;
+           // fprintf(stderr, "ub: %d\n", (*upper_bound));
+            root -> right = treeArray[(*upper_bound)];
         }
 
+        if (treeArray[(*upper_bound - 1)] -> nodeLabel == 'B')
+        {
+            (*upper_bound)--;
+           // fprintf(stderr, "ub: %d\n", (*upper_bound));
+            root -> left = constructTree(treeArray, upper_bound);
+        }
+        else
+        {
+            (*upper_bound)--;
+            //fprintf(stderr, "ub: %d\n", (*upper_bound));
+            root -> left = treeArray[(*upper_bound)];
+        }  
     }
-
-
-
-
-
-
+    if (root -> nodeLabel == 'H')
+    {
+        root -> height = root -> left -> height + root -> right -> height;
+        if (root -> left -> width > root -> right -> width)
+        {
+            root -> width = root -> left -> width;
+        }
+        else
+        {
+            root -> width = root -> right -> width;
+        }   
+    }
+    else if(root -> nodeLabel == 'V')
+    {
+        root -> width = root -> left -> width + root -> right -> width;
+        if (root -> left -> height > root -> right -> height)
+        {
+            root -> height = root -> left -> height;
+        }
+        else
+        {
+            root -> height = root -> right -> height;
+        }   
+    }
+    
+    return (root);
 }
 
 void printPreOrder(char * filename, Tree * root)
 {
-    FILE * fptr = fopen(filename, 'w');
+    FILE * fptr = fopen(filename, "w");
 
     printTreeNode(fptr, root);
 
@@ -192,17 +264,62 @@ void printTreeNode(FILE * fptr, Tree * root)
     {
         return;
     }
-    if(root -> label == 'V' || root -> label == 'H')
+    if(root -> nodeLabel == 'B')
     {
         fprintf(fptr, "%c\n", root -> label);
     }
     else
     {
-        fprintf(fptr, "%d(%d, %d)\n");
+        fprintf(fptr, "%d(%d,%d)\n", root -> label, root -> width, root -> height);
     }
 
     printTreeNode(fptr, root -> left);
     printTreeNode(fptr, root -> right);
+}
+
+void printDimensions(char * filename, Tree * root) // JOB SECURITY (LEVEL 1)
+{
+    FILE * fptr = fopen(filename, "w");
+
+    printDimHelper(fptr, root);
+
+    fclose(fptr);
+}
+
+void printDimHelper(FILE * fptr, Tree * root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    printDimHelper(fptr, root -> left);
+    printDimHelper(fptr, root -> right);
+
+    if (root -> nodeLabel == 'L')
+    {
+        fprintf(fptr, "%d(%d,%d)\n", root -> label, root -> width, root -> height);
+        return;
+    }
+    if (root -> nodeLabel == 'B')
+    {
+        fprintf(fptr, "%c(%d,%d)\n", root -> label, root -> width, root -> height);
+        return;
+    }
+}
+
+void Pack(char * filename, Tree * root)
+{
+    FILE * fptr = fopen(filename, "w");
+
+    PackHelper(fptr, root);
+
+    fclose(fptr);
+}
+
+void PackHelper(FILE * fptr, Tree * root)
+{
+    
 }
 
 void print2DUtil(Tree *root, int space) 
@@ -222,7 +339,7 @@ void print2DUtil(Tree *root, int space)
     fprintf(stderr, "\n"); 
     for (int i = COUNT; i < space; i++) 
         fprintf(stderr, " "); 
-    fprintf(stderr, "%ld, %c:\n", root->freq, root -> chr); 
+    fprintf(stderr, "%d, %d:\n", root->label, root -> width); 
   
     // Process left child 
     print2DUtil(root->left, space); 

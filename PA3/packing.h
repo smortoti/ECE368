@@ -19,8 +19,9 @@ typedef struct _List
 } List;
 
 
-Tree * buildTreeFromPostOrder(char * filename); // builds tree from given postorder traversal
+Tree * buildTreeFromPostOrder(char * filename, int * upper_bound); // builds tree from given postorder traversal
 List * createNode(List * head, int label, int width, int height);
+Tree * constructTree(Tree ** treeArray, int * upper_bound);
 
 Tree ** LLtoArray(List * head, int * size);
 void freeLL(List * head);
@@ -28,9 +29,11 @@ void freeLL(List * head);
 void freeNode(List * toDelete);
 
 void printPreOrder(char * filename, Tree * root); // prints tree with preorder traversal
+void printTreeNode(FILE * fptr, Tree * root);
 
-void Pack(Tree * root); // packs tree
+void Pack(char * filename, Tree * root); // packs tree
 
-void printDimesions(Tree * root);
+void printDimesions(char * filename, Tree * root);
+void printDimHelper(FILE * fptr, Tree * root);
 
 void print2DUtil(Tree *root, int space);

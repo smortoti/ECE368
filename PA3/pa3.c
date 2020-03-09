@@ -5,10 +5,11 @@
 int main(int argc, char ** argv)
 {
     Tree * tree = NULL;
+    int upper_bound = 0;
 
-    tree = buildTreeFromPostOrder(argv[1]);
+    tree = buildTreeFromPostOrder(argv[1], &upper_bound);
 
     printPreOrder(argv[2], tree);
 
-    print2DUtil(tree, 0);
+    print2DUtil(tree, 8);
 }
