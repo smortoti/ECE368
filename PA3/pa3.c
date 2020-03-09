@@ -9,7 +9,7 @@ int main(int argc, char ** argv)
 
     tree = buildTreeFromPostOrder(argv[1], &upper_bound);
 
-    if (tree == NULL)
+    if (tree == NULL) // empty file check and return
     {
         fprintf(stderr, "EMPTY FILE\n");
         return(EXIT_FAILURE);
