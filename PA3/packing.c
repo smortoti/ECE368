@@ -3,10 +3,11 @@
 #include <string.h>
 #include <limits.h>
 #include "packing.h"
+#define COUNT 10
 
 Tree * buildTreeFromPostOrder(char * filename)
 {
-    FILE * fptr = fopen(filename, 'r');
+    FILE * fptr = fopen(filename, "r");
 
     if (fptr == NULL)
     {
@@ -66,6 +67,7 @@ List * createNode(List * head, int label, int width, int height)
         temp -> height = height;
         temp -> width = width;
         temp -> next = NULL;
+        temp -> previous = NULL;
 
         head = temp;
 
@@ -84,6 +86,7 @@ List * createNode(List * head, int label, int width, int height)
     newNode -> height = height;
     newNode -> width = width;
     newNode -> next = NULL;
+    newNode -> previous = temp;
     temp -> next = newNode;
 
     return(head);
@@ -101,7 +104,16 @@ void freeLL(List * head)
     free(head);
 }
 
-Tree ** LLtoArray(List * head, int * size)
+void freeNode(List * toDelete)
+{
+    List * temp = toDelete -> previous;
+    List * temp2 = toDelete -> next;
+    free(toDelete);
+    temp -> next = temp2;
+    temp2 -> previous = temp;
+}
+
+/*Tree ** LLtoArray(List * head, int * size)
 {
     List * temp = head;
 
@@ -128,49 +140,35 @@ Tree ** LLtoArray(List * head, int * size)
     freeLL(head);
 
     return(treeArray);
+}*/
+
+Tree * constructTree(List * head, Tree * root)
+{
+    List * temp = head;
+
+    if (root == NULL)
+    {
+        while(temp -> next != NULL)
+        {
+            temp = temp -> next;
+        }
+
+        root = createTreeNode(root, temp -> label, temp -> width, temp -> height);
+        freeNode(temp);
+        return root;
+
+    }
+
+    if ((temp -> previous -> label != ('V' || 'H')) && (temp -> previous -> previous -> label != ('V' || 'H')))
+    {
+        return root;
+    }
+
+    if (temp -> previous -> label == ('V' || 'H'))
+    {
+        root -> right = 
+    }
 }
-
-
-Tree * constructTreeUtil(Tree ** treeArray, int * postIndex, int key, int min, int max, int size) 
-{ 
-    // Base case 
-    if (*postIndex < 0) 
-        return NULL; 
-  
-    Tree * root = NULL; 
-  
-    // If current element of post[] is in range, then 
-    // only it is part of current subtree 
-    if (key > min && key < max) 
-    { 
-        // Allocate memory for root of this subtree and decrement 
-        // *postIndex 
-        root = treeArray[(*postIndex)]; 
-        *postIndex = *postIndex - 1; 
-  
-        if (*postIndex >= 0) 
-        { 
-  
-          // All nodes which are in range {key..max} will go in right 
-          // subtree, and first such node will be root of right subtree. 
-          root -> right = constructTreeUtil(treeArray, postIndex, treeArray[*postIndex], key, max, size); 
-  
-          // Construct the subtree under root 
-          // All nodes which are in range {min .. key} will go in left 
-          // subtree, and first such node will be root of left subtree. 
-          root -> left = constructTreeUtil(treeArray, postIndex, treeArray[*postIndex], min, key, size ); 
-        } 
-    } 
-    return root; 
-} 
-  
-// The main function to construct BST from given postorder 
-// traversal. This function mainly uses constructTreeUtil() 
-Tree * constructTree (Tree ** treeArray, int size) 
-{ 
-    int postIndex = size - 1; 
-    return constructTreeUtil(treeArray, &postIndex, treeArray[postIndex], INT_MIN, INT_MAX, size); 
-} 
 
 void printPreOrder(char * filename, Tree * root)
 {
@@ -182,7 +180,7 @@ void printPreOrder(char * filename, Tree * root)
 
 }
 
-printTreeNode(FILE * fptr, Tree * root)
+void printTreeNode(FILE * fptr, Tree * root)
 {
     if(root == NULL)
     {
@@ -200,3 +198,26 @@ printTreeNode(FILE * fptr, Tree * root)
     printTreeNode(fptr, root -> left);
     printTreeNode(fptr, root -> right);
 }
+
+void print2DUtil(Tree *root, int space) 
+{ 
+    // Base case 
+    if (root == NULL) 
+        return; 
+  
+    // Increase distance between levels 
+    space += COUNT; 
+  
+    // Process right child first 
+    print2DUtil(root->right, space); 
+  
+    // Print current node after space 
+    // count 
+    fprintf(stderr, "\n"); 
+    for (int i = COUNT; i < space; i++) 
+        fprintf(stderr, " "); 
+    fprintf(stderr, "%ld, %c:\n", root->freq, root -> chr); 
+  
+    // Process left child 
+    print2DUtil(root->left, space); 
+} 

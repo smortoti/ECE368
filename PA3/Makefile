@@ -2,20 +2,20 @@ WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
 VAL = valgrind --dsymutil=yes --tool=memcheck --leak-check=full --verbose --show-leak-kinds=all --track-origins=yes
 GCC = gcc -g -std=c99 $(WARNINGFLAGS)
 
-SRCS = hufftree.c pa2.c
+SRCS = packing.c pa3.c
 OBJS = $(SRCS:%.c=%.o)
 
-pa2: $(OBJS) 
-	$(GCC) $(OBJS) -o pa2
+pa3: $(OBJS) 
+	$(GCC) $(OBJS) -o pa3
 
 .c.o: 
 	$(GCC) -c $*.c 
 
 testall: test1 test2 test4 test5 test6
 
-test1: pa2
-	./pa2  original/gophers freqOutput1 headOutput1 codeOutput1 treeOutput1
-	diff count/gophers.count freqOutput1 
+test1: pa3
+	./pa3 examples/3.po 3Outputpr 3Outputdi 3Outputpc
+	diff examples/3.pr 3Outputpr 
 
 test2: pa2
 	./pa2 original/woods freqOutput2 headOutput2 codeOutput2 treeOutput2

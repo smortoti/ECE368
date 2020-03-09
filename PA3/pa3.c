@@ -9,4 +9,6 @@ int main(int argc, char ** argv)
     tree = buildTreeFromPostOrder(argv[1]);
 
     printPreOrder(argv[2], tree);
+
+    print2DUtil(tree, 0);
 }
