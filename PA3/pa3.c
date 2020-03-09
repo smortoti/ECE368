@@ -11,5 +11,7 @@ int main(int argc, char ** argv)
 
     printPreOrder(argv[2], tree);
 
-    print2DUtil(tree, 8);
+    printDimensions(argv[3], tree);
+
+    Pack(argv[4], tree);
 }

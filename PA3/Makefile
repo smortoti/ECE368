@@ -14,16 +14,19 @@ pa3: $(OBJS)
 testall: test1 test2 test4 test5 test6
 
 test1: pa3
-	./pa3 examples/3.po 3Outputpr
+	./pa3 examples/3.po 3Outputpr 3Outputdi 3Outputpc
 	diff examples/3.pr 3Outputpr 
+	diff examples/3.dim 3Outputdi
+	diff examples/3.pck 3Outputpc
 
-test2: pa2
-	./pa2 original/woods freqOutput2 headOutput2 codeOutput2 treeOutput2
-	diff count/woods.count freqOutput2
+test2: pa3
+	./pa3 examples/8.po 8Outputpr 8Outputdi 8Outputpc
+	diff examples/8.pr 8Outputpr 
+	diff examples/8.dim 8Outputdi
+	diff examples/8.pck 8Outputpc
 
-test3: pa2
-	./pa2 original/binary1 freqOutput3 headOutput3 codeOutput3 treeOutput3
-	diff count/binary1.count freqOutput3
+test3: pa3
+	./pa3 examples/1K.po KOutputpr KOutputdi KOutputpc
 
 test4: pa2
 	./pa2 original/stone freqOutput4 headOutput4 codeOutput4 treeOutput4

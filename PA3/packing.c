@@ -37,6 +37,7 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
             if(!(feof(fptr)))
             {
                 head = createNode(head, readTemp, 0, 0);
+                readTemp = fgetc(fptr);
             }
         }
         else
@@ -55,15 +56,9 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
         }    
     }
 
-    fprintf(stderr, "enter array\n");
-
     treeArray = LLtoArray(head, &size);
 
-    fprintf(stderr, "array success\n");
-
     (*upper_bound) = size - 1;
-
-    fprintf(stderr, "assign success: %d\n", (*upper_bound));
 
     tree = constructTree(treeArray, upper_bound);
     
@@ -99,7 +94,6 @@ Tree ** LLtoArray(List * head, int * size)
         treeArray[i] -> nodeLabel = temp -> nodeLabel;
         treeArray[i] -> left = treeArray[i] -> right = NULL;
         temp = temp -> next;
-        fprintf(stderr, "label: %d\n", treeArray[i] -> label);
     }
     freeLL(head);
     return(treeArray);
@@ -107,7 +101,6 @@ Tree ** LLtoArray(List * head, int * size)
 
 List * createNode(List * head, int label, int width, int height)
 {
-    fprintf(stderr, "height: %d, width: %d\n", height, width);
     if (head == NULL)
     {
         List * temp = malloc(sizeof(*temp));
@@ -146,12 +139,10 @@ List * createNode(List * head, int label, int width, int height)
     if (height == 0 && width == 0)
     {
         newNode -> nodeLabel = 'B';
-        fprintf(stderr, "enter branch\n");
     }
     else
     {
         newNode -> nodeLabel = 'L';
-        fprintf(stderr, "enter leaf\n");
     }
     newNode -> next = NULL;
     newNode -> previous = temp;
@@ -190,61 +181,57 @@ Tree * constructTree(Tree ** treeArray, int * upper_bound)
         fprintf(stderr, "NULL\n");
     }
 
-    fprintf(stderr, "nodeLabel: %c\n", treeArray[(*upper_bound)] -> nodeLabel);
-
     if ((root -> nodeLabel) == 'B')
     {
         if (treeArray[(*upper_bound - 1)] -> nodeLabel == 'B')
         {
             (*upper_bound)--;
-            fprintf(stderr, "ub: %d\n", (*upper_bound));
             root -> right = constructTree(treeArray, upper_bound);
         }
         else
         {
             (*upper_bound)--;
-           // fprintf(stderr, "ub: %d\n", (*upper_bound));
             root -> right = treeArray[(*upper_bound)];
         }
 
         if (treeArray[(*upper_bound - 1)] -> nodeLabel == 'B')
         {
             (*upper_bound)--;
-           // fprintf(stderr, "ub: %d\n", (*upper_bound));
             root -> left = constructTree(treeArray, upper_bound);
         }
         else
         {
             (*upper_bound)--;
-            //fprintf(stderr, "ub: %d\n", (*upper_bound));
             root -> left = treeArray[(*upper_bound)];
         }  
     }
-    if (root -> nodeLabel == 'H')
+    if (root -> nodeLabel == 'B')
     {
-        root -> height = root -> left -> height + root -> right -> height;
-        if (root -> left -> width > root -> right -> width)
+        if (root -> label == 'H')
         {
-            root -> width = root -> left -> width;
+            root -> height = root -> left -> height + root -> right -> height;
+            if (root -> left -> width > root -> right -> width)
+            {
+                root -> width = root -> left -> width;
+            }
+            else
+            {
+                root -> width = root -> right -> width;
+            }   
         }
-        else
+        else if(root -> label == 'V')
         {
-            root -> width = root -> right -> width;
-        }   
-    }
-    else if(root -> nodeLabel == 'V')
-    {
-        root -> width = root -> left -> width + root -> right -> width;
-        if (root -> left -> height > root -> right -> height)
-        {
-            root -> height = root -> left -> height;
+            root -> width = root -> left -> width + root -> right -> width;
+            if (root -> left -> height > root -> right -> height)
+            {
+                root -> height = root -> left -> height;
+            }
+            else
+            {
+                root -> height = root -> right -> height;
+            }   
         }
-        else
-        {
-            root -> height = root -> right -> height;
-        }   
     }
-    
     return (root);
 }
 
@@ -312,13 +299,38 @@ void Pack(char * filename, Tree * root)
 {
     FILE * fptr = fopen(filename, "w");
 
-    PackHelper(fptr, root);
+    int xorigin = 0;
+    int yorigin = 0;
+
+    PackHelper(fptr, root, xorigin, yorigin);
 
     fclose(fptr);
 }
 
-void PackHelper(FILE * fptr, Tree * root)
+void PackHelper(FILE * fptr, Tree * root, int xorigin, int yorigin)
 {
+    if (root == NULL)
+    {
+        return;
+    }
+
+    if (root -> nodeLabel == 'B')
+    {
+        if (root -> label == 'H')
+        {
+            PackHelper(fptr, root -> left, xorigin, yorigin + root -> height - root -> left -> height);
+            PackHelper(fptr, root -> right, xorigin, yorigin);
+        }
+        if (root -> label == 'V')
+        {
+            PackHelper(fptr, root -> left, xorigin, yorigin);
+            PackHelper(fptr, root -> right, xorigin + root -> width - root -> right -> width, yorigin);
+        }
+    }
+    else
+    {
+        fprintf(fptr, "%d((%d,%d)(%d,%d))\n", root -> label, root -> width, root -> height, xorigin, yorigin);
+    }
     
 }
 

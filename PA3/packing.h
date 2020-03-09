@@ -32,8 +32,9 @@ void printPreOrder(char * filename, Tree * root); // prints tree with preorder t
 void printTreeNode(FILE * fptr, Tree * root);
 
 void Pack(char * filename, Tree * root); // packs tree
+void PackHelper(FILE * fptr, Tree * root, int xorigin, int yorigin);
 
-void printDimesions(char * filename, Tree * root);
+void printDimensions(char * filename, Tree * root);
 void printDimHelper(FILE * fptr, Tree * root);
 
 void print2DUtil(Tree *root, int space);
