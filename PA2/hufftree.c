@@ -713,6 +713,7 @@ void Tree_Destroy(Tree * root)
 {
     if (root == NULL)
     {
+        free(root);
         return;
     }
     Tree_Destroy(root -> left);
