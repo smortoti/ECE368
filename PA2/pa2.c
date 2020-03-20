@@ -16,11 +16,6 @@ int main(int argc, char ** argv)
 
     chr_freqs = Read_From_File(argv[1]);
 
-    if (chr_freqs == NULL)
-    {
-        fprintf(stderr, "List NULL\n" );
-    }
-
     Read_Freq(argv[2], chr_freqs);
 
     MergeSort(&chr_freqs);

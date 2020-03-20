@@ -87,15 +87,21 @@ void Read_Freq(char * filename, List * head)
         return;
     }
 
+    long zero = 0;
+    int i = 0;
+
     if (head == NULL)
     {
+        while (i < ASCIIMAX)
+        {
+            fwrite(&zero, sizeof(long), 1, fptr);
+            i++;
+        }
         fclose(fptr);
         return;
     }
 
     List * tmpNode = head;
-    int i = 0;
-    long zero = 0;
     int write = 0;
 
     while(i < ASCIIMAX) // checks for all ascii values
