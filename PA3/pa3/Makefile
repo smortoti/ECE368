@@ -14,7 +14,7 @@ pa3: $(OBJS)
 testall: test1 test2 test3
 
 testmemory: pa3
-	$(VAL) --log-file=memcheck1.txt ./pa3 examples/empty.po 3Outputpr 3Outputdi 3Outputpc
+    $(VAL) --log-file=memcheck1.txt ./pa3 examples/empty.po 3Outputpr 3Outputdi 3Outputpc
 
 test1: pa3
 	./pa3 examples/3.po 3Outputpr 3Outputdi 3Outputpc
@@ -35,4 +35,4 @@ test4: pa3
 	./pa3 examples/empty.po EOutputpr EOutputdi EOutputpc
 
 clean: # remove all machine generated files
-	rm -f pa3 *.o ?Output??
+	rm -f pa1 *.o ?Output??
