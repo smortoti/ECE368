@@ -11,6 +11,9 @@ pa2: $(OBJS)
 .c.o: 
 	$(GCC) -c $*.c 
 
+testmemory: pa2
+	$(VAL) --log-file=memcheck1.txt ./pa2 original/empty freqOutput6 headOutput6 codeOutput6 treeOutput6
+
 testall: test1 test2 test4 test5 test6
 
 test1: pa2
