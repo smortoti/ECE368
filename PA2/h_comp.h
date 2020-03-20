@@ -6,13 +6,14 @@ typedef struct _Tree // Binary Tree definition
     long freq; // Frequency of char
     long code;
     long length;
+    char diff; // stores if leaf or branch node
     struct _Tree * left;
     struct _Tree * right;
 } Tree;
 
 typedef struct _Node // Dynamic memory for frequency
 {
-    char chr; // Stores char value
+    unsigned char chr; // Stores char value
     long freq; // Stored freq of char
     struct _Node * next;
 } List;
@@ -24,7 +25,7 @@ typedef struct _List
 } TreeList;
 
 List * Read_From_File(char * filename);
-List * Add_Node(List * head, char chr);
+List * Add_Node(List * head, unsigned char chr);
 
 void Read_Freq(char * filename, List * head);
 

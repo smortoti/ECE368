@@ -16,7 +16,7 @@ List * Read_From_File(char * filename)
     }
 
     List * chr_list = NULL;
-    char chr = 'a';
+    unsigned char chr = 'a';
 
     while (!feof(fptr)) // creates a new node for each character read
     {
@@ -34,7 +34,7 @@ List * Read_From_File(char * filename)
 
 }
 
-List * Add_Node(List * head, char chr) // adds new node with char chr to linked list
+List * Add_Node(List * head, unsigned char chr) // adds new node with char chr to linked list
 {
     List * newNode = malloc(sizeof(*newNode));
 
@@ -93,8 +93,6 @@ void Read_Freq(char * filename, List * head)
         return;
     }
 
-
-
     List * tmpNode = head;
     int i = 0;
     long zero = 0;
@@ -104,11 +102,13 @@ void Read_Freq(char * filename, List * head)
     {
         if ((tmpNode -> chr) == i)
         {
+            fprintf(stderr, "i: %d chr: %c freq: %ld\n", i, tmpNode -> chr, tmpNode -> freq);
             write = fwrite(&(tmpNode -> freq), sizeof(long), 1, fptr); // writes if character exists in list
             i++;
         }
         else if (tmpNode -> next == NULL) // writes last of list
         {
+            fprintf(stderr, "ZERO\n");
             write = fwrite(&zero, sizeof(long), 1, fptr);
             i++;
         }
@@ -228,6 +228,7 @@ Tree * Add_TreeNode(char chr, long freq) // adds a node to the binary tree
     root -> chr = chr;
     root -> code = 0;
     root -> length = 0;
+    root -> diff = 'L';
     root -> left = NULL;
     root -> right = NULL;
 
@@ -241,6 +242,7 @@ Tree * Merge_Tree(Tree * node1, Tree * node2) // merges two tree nodes from the 
     root -> left = node1;
     root -> right = node2;
     root -> chr = '\0';
+    root -> diff = 'B';
     root -> freq = node1 -> freq + node2 -> freq;
     root -> code = 0;
     root -> length = 0;
@@ -392,6 +394,7 @@ Tree * Build_Tree(List * head) // builds binary tree from forest
     root -> right = headTree -> treeptr -> right;
     root -> code = headTree -> treeptr -> code;
     root -> length = headTree -> treeptr -> length;
+    root -> diff = headTree -> treeptr -> diff;
 
     TreeList_Destroy(headTree); // frees treelist memory
     free(treeArray);
@@ -505,7 +508,7 @@ Tree * searchTree(Tree * root, char chr) // searches binary tree for a node and 
 
     if (root != NULL)
     {
-        if (root -> chr == chr)
+        if ((root -> chr == chr) && (root -> diff =='L'))
         {
             if (root -> left == NULL && root -> right == NULL)
             {
@@ -623,6 +626,7 @@ void Compress(char * filenamein, char * filenamehead, char * filenameout, Tree *
             bitCounter += 8;
             break;
         }
+
         if (bitCounter >= 8)
         {
             temp = headOut >> (bitCounter - 8); // use bit storage for output
