@@ -287,6 +287,13 @@ TreeList * TL_Insert(TreeList * head, TreeList * node) // inserts treelist node
 
 TreeList * TL_Build(Tree ** treeArray, long size) // builds tree list
 {
+
+    if (treeArray == NULL)
+    {
+      free(treeArray);
+      return NULL;
+    }
+
     long i = 0;
     TreeList * head = NULL;
     
@@ -713,7 +720,6 @@ void Tree_Destroy(Tree * root)
 {
     if (root == NULL)
     {
-        free(root);
         return;
     }
     Tree_Destroy(root -> left);

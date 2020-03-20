@@ -1,88 +1,84 @@
-==42165== Memcheck, a memory error detector
-==42165== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==42165== Using Valgrind-3.14.0-353a3587bb-20181007X and LibVEX; rerun with -h for copyright info
-==42165== Command: ./pa2 original/empty freqOutput6 headOutput6 codeOutput6 treeOutput6
-==42165== Parent PID: 42155
-==42165== 
---42165-- 
---42165-- Valgrind options:
---42165--    --dsymutil=yes
---42165--    --tool=memcheck
---42165--    --leak-check=full
---42165--    --verbose
---42165--    --show-leak-kinds=all
---42165--    --track-origins=yes
---42165--    --log-file=memcheck1.txt
---42165-- Contents of /proc/version:
---42165--   Linux version 3.10.0-1062.18.1.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-39) (GCC) ) #1 SMP Tue Mar 17 23:49:17 UTC 2020
---42165-- 
---42165-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-rdtscp-sse3-avx
---42165-- Page sizes: currently 4096, max supported 4096
---42165-- Valgrind library directory: /usr/lib64/valgrind
---42165-- Reading syms from /home/shay/a/lewis446/ECE368/ECE368/PA2/pa2
---42165-- Reading syms from /usr/lib64/ld-2.17.so
---42165--   Considering /usr/lib/debug/.build-id/5c/c1a53b747a7e4d21198723c2b633e54f3c06d9.debug ..
---42165--   .. build-id is valid
---42165-- Reading syms from /usr/lib64/valgrind/memcheck-amd64-linux
---42165--    object doesn't have a symbol table
---42165--    object doesn't have a dynamic symbol table
---42165-- Scheduler: using generic scheduler lock implementation.
---42165-- Reading suppressions file: /usr/lib64/valgrind/default.supp
-==42165== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-42165-by-lewis446-on-ecegrid-thin4.ecn.purdue.edu
-==42165== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-42165-by-lewis446-on-ecegrid-thin4.ecn.purdue.edu
-==42165== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-42165-by-lewis446-on-ecegrid-thin4.ecn.purdue.edu
-==42165== 
-==42165== TO CONTROL THIS PROCESS USING vgdb (which you probably
-==42165== don't want to do, unless you know exactly what you're doing,
-==42165== or are doing some strange experiment):
-==42165==   /usr/lib64/valgrind/../../bin/vgdb --pid=42165 ...command...
-==42165== 
-==42165== TO DEBUG THIS PROCESS USING GDB: start GDB like this
-==42165==   /path/to/gdb ./pa2
-==42165== and then give GDB the following command
-==42165==   target remote | /usr/lib64/valgrind/../../bin/vgdb --pid=42165
-==42165== --pid is optional if only one valgrind process is running
-==42165== 
---42165-- REDIR: 0x4019df0 (ld-linux-x86-64.so.2:strlen) redirected to 0x580c66c5 (???)
---42165-- REDIR: 0x4019bc0 (ld-linux-x86-64.so.2:index) redirected to 0x580c66df (???)
---42165-- Reading syms from /usr/lib64/valgrind/vgpreload_core-amd64-linux.so
---42165-- Reading syms from /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so
-==42165== WARNING: new redirection conflicts with existing -- ignoring it
---42165--     old: 0x04019df0 (strlen              ) R-> (0000.0) 0x580c66c5 ???
---42165--     new: 0x04019df0 (strlen              ) R-> (2007.0) 0x04c2d0e0 strlen
---42165-- REDIR: 0x4019d70 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c2e230 (strcmp)
---42165-- REDIR: 0x401aa30 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c31de0 (mempcpy)
---42165-- Reading syms from /usr/lib64/libc-2.17.so
---42165--   Considering /usr/lib/debug/.build-id/39/8944d32cf16a67af51067a326e6c0cc14f90ed.debug ..
---42165--   .. build-id is valid
---42165-- REDIR: 0x4ec70e0 (libc.so.6:strcasecmp) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---42165-- REDIR: 0x4ec3e60 (libc.so.6:strnlen) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---42165-- REDIR: 0x4ec93b0 (libc.so.6:strncasecmp) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---42165-- REDIR: 0x4ec68c0 (libc.so.6:memset) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---42165-- REDIR: 0x4ec6870 (libc.so.6:memcpy@GLIBC_2.2.5) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---42165-- REDIR: 0x4ec5850 (libc.so.6:__GI_strrchr) redirected to 0x4c2caa0 (__GI_strrchr)
---42165-- REDIR: 0x4ebca90 (libc.so.6:malloc) redirected to 0x4c29e1c (malloc)
---42165-- REDIR: 0x4edc8d0 (libc.so.6:__GI_strstr) redirected to 0x4c32070 (__strstr_sse2)
---42165-- REDIR: 0x4ebceb0 (libc.so.6:free) redirected to 0x4c2af16 (free)
-==42165== 
-==42165== HEAP SUMMARY:
-==42165==     in use at exit: 0 bytes in 1 blocks
-==42165==   total heap usage: 8 allocs, 7 frees, 3,976 bytes allocated
-==42165== 
-==42165== Searching for pointers to 1 not-freed blocks
-==42165== Checked 70,160 bytes
-==42165== 
-==42165== 0 bytes in 1 blocks are definitely lost in loss record 1 of 1
-==42165==    at 0x4C29EA3: malloc (vg_replace_malloc.c:309)
-==42165==    by 0x40102A: Build_Tree (hufftree.c:341)
-==42165==    by 0x401D4E: main (pa2.c:28)
-==42165== 
-==42165== LEAK SUMMARY:
-==42165==    definitely lost: 0 bytes in 1 blocks
-==42165==    indirectly lost: 0 bytes in 0 blocks
-==42165==      possibly lost: 0 bytes in 0 blocks
-==42165==    still reachable: 0 bytes in 0 blocks
-==42165==         suppressed: 0 bytes in 0 blocks
-==42165== 
-==42165== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
-==42165== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==6490== Memcheck, a memory error detector
+==6490== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==6490== Using Valgrind-3.14.0-353a3587bb-20181007X and LibVEX; rerun with -h for copyright info
+==6490== Command: ./pa2 original/empty freqOutput6 headOutput6 codeOutput6 treeOutput6
+==6490== Parent PID: 6482
+==6490== 
+--6490-- 
+--6490-- Valgrind options:
+--6490--    --dsymutil=yes
+--6490--    --tool=memcheck
+--6490--    --leak-check=full
+--6490--    --verbose
+--6490--    --show-leak-kinds=all
+--6490--    --track-origins=yes
+--6490--    --log-file=memcheck1.txt
+--6490-- Contents of /proc/version:
+--6490--   Linux version 3.10.0-1062.18.1.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-39) (GCC) ) #1 SMP Tue Mar 17 23:49:17 UTC 2020
+--6490-- 
+--6490-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-avx-avx2-bmi
+--6490-- Page sizes: currently 4096, max supported 4096
+--6490-- Valgrind library directory: /usr/lib64/valgrind
+--6490-- Reading syms from /home/shay/a/lewis446/ECE368/ECE368/PA2/pa2
+--6490-- Reading syms from /usr/lib64/ld-2.17.so
+--6490-- Reading syms from /usr/lib64/valgrind/memcheck-amd64-linux
+--6490--    object doesn't have a symbol table
+--6490--    object doesn't have a dynamic symbol table
+--6490-- Scheduler: using generic scheduler lock implementation.
+--6490-- Reading suppressions file: /usr/lib64/valgrind/default.supp
+==6490== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-6490-by-lewis446-on-ecegrid-thin7.ecn.purdue.edu
+==6490== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-6490-by-lewis446-on-ecegrid-thin7.ecn.purdue.edu
+==6490== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-6490-by-lewis446-on-ecegrid-thin7.ecn.purdue.edu
+==6490== 
+==6490== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==6490== don't want to do, unless you know exactly what you're doing,
+==6490== or are doing some strange experiment):
+==6490==   /usr/lib64/valgrind/../../bin/vgdb --pid=6490 ...command...
+==6490== 
+==6490== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==6490==   /path/to/gdb ./pa2
+==6490== and then give GDB the following command
+==6490==   target remote | /usr/lib64/valgrind/../../bin/vgdb --pid=6490
+==6490== --pid is optional if only one valgrind process is running
+==6490== 
+--6490-- REDIR: 0x4019df0 (ld-linux-x86-64.so.2:strlen) redirected to 0x580c66c5 (???)
+--6490-- REDIR: 0x4019bc0 (ld-linux-x86-64.so.2:index) redirected to 0x580c66df (???)
+--6490-- Reading syms from /usr/lib64/valgrind/vgpreload_core-amd64-linux.so
+--6490-- Reading syms from /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so
+==6490== WARNING: new redirection conflicts with existing -- ignoring it
+--6490--     old: 0x04019df0 (strlen              ) R-> (0000.0) 0x580c66c5 ???
+--6490--     new: 0x04019df0 (strlen              ) R-> (2007.0) 0x04c2d0e0 strlen
+--6490-- REDIR: 0x4019d70 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c2e230 (strcmp)
+--6490-- REDIR: 0x401aa30 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c31de0 (mempcpy)
+--6490-- Reading syms from /usr/lib64/libc-2.17.so
+--6490-- REDIR: 0x4ec70e0 (libc.so.6:strcasecmp) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
+--6490-- REDIR: 0x4ec3e60 (libc.so.6:strnlen) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
+--6490-- REDIR: 0x4ec93b0 (libc.so.6:strncasecmp) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
+--6490-- REDIR: 0x4ec68c0 (libc.so.6:memset) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
+--6490-- REDIR: 0x4ec6870 (libc.so.6:memcpy@GLIBC_2.2.5) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
+--6490-- REDIR: 0x4ec5850 (libc.so.6:__GI_strrchr) redirected to 0x4c2caa0 (__GI_strrchr)
+--6490-- REDIR: 0x4ebca90 (libc.so.6:malloc) redirected to 0x4c29e1c (malloc)
+--6490-- REDIR: 0x4edc8d0 (libc.so.6:__GI_strstr) redirected to 0x4c32070 (__strstr_sse2)
+--6490-- REDIR: 0x4ebceb0 (libc.so.6:free) redirected to 0x4c2af16 (free)
+==6490== 
+==6490== HEAP SUMMARY:
+==6490==     in use at exit: 0 bytes in 1 blocks
+==6490==   total heap usage: 8 allocs, 7 frees, 3,976 bytes allocated
+==6490== 
+==6490== Searching for pointers to 1 not-freed blocks
+==6490== Checked 70,160 bytes
+==6490== 
+==6490== 0 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==6490==    at 0x4C29EA3: malloc (vg_replace_malloc.c:309)
+==6490==    by 0x40102A: Build_Tree (hufftree.c:341)
+==6490==    by 0x401D5A: main (pa2.c:28)
+==6490== 
+==6490== LEAK SUMMARY:
+==6490==    definitely lost: 0 bytes in 1 blocks
+==6490==    indirectly lost: 0 bytes in 0 blocks
+==6490==      possibly lost: 0 bytes in 0 blocks
+==6490==    still reachable: 0 bytes in 0 blocks
+==6490==         suppressed: 0 bytes in 0 blocks
+==6490== 
+==6490== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==6490== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
