@@ -290,7 +290,6 @@ TreeList * TL_Build(Tree ** treeArray, long size) // builds tree list
 
     if (treeArray == NULL)
     {
-      free(treeArray);
       return NULL;
     }
 
@@ -344,8 +343,12 @@ List * Free_Node(List * head, List * nodeToDelete) // node to free from linked l
 Tree * Build_Tree(List * head) // builds binary tree from forest
 {
     long size = countNode(head);
+    Tree ** treeArray = NULL;
 
-    Tree ** treeArray = malloc(sizeof(Tree *) * size);
+    if (size != 0)
+    {
+      treeArray = malloc(sizeof(Tree *) * size);
+    }
     List * tempNode = head;
     long i = 0;
 
