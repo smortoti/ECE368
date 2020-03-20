@@ -108,13 +108,11 @@ void Read_Freq(char * filename, List * head)
     {
         if ((tmpNode -> chr) == i)
         {
-            fprintf(stderr, "i: %d chr: %c freq: %ld\n", i, tmpNode -> chr, tmpNode -> freq);
             write = fwrite(&(tmpNode -> freq), sizeof(long), 1, fptr); // writes if character exists in list
             i++;
         }
         else if (tmpNode -> next == NULL) // writes last of list
         {
-            fprintf(stderr, "ZERO\n");
             write = fwrite(&zero, sizeof(long), 1, fptr);
             i++;
         }
