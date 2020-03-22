@@ -48,7 +48,7 @@ Node * List_Load_From_File(char * filename)
     List * nodelist = malloc(sizeof(List));
     long holder = 0;
 
-    while(fread((void *)holder, sizeof(long), 1, fptr)) // Reads into node
+    while(fread(&holder, sizeof(long), 1, fptr)) // Reads into node
     {
         nodelist = addNode(nodelist, holder); // Adds node for each value
     }
@@ -78,14 +78,18 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
 
     while (nodecount -> next != NULL) // Finds size of linked list
     {
-        nodecount -> next = nodecount;
+        nodecount = nodecount -> next;
         size++;
     }
+
+    fprintf(stderr, "size: %ld\n", size);
 
     do // Generates sequence
     {
         sequence = 3 * sequence + 1;
     }while(sequence < size);
+
+    fprintf(stderr, "sequence success\n");
 
     sequence = (sequence - 1) / 3;
     /* Shellsort algorithm using while loops to make up for array indexing. Any array indexing is used with a while loop to progress the linked list. */
@@ -99,10 +103,13 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                 i++;
             }
 
+            fprintf(stderr, "i: %d k= %d i-k= %d\n", i, k, i - k);
+
             while (l != (i - k))
             {
                 arraymintemp = arraymintemp -> next;
                 l++;
+               // fprintf(stderr, "2\n");
             }
 
             l = 1;

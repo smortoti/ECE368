@@ -10,7 +10,6 @@ int main(int argc, char **argv)
     }
 
     int pos_num = 0;
-    long element_num = 0;
     long * array = NULL;
     int size = 0;
     long num_comp = 0;
@@ -43,13 +42,13 @@ int main(int argc, char **argv)
 
     num_comp = 0; // resets comparisons to zero for linked list
 
-    /* Unfortunately, my Makefile ran into a mapping issue with VSCode
-    and I was no longer able to test/compile my files from 9 PM, 2/10 and 
-    onward. My linked list functions are untested and will have errors. */
+    fprintf(stderr, "enter load\n");
 
     list = List_Load_From_File(argv[2]);
+     fprintf(stderr, "load success\n");
 
     list = List_Shellsort(list, &num_comp);
+    fprintf(stderr, "shellsort success\n");
 
     num_written = List_Save_To_File(argv[3], list);
 
