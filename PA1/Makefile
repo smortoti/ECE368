@@ -2,6 +2,7 @@ WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
 GCC = gcc -g -std=c99 $(WARNINGFLAGS)
 
 SRCS = shell_array.c shell_list.c pa1.c
+OBJS = $(SRCS:%.c=%.o)
 
 pa1: $(OBJS) 
 	$(GCC) $(OBJS) -o pa1

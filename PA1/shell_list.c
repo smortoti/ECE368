@@ -13,7 +13,6 @@ typedef struct List // created a list structure to more efficiently add nodes to
 List * addNode(List * headnode, long val)
 {
     Node * newnode = malloc(sizeof(Node));
-    Node * temp = NULL;
 
     newnode -> value = val;
     newnode -> next = NULL;
@@ -66,39 +65,75 @@ Node * List_Load_From_File(char * filename)
 Node * List_Shellsort(Node * nodelist, long * n_comp)
 {
     long sequence = 0;
-    int size = 0;
-    long counter = 1;
+    long size = 1;
     Node * nodecount = nodelist;
     long k = 0;
     long j = 0;
     Node * temp = nodelist;
-    long i = 0;
-    long l = 0;
-    long m = 0;
-    Node * arraytemp1 = NULL;
-    Node * arraytemp2 = NULL;
-    Node * arraymintemp = NULL;
-    Node * arraytemp = NULL;
-    Node * tempholder = NULL;
-    long o = 0;
-    Node * tempholder2 = NULL;
+    long i = 1;
+    long l = 1;
+    long m = 1;
+    Node * arraymintemp = nodelist;
+    int holder;
 
     while (nodecount -> next != NULL) // Finds size of linked list
     {
         nodecount -> next = nodecount;
-        counter++;
+        size++;
     }
 
     do // Generates sequence
     {
         sequence = 3 * sequence + 1;
-    }while(sequence < counter);
+    }while(sequence < size);
 
     sequence = (sequence - 1) / 3;
     /* Shellsort algorithm using while loops to make up for array indexing. Any array indexing is used with a while loop to progress the linked list. */
     for(k = sequence; k > 0; k = (k - 1) / 3) 
     {
-        while(j < counter)
+        for(j = k; j < size; j++)
+        {
+            while (i != j)
+            {
+                temp = temp -> next;
+                i++;
+            }
+
+            while (l != (i - k))
+            {
+                arraymintemp = arraymintemp -> next;
+                l++;
+            }
+
+            l = 1;
+
+            while ((i >= k) && (arraymintemp -> value > temp -> value))
+            {
+                holder = temp -> value;
+                temp -> value = arraymintemp -> value;
+                arraymintemp -> value = holder;
+                temp = nodelist;
+                arraymintemp = nodelist;
+                while (m != (i - k))
+                {
+                    temp = temp -> next;
+                    arraymintemp = arraymintemp -> next;
+                    m++;
+                }
+                m = 1;
+                (*n_comp)++;
+                i = i - k;
+            }
+            (*n_comp)++;
+            temp = nodelist;
+            while (m != i)
+            {
+                temp = temp -> next;
+                m++;
+            }
+            m = 1;
+        }
+        /*while(j < size)
         {
             j++;
             while(i != j)
@@ -156,7 +191,7 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
             }
             (*n_comp)++;
 
-        }
+        }*/
 
     }
     return (nodelist);
