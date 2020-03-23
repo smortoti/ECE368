@@ -95,5 +95,7 @@ int Array_Save_To_File(char * filename, long * array, int size)
 
     fclose(fptr); // Closes file
 
+    free(array);
+
     return(write_num);
 }

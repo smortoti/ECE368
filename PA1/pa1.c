@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
     num_comp = 0; // resets comparisons to zero for linked list
 
-    fprintf(stderr, "enter load\n");
+/*    fprintf(stderr, "enter load\n");
 
     list = List_Load_From_File(argv[2]);
      fprintf(stderr, "load success\n");
@@ -53,6 +53,6 @@ int main(int argc, char **argv)
     num_written = List_Save_To_File(argv[3], list);
 
     printf("%ld\n", num_comp);
-
+*/
     return(0);
 }

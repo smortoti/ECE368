@@ -70,9 +70,9 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
     long k = 0;
     long j = 0;
     Node * temp = nodelist;
-    long i = 1;
+    long i = 0;
     long l = 0;
-    long m = 1;
+    long m = 0;
     Node * arraymintemp = nodelist;
     int holder;
 
@@ -109,7 +109,11 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
             {
                 arraymintemp = arraymintemp -> next;
                 l++;
-               // fprintf(stderr, "2\n");
+		if (arraymintemp -> next == NULL)
+		{
+                  fprintf(stderr, "NULL\n");
+		  break;
+		}
             }
 
             l = 0;
@@ -142,7 +146,7 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                 m++;
                 fprintf(stderr, "m increment: %d\n", m);
             }
-            m = 1;
+            m = 0;
             fprintf(stderr, "sort success\n");
         }
         /*while(j < size)
