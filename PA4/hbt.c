@@ -39,3 +39,56 @@ int isBal(Tnode * root)
     }
     
 }
+
+Tnode * createNode(int key)
+{
+    Tnode * newNode = malloc(sizeof(*newNode));
+
+    newNode -> key = key;
+    newNode -> balance = '0';
+    newNode -> left = NULL;
+    newNode -> right = NULL;
+
+    return newNode;
+}
+
+Tnode * insertNode(Tnode * root, Tnode * newNode)
+{
+    if (root == NULL)
+    {
+        return newNode;
+    }
+
+    insertNodeHelp(root, newNode);
+
+    return (root);
+}
+
+void insertNodeHelp(Tnode * root, Tnode * newNode)
+{
+    if (root -> key >= newNode -> key)
+    {
+        if (root -> left == NULL)
+        {
+            root -> left = newNode;
+            return;
+        }
+        else
+        {
+            insertNodeHelp(root -> left, newNode);
+        }
+    }
+    if (root -> key < newNode -> key)
+    {
+        if (root -> right == NULL)
+        {
+            root -> right = newNode;
+            return;
+        }
+        else
+        {
+            insertNodeHelp(root -> right, newNode);
+        }
+        
+    }
+}
