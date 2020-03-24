@@ -1,5 +1,7 @@
 WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
 GCC = gcc -g -std=c99 $(WARNINGFLAGS)
+VAL = valgrind --leak-check=full --leak-check=full --show-leak-kinds=all
+
 
 SRCS = shell_array.c shell_list.c pa1.c
 OBJS = $(SRCS:%.c=%.o)
@@ -9,6 +11,9 @@ pa1: $(OBJS)
 
 .c.o: 
 	$(GCC) -c $*.c 
+
+testmemory: pa1
+	$(VAL) --log-file=memcheck1.txt ./pa1 -a examples/1K.b output1Kl
 
 test1a: pa1
 	./pa1 -a examples/1K.b output1Ka
