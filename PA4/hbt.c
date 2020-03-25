@@ -23,21 +23,35 @@ int isBal(Tnode * root)
 {
     if (root == NULL)
     {
+        return 1;
+    }
+
+    if (root -> balance != ('-1' || '0' || '1'))
+    {
         return 0;
     }
 
-    int leftBal = isBal(root -> left);
-    int rightBal = isBal(root -> right);
+    return (isBal(root -> left) && (isBal(root -> right)));
+}
+
+void findHeights(Tnode * root, int * leftBal, int * rightBal)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    findHeights(root -> left, leftBal, rightBal);
+    findHeights(root -> right, leftBal, rightBal);
 
     if (leftBal > rightBal)
     {
-        return (leftBal + 1);
+        (*leftBal)++;
     }
     else
     {
-       return (rightBal + 1);
+       (*rightBal)++;
     }
-    
 }
 
 Tnode * createNode(int key)
@@ -76,6 +90,7 @@ void insertNodeHelp(Tnode * root, Tnode * newNode)
         else
         {
             insertNodeHelp(root -> left, newNode);
+            return;
         }
     }
     if (root -> key < newNode -> key)
@@ -88,6 +103,7 @@ void insertNodeHelp(Tnode * root, Tnode * newNode)
         else
         {
             insertNodeHelp(root -> right, newNode);
+            return;
         }
         
     }
