@@ -68,6 +68,7 @@ Tnode * createNode(int key)
 
 Tnode * insertNode(Tnode * root, Tnode * newNode)
 {
+
     if (root == NULL)
     {
         return newNode;
@@ -80,11 +81,16 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
 
 void insertNodeHelp(Tnode * root, Tnode * newNode)
 {
+    int leftBal = 0;
+    int rightBal = 0;
+
     if (root -> key >= newNode -> key)
     {
         if (root -> left == NULL)
         {
             root -> left = newNode;
+            findHeights(root -> left, &leftBal, &rightBal);
+            root -> left -> balance = leftBal - rightBal;
             return;
         }
         else
@@ -98,6 +104,8 @@ void insertNodeHelp(Tnode * root, Tnode * newNode)
         if (root -> right == NULL)
         {
             root -> right = newNode;
+            findHeights(root -> right, &leftBal, &rightBal);
+            root -> right -> balance = leftBal - rightBal;
             return;
         }
         else
