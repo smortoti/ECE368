@@ -96,10 +96,9 @@ void insertNodeHelp(Tnode * root, Tnode * newNode)
         else
         {
             insertNodeHelp(root -> left, newNode);
-            return;
         }
     }
-    if (root -> key < newNode -> key)
+    else if (root -> key < newNode -> key)
     {
         if (root -> right == NULL)
         {
@@ -111,8 +110,18 @@ void insertNodeHelp(Tnode * root, Tnode * newNode)
         else
         {
             insertNodeHelp(root -> right, newNode);
-            return;
         }
-        
     }
+}
+
+void destroyTree(Tnode * root) // frees tree
+{
+    if (root -> left == NULL && root -> right == NULL)
+    {
+        free(root);
+        return;
+    }
+    destroyTree(root -> left);
+    destroyTree(root -> right);
+    free(root); // ensures branch is destroyed after recursion
 }
