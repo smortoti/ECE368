@@ -74,15 +74,20 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
         return newNode;
     }
 
-    insertNodeHelp(root, newNode);
+    insertNodeHelp(root, newNode, NULL);
 
     return (root);
 }
 
-void insertNodeHelp(Tnode * root, Tnode * newNode)
+void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode)
 {
     int leftBal = 0;
     int rightBal = 0;
+
+    if (root -> balance == (-1 || 1))
+    {
+        unbalNode == root;
+    }
 
     if (root -> key >= newNode -> key)
     {
@@ -91,11 +96,18 @@ void insertNodeHelp(Tnode * root, Tnode * newNode)
             root -> left = newNode;
             findHeights(root -> left, &leftBal, &rightBal);
             root -> left -> balance = leftBal - rightBal;
+            leftBal = rightBal = 0;
+            findHeights(unbalNode, &leftBal, &rightBal);
+            unbalNode -> balance = leftBal - rightBal;
+            if (unbalNode -> balance < '-1' || unbalNode -> balance > '1')
+            {
+                // rotations
+            }
             return;
         }
         else
         {
-            insertNodeHelp(root -> left, newNode);
+            insertNodeHelp(root -> left, newNode, unbalNode);
         }
     }
     else if (root -> key < newNode -> key)
@@ -105,11 +117,18 @@ void insertNodeHelp(Tnode * root, Tnode * newNode)
             root -> right = newNode;
             findHeights(root -> right, &leftBal, &rightBal);
             root -> right -> balance = leftBal - rightBal;
+            leftBal = rightBal = 0;
+            findHeights(unbalNode, &leftBal, &rightBal);
+            unbalNode -> balance = leftBal - rightBal;
+            if (unbalNode -> balance < '-1' || unbalNode -> balance > '1')
+            {
+                // rotations
+            }
             return;
         }
         else
         {
-            insertNodeHelp(root -> right, newNode);
+            insertNodeHelp(root -> right, newNode, unbalNode);
         }
     }
 }
@@ -124,4 +143,14 @@ void destroyTree(Tnode * root) // frees tree
     destroyTree(root -> left);
     destroyTree(root -> right);
     free(root); // ensures branch is destroyed after recursion
+}
+
+void CCWRotate(Tnode * root)
+{
+
+}
+
+void CWRotate(Tnode * root)
+{
+
 }
