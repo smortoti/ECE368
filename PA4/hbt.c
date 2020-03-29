@@ -101,7 +101,14 @@ void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode)
             unbalNode -> balance = leftBal - rightBal;
             if (unbalNode -> balance < '-1' || unbalNode -> balance > '1')
             {
-                // rotations
+                if (unbalNode -> balance < '-1')
+                {
+                    CCWRotate(unbalNode);
+                }
+                else
+                {
+                    CWRotate(unbalNode);
+                }
             }
             return;
         }
@@ -122,7 +129,14 @@ void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode)
             unbalNode -> balance = leftBal - rightBal;
             if (unbalNode -> balance < '-1' || unbalNode -> balance > '1')
             {
-                // rotations
+                if (unbalNode -> balance < '-1')
+                {
+                    CCWRotate(unbalNode);
+                }
+                else
+                {
+                    CWRotate(unbalNode);
+                }
             }
             return;
         }
@@ -147,10 +161,23 @@ void destroyTree(Tnode * root) // frees tree
 
 void CCWRotate(Tnode * root)
 {
+    Tnode * newRoot = root -> right;
+    Tnode * temp = newRoot -> left;
 
+    newRoot -> left = root;
+    root -> right = temp;
 }
 
 void CWRotate(Tnode * root)
 {
+    Tnode * newRoot = root -> left;
+    Tnode * temp = newRoot -> right;
 
+    newRoot -> right = root;
+    root -> left = temp;
+}
+
+void printPreOrder(Tnode * root)
+{
+    
 }
