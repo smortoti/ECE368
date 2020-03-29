@@ -7,7 +7,8 @@ Tnode * insertNode(Tnode * root, Tnode * newNode);
 void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode);
 Tnode * createNode(int key);
 
-void printPreOrder(Tnode * root);
+void printPreOrder(char * filename, Tnode * root);
+void printPreOrderHelp(FILE * fptr, Tnode * root);
 
 void deleteNode(Tnode * root, int toDelete);
 

@@ -177,7 +177,23 @@ void CWRotate(Tnode * root)
     root -> left = temp;
 }
 
-void printPreOrder(Tnode * root)
+void printPreOrder(char * filename, Tnode * root)
 {
-    
+    FILE * fptr = fopen(filename, "w");
+
+    printPreOrderHelp(fptr, root);
+
+    fclose(fptr);
+}
+
+void printPreOrderHelp(FILE * fptr, Tnode * root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    char pattern = '0';
+
+    fprintf(stdout, "")
 }
