@@ -12,4 +12,4 @@ void printPreOrderHelp(FILE * fptr, Tnode * root);
 
 void deleteNode(Tnode * root, int toDelete);
 
-void deleteTree(Tnode * root);
+void destroyTree(Tnode * root);

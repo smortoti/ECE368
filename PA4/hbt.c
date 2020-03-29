@@ -179,7 +179,7 @@ void CWRotate(Tnode * root)
 
 void printPreOrder(char * filename, Tnode * root)
 {
-    FILE * fptr = fopen(filename, "w");
+    FILE * fptr = fopen(filename, "wb");
 
     printPreOrderHelp(fptr, root);
 
@@ -193,7 +193,52 @@ void printPreOrderHelp(FILE * fptr, Tnode * root)
         return;
     }
 
-    char pattern = '0';
+    char pattern = 0;
 
-    fprintf(stdout, "")
+    if (root -> left == NULL)
+    {
+        if (root -> right == NULL)
+        {
+            pattern = 0x00;
+        }
+        else
+        {
+            pattern = 0x01;
+        }   
+    }
+    else
+    {
+        if (root -> right == NULL)
+        {
+            pattern = 0x02;
+        }
+        else
+        {
+            pattern = 0x03;
+        }
+    }
+
+    fwrite(root -> key, sizeof(int), 1, fptr);
+    fwrite(&pattern, sizeof(char), 1, fptr);
+
+    printPreOrderHelp(fptr, root -> left);
+    printPreOrderHelp(fptr, root -> right);
+        
+}
+
+void deleteNode(Tnode * root, int toDelete)
+{
+    if (toDelete < root -> key)
+    {
+        deleteNode(root -> left, toDelete);
+    }
+    else if (toDelete > root -> key)
+    {
+        deleteNode(root -> right, toDelete);
+    }
+    else
+    {
+        
+    }
+    
 }

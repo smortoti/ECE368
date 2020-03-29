@@ -25,20 +25,30 @@ int main(int argc, char ** argv)
     Tnode * root = NULL;
     Tnode * newNode = NULL;
 
-    while(fscanf(fptr, "%d %c\n", &key, &mode))
+    while(!(feof(fptr)))
     {
-        if (mode = 'i')
+        fread(&key, sizeof(int), 1, fptr);
+        fread(&mode, sizeof(char), 1, fptr);
+
+        if(!(feof(fptr)))
         {
-            newNode = createNode(key);
-            root = insertNode(root, newNode);
-        }
-        else
-        {
-            deleteNode(root, key);  
+            if (mode == 'i')
+            {
+                newNode = createNode(key);
+                root = insertNode(root, newNode);
+            }
+            else
+            {
+                deleteNode(root, key);  
+            }
         }
     }
 
-    deleteTree(root);
+    fprintf(stdout, "%d\n", 1);
+
+    printPreOrder(argv[2], root);
+
+    destroyTree(root);
 
     return EXIT_SUCCESS;
 
