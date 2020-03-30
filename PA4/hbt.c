@@ -87,6 +87,7 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
             {
                 current -> balance += 1;
                 unbal = current;
+                prevUnbal = previous;
                 previous = current;
                 current = current -> left;
 
@@ -98,8 +99,26 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
                 if (unbal -> balance > '0' + 1)
                 {
                     fprintf(stderr, "1\n");
-                    unbal = CWRotate(unbal);
+                    unbal = CWRotate(unbal, prevUnbal);
                 } 
+            }
+            else
+            {
+                unbal = current;
+                prevUnbal = previous;
+                previous = current;
+                current = current -> left;
+
+                if (current == NULL)
+                {
+                    previous -> left = newNode;
+                }
+
+                if (unbal -> balance > '0' - 1)
+                {
+                    fprintf(stderr, "2\n");
+                    unbal = CWRotate(unbal, prevUnbal);
+                }
             }
         }
         else
@@ -108,6 +127,7 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
             {
                 current -> balance -= 1;
                 unbal = current;
+                prevUnbal = previous;
                 previous = current;
                 current = current -> right;
 
@@ -119,7 +139,25 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
                 if (unbal -> balance < '0' - 1)
                 {
                     fprintf(stderr, "2\n");
-                    unbal = CWRotate(unbal, prevUnbal);
+                    unbal = CCWRotate(unbal, prevUnbal);
+                }
+            }
+            else
+            {
+                unbal = current;
+                prevUnbal = previous;
+                previous = current;
+                current = current -> right;
+
+                if (current == NULL)
+                {
+                    previous -> right = newNode;
+                }
+
+                if (unbal -> balance < '0' - 1)
+                {
+                    fprintf(stderr, "2\n");
+                    unbal = CCWRotate(unbal, prevUnbal);
                 }
             }
         }
@@ -141,26 +179,72 @@ void destroyTree(Tnode * root) // frees tree
 
 Tnode * CCWRotate(Tnode * root, Tnode * prevUnbal)
 {
-    if (prevUnbal == NULL)
-    {
-
-    }
     Tnode * newRoot = root -> right;
+    fprintf(stderr, "newroot assign\n");
     Tnode * temp = newRoot -> left;
+
+    fprintf(stderr, "assign 1 success\n");
+
+    if (newRoot -> balance > '0')
+    {
+        root = CWRotate(newRoot, root);
+    }
+
+    fprintf(stderr, "check bal left\n");
 
     newRoot -> left = root;
     root -> right = temp;
 
+    if (prevUnbal == NULL)
+    {
+        return newRoot;
+    }
+
+    if (prevUnbal -> right == root)
+    {
+        prevUnbal -> right = newRoot;
+        return newRoot;
+    }
+
+    if (prevUnbal -> left == root)
+    {
+        prevUnbal -> left = newRoot;
+        return newRoot;
+    }
+
     return newRoot;
+
 }
 
-Tnode * CWRotate(Tnode * root)
+Tnode * CWRotate(Tnode * root, Tnode * prevUnbal)
 {
     Tnode * newRoot = root -> left;
     Tnode * temp = newRoot -> right;
 
+    if (newRoot -> balance < '0')
+    {
+        root = CCWRotate(newRoot, root);
+    }
+
     newRoot -> right = root;
     root -> left = temp;
+
+    if (prevUnbal == NULL)
+    {
+        return newRoot;
+    }
+
+    if (prevUnbal -> right == root)
+    {
+        prevUnbal -> right = newRoot;
+        return newRoot;
+    }
+
+    if (prevUnbal -> left == root)
+    {
+        prevUnbal -> left = newRoot;
+        return newRoot;
+    }
 
     return newRoot;
 }
