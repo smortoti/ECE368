@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "hbtfun.h"
 #include "hbt.h"
+#define COUNT 10
 
 
 int isBST(Tnode * node, int min, int max)  
@@ -83,7 +84,7 @@ void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode)
     int leftBal = 0;
     int rightBal = 0;
 
-    if (root -> balance == (-1 || 1))
+    if (root -> balance == ('0' + 1) || root -> balance == ('0' - 1));
     {
         unbalNode = root;
     }
@@ -264,3 +265,26 @@ Tnode * buildPreOrder(int * key_array, int start, int end)
 
     return root;
 }
+
+void print2DUtil(Tnode *root, int space) // debugging tree print function
+{ 
+    // Base case 
+    if (root == NULL) 
+        return; 
+  
+    // Increase distance between levels 
+    space += COUNT; 
+  
+    // Process right child first 
+    print2DUtil(root->right, space); 
+  
+    // Print current node after space 
+    // count 
+    fprintf(stderr, "\n"); 
+    for (int i = COUNT; i < space; i++) 
+        fprintf(stderr, " "); 
+    fprintf(stderr, "%d, %d:\n", root->key, root -> balance); 
+  
+    // Process left child 
+    print2DUtil(root->left, space); 
+} 

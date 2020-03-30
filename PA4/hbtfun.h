@@ -20,3 +20,5 @@ Tnode * buildPreOrder(int * key_array, int start, int end);
 void deleteNode(Tnode * root, int toDelete);
 
 void destroyTree(Tnode * root);
+
+void print2DUtil(Tnode * root, int space);

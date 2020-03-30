@@ -18,6 +18,7 @@ testmemory: pa4
 
 test1b: pa4
 	./pa4 -b examples-2/ops0.b tree0b
+	diff examples-2/tree0.b tree0b
 
 test1e: pa4
 	./pa4 -e examples-2/ops0.b tree0e

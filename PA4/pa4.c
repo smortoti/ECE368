@@ -12,6 +12,7 @@ int main(int argc, char ** argv)
 
     if (!(strcmp(argv[1], b)))
     {
+        fprintf(stderr, "enter b\n");
         FILE * fptr = fopen(argv[2], "rb");
 
         if (fptr == NULL)
@@ -30,21 +31,27 @@ int main(int argc, char ** argv)
             fread(&key, sizeof(int), 1, fptr);
             fread(&mode, sizeof(char), 1, fptr);
 
+            fprintf(stderr, "read success - key: %d, mode: %c\n", key, mode);
+
             if(!(feof(fptr)))
             {
                 if (mode == 'i')
                 {
                     newNode = createNode(key);
+                    fprintf(stderr, "create success\n");
                     root = insertNode(root, newNode);
+                    fprintf(stderr, "insert success\n");
                 }
                 else
                 {
-                    deleteNode(root, key);  
+                   // deleteNode(root, key);  
                 }
             }
         }
 
         fprintf(stdout, "%d\n", 1);
+
+        print2DUtil(root, 5);
 
         printPreOrder(argv[3], root);
 
