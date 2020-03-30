@@ -241,3 +241,27 @@ void deleteNode(Tnode * root, int toDelete)
         
     }
 }
+
+Tnode * buildPreOrder(int * key_array, int start, int end)
+{
+    if (start > end)
+    {
+        return NULL;
+    }
+
+    Tnode * root = createNode(key_array[start]);
+
+    int i = start;
+    for (i = start; i <= end; i++)
+    {
+        if (key_array[i] > root -> key)
+        {
+            break;
+        }
+    }
+
+    root -> left = buildPreOrder(key_array, start + 1, i - 1);
+    root -> right = buildPreOrder(key_array, i, end);
+
+    return root;
+}

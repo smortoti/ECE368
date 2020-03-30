@@ -49,6 +49,8 @@ int main(int argc, char ** argv)
         printPreOrder(argv[3], root);
 
         destroyTree(root);
+
+        return EXIT_SUCCESS;
     }
 
     else if (!(strcmp(argv[1], e)))
@@ -91,8 +93,18 @@ int main(int argc, char ** argv)
                 i++;
             }
         }
+
+        root = buildPreOrder(key_array, 0, count - 1);
+
+        out2 = isBST(root, INT32_MIN, INT32_MAX);
+        out3 = isBal(root);
+
+        return EXIT_SUCCESS;
+
     }
-
-    return EXIT_SUCCESS;
-
+    else
+    {
+        fprintf(stderr, "Please check inputs to program\n");
+        return EXIT_FAILURE;
+    }
 }
