@@ -12,8 +12,8 @@ Tnode * createNode(int key);
 void printPreOrder(char * filename, Tnode * root);
 void printPreOrderHelp(FILE * fptr, Tnode * root);
 
-void CCWRotate(Tnode * root, Tnode * prevUnbal);
-void CWRotate(Tnode * root, Tnode * prevUnbal);
+Tnode * CCWRotate(Tnode * root, Tnode * prevUnbal);
+Tnode * CWRotate(Tnode * root, Tnode * prevUnbal);
 
 Tnode * buildPreOrder(int * key_array, int start, int end);
 
