@@ -69,9 +69,11 @@ int main(int argc, char ** argv)
 
         FILE * fptr = fopen(argv[2], "rb");
 
-        if (fptr = NULL)
+        if (fptr == NULL)
         {
             out1 = -1;
+            fprintf(stdout, "%d,%d,%d\n", out1, out2, out3);
+            return EXIT_FAILURE;
         }
 
         fseek(fptr, 0, SEEK_END);
@@ -96,10 +98,27 @@ int main(int argc, char ** argv)
 
         root = buildPreOrder(key_array, 0, count - 1);
 
-        out2 = isBST(root, INT32_MIN, INT32_MAX);
-        out3 = isBal(root);
+        if (root != NULL)
+        {
+            out1 = 1;
+        }
 
-        return EXIT_SUCCESS;
+        if(out1 == 1)
+        {
+            out2 = isBST(root, INT32_MIN, INT32_MAX);
+            out3 = isBal(root);
+
+            fprintf(stdout, "%d,%d,%d\n", out1, out2, out3);
+            fclose(fptr);
+
+            return EXIT_SUCCESS; 
+        }
+        else
+        {
+            fprintf(stdout, "%d,%d,%d\n", out1, out2, out3);
+
+            return EXIT_FAILURE;
+        }
 
     }
     else

@@ -26,7 +26,7 @@ int isBal(Tnode * root)
         return 1;
     }
 
-    if (root -> balance != ('-1' || '0' || '1'))
+    if ((root -> balance != ('0' - 1)) || (root -> balance != '0') || (root -> balance != ('0' + 1)))
     {
         return 0;
     }
@@ -86,7 +86,7 @@ void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode)
 
     if (root -> balance == (-1 || 1))
     {
-        unbalNode == root;
+        unbalNode = root;
     }
 
     if (root -> key >= newNode -> key)
@@ -95,13 +95,13 @@ void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode)
         {
             root -> left = newNode;
             findHeights(root -> left, &leftBal, &rightBal);
-            root -> left -> balance = leftBal - rightBal;
+            root -> left -> balance = '0' + leftBal - rightBal;
             leftBal = rightBal = 0;
             findHeights(unbalNode, &leftBal, &rightBal);
             unbalNode -> balance = leftBal - rightBal;
-            if (unbalNode -> balance < '-1' || unbalNode -> balance > '1')
+            if ((unbalNode -> balance < ('0' - 1)) || (unbalNode -> balance > ('0' + 1)))
             {
-                if (unbalNode -> balance < '-1')
+                if (unbalNode -> balance < ('0' - 1))
                 {
                     CCWRotate(unbalNode);
                 }
@@ -123,13 +123,13 @@ void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode)
         {
             root -> right = newNode;
             findHeights(root -> right, &leftBal, &rightBal);
-            root -> right -> balance = leftBal - rightBal;
+            root -> right -> balance = '0' + leftBal - rightBal;
             leftBal = rightBal = 0;
             findHeights(unbalNode, &leftBal, &rightBal);
             unbalNode -> balance = leftBal - rightBal;
-            if (unbalNode -> balance < '-1' || unbalNode -> balance > '1')
+            if (unbalNode -> balance < ('0' - 1) || unbalNode -> balance > ('0' + 1))
             {
-                if (unbalNode -> balance < '-1')
+                if (unbalNode -> balance < ('0' - 1))
                 {
                     CCWRotate(unbalNode);
                 }
@@ -218,7 +218,7 @@ void printPreOrderHelp(FILE * fptr, Tnode * root)
         }
     }
 
-    fwrite(root -> key, sizeof(int), 1, fptr);
+    fwrite(&(root -> key), sizeof(int), 1, fptr);
     fwrite(&pattern, sizeof(char), 1, fptr);
 
     printPreOrderHelp(fptr, root -> left);

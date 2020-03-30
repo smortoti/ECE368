@@ -1,3 +1,5 @@
+#include "hbt.h"
+
 int isBST(Tnode * root, int min, int max);
 int isBal(Tnode * root);
 
@@ -9,6 +11,9 @@ Tnode * createNode(int key);
 
 void printPreOrder(char * filename, Tnode * root);
 void printPreOrderHelp(FILE * fptr, Tnode * root);
+
+void CCWRotate(Tnode * root);
+void CWRotate(Tnode * root);
 
 Tnode * buildPreOrder(int * key_array, int start, int end);
 
