@@ -2,10 +2,10 @@ WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
 VAL = valgrind --leak-check=full --leak-check=full --show-leak-kinds=all
 GCC = gcc -g -O3 -std=c99 $(WARNINGFLAGS)
 
-SRCS = packing.c pa3.c
+SRCS = hbt.c pa4.c
 OBJS = $(SRCS:%.c=%.o)
 
-pa3: $(OBJS) 
+pa4: $(OBJS) 
 	$(GCC) $(OBJS) -o pa3
 
 .c.o: 
@@ -16,8 +16,8 @@ testall: test1 test2 test3
 testmemory: pa3
 	$(VAL) --log-file=memcheck1.txt ./pa3 examples/empty.po 3Outputpr 3Outputdi 3Outputpc
 
-test1: pa3
-	./pa3 examples/3.po 3Outputpr 3Outputdi 3Outputpc
+test1: pa4
+	./pa4 examples/3.po 3Outputpr 3Outputdi 3Outputpc
 	diff examples/3.pr 3Outputpr 
 	diff examples/3.dim 3Outputdi
 	diff examples/3.pck 3Outputpc
