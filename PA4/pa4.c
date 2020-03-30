@@ -22,7 +22,7 @@ int main(int argc, char ** argv)
         }
 
         int key = 0;
-        char mode = '0';
+        char mode = 0;
         Tnode * root = NULL;
         Tnode * newNode = NULL;
 
@@ -38,9 +38,7 @@ int main(int argc, char ** argv)
                 if (mode == 'i')
                 {
                     newNode = createNode(key);
-                    fprintf(stderr, "create success\n");
                     root = insertNode(root, newNode);
-                    fprintf(stderr, "insert success\n");
                 }
                 else
                 {
@@ -51,11 +49,11 @@ int main(int argc, char ** argv)
 
         fprintf(stdout, "%d\n", 1);
 
-        print2DUtil(root, 5);
+        print2DUtil(root, 10);
 
-        printPreOrder(argv[3], root);
+       // printPreOrder(argv[3], root);
 
-        destroyTree(root);
+        //destroyTree(root);
 
         return EXIT_SUCCESS;
     }

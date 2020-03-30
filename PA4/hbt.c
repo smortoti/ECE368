@@ -27,7 +27,7 @@ int isBal(Tnode * root)
         return 1;
     }
 
-    if ((root -> balance != ('0' - 1)) || (root -> balance != '0') || (root -> balance != ('0' + 1)))
+    if ((root -> balance != -1) || (root -> balance != 0) || (root -> balance != 1))
     {
         return 0;
     }
@@ -60,7 +60,7 @@ Tnode * createNode(int key)
     Tnode * newNode = malloc(sizeof(*newNode));
 
     newNode -> key = key;
-    newNode -> balance = '0';
+    newNode -> balance = 0;
     newNode -> left = NULL;
     newNode -> right = NULL;
 
@@ -83,7 +83,7 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
     {
         if (current -> key >= newNode -> key)
         {
-            if (current -> left == NULL || current -> left -> balance == '0')
+            if (current -> left == NULL || current -> left -> balance == 0)
             {
                 current -> balance += 1;
                 unbal = current;
@@ -95,12 +95,6 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
                 {
                     previous -> left = newNode;
                 }
-
-                if (unbal -> balance > '0' + 1)
-                {
-                    fprintf(stderr, "1\n");
-                    unbal = CWRotate(unbal, prevUnbal);
-                } 
             }
             else
             {
@@ -113,17 +107,11 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
                 {
                     previous -> left = newNode;
                 }
-
-                if (unbal -> balance > '0' - 1)
-                {
-                    fprintf(stderr, "2\n");
-                    unbal = CWRotate(unbal, prevUnbal);
-                }
             }
         }
         else
         {
-            if (current -> right == NULL || current -> right -> balance == '0')
+            if (current -> right == NULL || current -> right -> balance == 0)
             {
                 current -> balance -= 1;
                 unbal = current;
@@ -134,12 +122,6 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
                 if (current == NULL)
                 {
                     previous -> right = newNode;
-                }
-
-                if (unbal -> balance < '0' - 1)
-                {
-                    fprintf(stderr, "2\n");
-                    unbal = CCWRotate(unbal, prevUnbal);
                 }
             }
             else
@@ -153,15 +135,21 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
                 {
                     previous -> right = newNode;
                 }
-
-                if (unbal -> balance < '0' - 1)
-                {
-                    fprintf(stderr, "2\n");
-                    unbal = CCWRotate(unbal, prevUnbal);
-                }
             }
         }
     }
+    if (unbal -> balance > 1)
+    {
+        fprintf(stderr, "enter CW\n");
+        CWRotate(unbal, prevUnbal);
+    }
+
+    if (unbal -> balance < -1)
+    {
+        fprintf(stderr, "enter CCW\n");
+        CCWRotate(unbal, prevUnbal);
+    }
+
     return root;
 }
 
@@ -177,76 +165,80 @@ void destroyTree(Tnode * root) // frees tree
     free(root); // ensures branch is destroyed after recursion
 }
 
-Tnode * CCWRotate(Tnode * root, Tnode * prevUnbal)
+void CCWRotate(Tnode * root, Tnode * prevUnbal)
 {
     Tnode * newRoot = root -> right;
-    fprintf(stderr, "newroot assign\n");
     Tnode * temp = newRoot -> left;
 
-    fprintf(stderr, "assign 1 success\n");
+    int leftBal = 0;
+    int rightBal = 0;
 
-    if (newRoot -> balance > '0')
+    if (newRoot -> balance > 0)
     {
-        root = CWRotate(newRoot, root);
+        CWRotate(newRoot, root);
+        leftBal = 0;
+        rightBal = 0;
     }
-
-    fprintf(stderr, "check bal left\n");
 
     newRoot -> left = root;
     root -> right = temp;
 
+    findHeights(newRoot, &leftBal, &rightBal);
+    newRoot -> balance = leftBal - rightBal;
+
     if (prevUnbal == NULL)
     {
-        return newRoot;
+        return;
     }
 
     if (prevUnbal -> right == root)
     {
         prevUnbal -> right = newRoot;
-        return newRoot;
     }
 
     if (prevUnbal -> left == root)
     {
         prevUnbal -> left = newRoot;
-        return newRoot;
     }
-
-    return newRoot;
 
 }
 
-Tnode * CWRotate(Tnode * root, Tnode * prevUnbal)
+void CWRotate(Tnode * root, Tnode * prevUnbal)
 {
     Tnode * newRoot = root -> left;
     Tnode * temp = newRoot -> right;
 
-    if (newRoot -> balance < '0')
+    int leftBal = 0;
+    int rightBal = 0;
+
+    if (newRoot -> balance < 0)
     {
-        root = CCWRotate(newRoot, root);
+        CCWRotate(newRoot, root);
+        leftBal = 0;
+        rightBal = 0;
     }
 
     newRoot -> right = root;
     root -> left = temp;
 
+    findHeights(newRoot, &leftBal, &rightBal);
+    newRoot -> balance = leftBal - rightBal;
+
     if (prevUnbal == NULL)
     {
-        return newRoot;
+        return;
     }
 
     if (prevUnbal -> right == root)
     {
         prevUnbal -> right = newRoot;
-        return newRoot;
     }
 
     if (prevUnbal -> left == root)
     {
         prevUnbal -> left = newRoot;
-        return newRoot;
     }
 
-    return newRoot;
 }
 
 void printPreOrder(char * filename, Tnode * root)
