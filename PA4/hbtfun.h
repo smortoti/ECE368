@@ -6,14 +6,14 @@ int isBal(Tnode * root);
 void findHeights(Tnode * root, int * leftBal, int * rightBal);
 
 Tnode * insertNode(Tnode * root, Tnode * newNode);
-void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode);
+void insertNodeHelp(Tnode * root, Tnode * newNode, Tnode * unbalNode, Tnode * prevUnbal);
 Tnode * createNode(int key);
 
 void printPreOrder(char * filename, Tnode * root);
 void printPreOrderHelp(FILE * fptr, Tnode * root);
 
-void CCWRotate(Tnode * root);
-void CWRotate(Tnode * root);
+Tnode * CCWRotate(Tnode * root, Tnode * prevUnbal);
+Tnode * CWRotate(Tnode * root, Tnode * prevUnbal);
 
 Tnode * buildPreOrder(int * key_array, int start, int end);
 
