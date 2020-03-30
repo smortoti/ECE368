@@ -13,8 +13,8 @@ pa4: $(OBJS)
 
 testall: test1 test2 test3
 
-testmemory: pa3
-	$(VAL) --log-file=memcheck1.txt ./pa3 examples/empty.po 3Outputpr 3Outputdi 3Outputpc
+testmemory: pa4
+	$(VAL) --log-file=memcheck1.txt ./pa4 -b examples-2/ops0.b tree0b
 
 test1b: pa4
 	./pa4 -b examples-2/ops0.b tree0b

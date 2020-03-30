@@ -68,7 +68,6 @@ Tnode * createNode(int key)
 
 Tnode * insertNode(Tnode * root, Tnode * newNode)
 {
-
     if (root == NULL)
     {
         return newNode;
