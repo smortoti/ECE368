@@ -60,6 +60,9 @@ int main(int argc, char ** argv)
         int i = 0;
         char pattern = 0;
         long size = 0;
+        long count = 0;
+        int key = 0;
+
         Tnode * root = NULL;
 
         FILE * fptr = fopen(argv[2], "rb");
@@ -73,13 +76,20 @@ int main(int argc, char ** argv)
         size = ftell(fptr);
         fseek(fptr, 0, SEEK_SET);
 
+        count = size / (sizeof(int) + sizeof(char));
+
+        key_array = malloc(sizeof(int) * count);
 
         while(!(feof(fptr)))
         {
-            fread(key_array[i], sizeof(int), 1, fptr);
-            fread(&pattern, sizeof(char), 1, fptr);
+            fread(&key, sizeof(int), 1, fptr);
 
-            buildPreOrder(root, key, pattern);
+            if(!(feof(fptr)))
+            {
+                fread(&pattern, sizeof(char), 1, fptr);
+                key_array[i] = key;
+                i++;
+            }
         }
     }
 
