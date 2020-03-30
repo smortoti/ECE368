@@ -10,6 +10,8 @@ Tnode * createNode(int key);
 void printPreOrder(char * filename, Tnode * root);
 void printPreOrderHelp(FILE * fptr, Tnode * root);
 
+void buildPreOrder(Tnode * root, int key, char pattern);
+
 void deleteNode(Tnode * root, int toDelete);
 
 void destroyTree(Tnode * root);
