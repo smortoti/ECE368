@@ -5,19 +5,34 @@
 #define COUNT 10
 
 
-int isBST(Tnode * node, int min, int max)  
+void isBST(Tnode * node, int * BSTeval)  
 {
+
     if (node == NULL)
     {
-        return 1;
+        return;
     }  
 
-    if (node -> key < min || node -> key > max)  
+    if (node -> left != NULL)
     {
-        return 0;
+        if (node -> left -> key > node -> key)
+        {
+            (*BSTeval) = 0;
+            return;
+        }
     }
 
-    return (isBST(node -> left, min, node -> key - 1) && isBST(node -> right, node -> key + 1, max));  // Allow only distinct values 
+    if (node -> right != NULL)
+    {
+        if (node -> right -> key <= node -> key)
+        {
+            (*BSTeval) = 0;
+            return;
+        }
+    }
+
+    isBST(node -> left, BSTeval);
+    isBST(node -> right, BSTeval);
 }  
 
 int isBal(Tnode * root)
@@ -69,6 +84,10 @@ Tnode * createNode(int key)
 
 Tnode * insertNode(Tnode * root, Tnode * newNode)
 {
+    if (root == NULL)
+    {
+        return newNode;
+    }
 
     Tnode * current = root;
     Tnode * previous = NULL;
@@ -80,8 +99,57 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
         if (current -> balance != 0)
         {
             unbal = current;
+        }
+        if (newNode -> key <= current -> key)
+        {
+            if (current -> left == NULL)
+            {
+                current -> balance += 1;
+                current -> left = newNode;
+                current = current -> left -> left;
+            }
+            else if(current -> left -> balance == 0)
+            {
+                current -> balance += 1;
+                current = current -> left;
+            }
+            else
+            {
+                current = current -> left;
+            }  
+        }
+        else
+        {
+            if (current -> right == NULL)
+            {
+                current -> right = newNode;
+                current -> balance -= 1;
+                fprintf(stderr, "Null");
+                current = current -> right -> right;
+            }
+            else if (current -> right -> balance == 0)
+            {
+                current -> balance -= 1;
+                current = current -> right;
+            }
+            else
+            {
+                current = current -> right;
+            }  
+        }
+    }
+
+    return root;
+
+   /* while(current != NULL)
+    {
+        if (current -> balance != 0)
+        {
+            unbal = current;
             prevUnbal = previous;
         }
+        fprintf(stderr, "root: %d\n", root -> key);
+        fprintf(stderr, "unbal: %d\n", unbal -> key);
 
         previous = current;
 
@@ -94,7 +162,7 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
             current = current -> right;
         }
 
-        if (current == NULL || current -> balance == 0)
+        if ((current == NULL) || (current -> balance == 0))
         {
             if (previous -> key >= newNode -> key)
             {
@@ -106,11 +174,8 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
             }
         }
     }
-    if (current == NULL && root == NULL)
-    {
-        root = newNode;
-        return root;
-    }
+    fprintf(stderr, "UNBAL\n");
+    print2DUtil(unbal, 5);
 
     if (newNode -> key > previous -> key)
     {
@@ -124,23 +189,22 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
     if (unbal -> balance > 1)
     {
         fprintf(stderr, "enter CW\n");
-        prevUnbal -> left = CWRotate(unbal, prevUnbal);
+        previous = CWRotate(unbal, prevUnbal);
     }
 
     if (unbal -> balance < -1)
     {
         fprintf(stderr, "enter CCW\n");
-        prevUnbal = CCWRotate(unbal, prevUnbal);
+        previous = CCWRotate(unbal, prevUnbal);
     }
 
-    return root;
+    return root;*/
 }
 
 void destroyTree(Tnode * root) // frees tree
 {
-    if (root -> left == NULL && root -> right == NULL)
+    if (root == NULL)
     {
-        free(root);
         return;
     }
     destroyTree(root -> left);
@@ -177,8 +241,8 @@ Tnode * CCWRotate(Tnode * root, Tnode * prevUnbal)
             prevUnbal -> left = newRoot;
         }
     }
+    fprintf(stderr, "newRoot: %d", newRoot -> key);
 
-    print2DUtil(newRoot, 5);
     return newRoot;
 }
 
@@ -278,26 +342,30 @@ void deleteNode(Tnode * root, int toDelete)
     }
 }
 
-Tnode * buildPreOrder(int * key_array, int start, int end)
+Tnode * buildPreOrder(int * key_array, char * pattern_array, int index)
 {
-    if (start > end)
+    Tnode * root = createNode(key_array[index]);
+
+    if (pattern_array[index] == 3)
     {
-        return NULL;
+        root -> left = buildPreOrder(key_array, pattern_array, index + 1);
+        root -> right = buildPreOrder(key_array, pattern_array, index + 1);
     }
-
-    Tnode * root = createNode(key_array[start]);
-
-    int i = start;
-    for (i = start; i <= end; i++)
+    else if (pattern_array[index] == 2)
     {
-        if (key_array[i] > root -> key)
-        {
-            break;
-        }
+        root -> left = buildPreOrder(key_array, pattern_array, index + 1);
+        root -> right = NULL;
     }
-
-    root -> left = buildPreOrder(key_array, start + 1, i - 1);
-    root -> right = buildPreOrder(key_array, i, end);
+    else if (pattern_array[index] == 1)
+    {
+        root -> left = NULL;
+        root -> right = buildPreOrder(key_array, pattern_array, index + 1);
+    }
+    else
+    {
+       root -> left = NULL;
+       root -> right = NULL;
+    }
 
     return root;
 }

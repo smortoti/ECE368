@@ -1,6 +1,6 @@
 #include "hbt.h"
 
-int isBST(Tnode * root, int min, int max);
+void isBST(Tnode * root, int * BSTeval);
 int isBal(Tnode * root);
 
 void findHeights(Tnode * root, int * leftBal, int * rightBal);
@@ -15,7 +15,7 @@ void printPreOrderHelp(FILE * fptr, Tnode * root);
 Tnode * CCWRotate(Tnode * root, Tnode * prevUnbal);
 Tnode * CWRotate(Tnode * root, Tnode * prevUnbal);
 
-Tnode * buildPreOrder(int * key_array, int start, int end);
+Tnode * buildPreOrder(int * key_array, char * pattern_array, int index);
 
 void deleteNode(Tnode * root, int toDelete);
 

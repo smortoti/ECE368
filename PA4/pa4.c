@@ -49,11 +49,11 @@ int main(int argc, char ** argv)
 
         fprintf(stdout, "%d\n", 1);
 
+        printPreOrder(argv[3], root);
+
         print2DUtil(root, 10);
 
-       // printPreOrder(argv[3], root);
-
-        //destroyTree(root);
+        destroyTree(root);
 
         return EXIT_SUCCESS;
     }
@@ -64,11 +64,13 @@ int main(int argc, char ** argv)
         int out2 = 0;
         int out3 = 0;
         int * key_array = NULL;
+        char * pattern_array = NULL;
         int i = 0;
         char pattern = 0;
         long size = 0;
-        long count = 0;
+        long ncount = 0;
         int key = 0;
+        int BSTeval = 1;
 
         Tnode * root = NULL;
 
@@ -85,9 +87,10 @@ int main(int argc, char ** argv)
         size = ftell(fptr);
         fseek(fptr, 0, SEEK_SET);
 
-        count = size / (sizeof(int) + sizeof(char));
+        ncount = size / (sizeof(int) + sizeof(char));
 
-        key_array = malloc(sizeof(int) * count);
+        key_array = malloc(sizeof(int) * ncount);
+        pattern_array = malloc(sizeof(char) * ncount);
 
         while(!(feof(fptr)))
         {
@@ -97,29 +100,40 @@ int main(int argc, char ** argv)
             {
                 fread(&pattern, sizeof(char), 1, fptr);
                 key_array[i] = key;
+                pattern_array[i] = pattern;
                 i++;
             }
         }
 
-        root = buildPreOrder(key_array, 0, count - 1);
+        root = buildPreOrder(key_array, pattern_array, 0);
 
         if (root != NULL)
         {
             out1 = 1;
         }
+        else
+        {
+            out1 = 0;
+        }
+        
 
         if(out1 == 1)
         {
-            out2 = isBST(root, INT32_MIN, INT32_MAX);
+            isBST(root, &BSTeval);
             out3 = isBal(root);
 
-            fprintf(stdout, "%d,%d,%d\n", out1, out2, out3);
+            fprintf(stdout, "%d,%d,%d\n", out1, BSTeval, out3);
             fclose(fptr);
+            free(pattern_array);
+            free(key_array);
 
             return EXIT_SUCCESS; 
         }
         else
         {
+            fclose(fptr);
+            free(pattern_array);
+            free(key_array);
             fprintf(stdout, "%d,%d,%d\n", out1, out2, out3);
 
             return EXIT_FAILURE;
