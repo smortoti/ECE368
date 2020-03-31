@@ -54,7 +54,7 @@ int main(int argc, char ** argv)
         print2DUtil(root, 10);
 
         destroyTree(root);
-
+	fclose(fptr);
         return EXIT_SUCCESS;
     }
 
