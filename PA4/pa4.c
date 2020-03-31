@@ -31,8 +31,6 @@ int main(int argc, char ** argv)
             fread(&key, sizeof(int), 1, fptr);
             fread(&mode, sizeof(char), 1, fptr);
 
-            fprintf(stderr, "read success - key: %d, mode: %c\n", key, mode);
-
             if(!(feof(fptr)))
             {
                 if (mode == 'i')
@@ -51,10 +49,9 @@ int main(int argc, char ** argv)
 
         printPreOrder(argv[3], root);
 
-        print2DUtil(root, 10);
-
         destroyTree(root);
-	fclose(fptr);
+	    fclose(fptr);
+
         return EXIT_SUCCESS;
     }
 

@@ -90,9 +90,7 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
     }
 
     Tnode * current = root;
-    Tnode * previous = NULL;
     Tnode * unbal = root;
-    Tnode * prevUnbal = NULL;
 
     while(current != NULL)
     {
