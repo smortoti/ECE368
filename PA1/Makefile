@@ -12,7 +12,7 @@ pa1: $(OBJS)
 	$(GCC) -c $*.c 
 
 testmemory: pa1
-	$(VAL) --log-file=memcheck1.txt ./pa1 -a examples/1K.b output1Kl
+	$(VAL) --log-file=memcheck1.txt ./pa1 -l examples/1K.b output1Kl
 
 test1a: pa1
 	./pa1 -a examples/1K.b output1Ka
