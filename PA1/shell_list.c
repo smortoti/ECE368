@@ -119,7 +119,7 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
 
             l = 0;
 
-            fprintf(stderr, "mintemp success\n");
+           // fprintf(stderr, "mintemp success\n");
 
             while ((i >= k) && (arraymintemp -> value > temp -> value))
             {
@@ -130,19 +130,20 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                 temp = nodelist;
                 arraymintemp = nodelist;
 
-                fprintf(stderr, "assignment success\n");
+                //fprintf(stderr, "assignment success\n");
                 while (m != (i - k))
                 {
                     temp = temp -> next;
                     arraymintemp = arraymintemp -> next;
                     m++;
                 }
-                m = 1;
+                m = 0;
                 (*n_comp)++;
                 i = i - k;
             }
             (*n_comp)++;
             temp = nodelist;
+
             while (m != i)
             {
                 temp = temp -> next;
@@ -150,7 +151,7 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                 //fprintf(stderr, "m increment: %d\n", m);
             }
             m = 0;
-            fprintf(stderr, "sort success\n");
+            //fprintf(stderr, "sort success\n");
         }
 
     }
