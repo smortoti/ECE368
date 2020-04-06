@@ -46,6 +46,8 @@ Node * List_Load_From_File(char * filename)
     }
 
     List * nodelist = malloc(sizeof(List));
+    nodelist -> head = NULL;
+    nodelist -> tail = NULL;
     long holder = 0;
 
     while(fread(&holder, sizeof(long), 1, fptr)) // Reads into node
