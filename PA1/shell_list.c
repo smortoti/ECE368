@@ -95,6 +95,7 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
     fprintf(stderr, "sequence success\n");
 
     sequence = (sequence - 1) / 3;
+    k = sequence;
     /* Shellsort algorithm using while loops to make up for array indexing. 
     Any array indexing is used with a while loop to progress the linked list. */
     while(k > 0) 
@@ -120,6 +121,8 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                 }
 
                 l = 0; // resets counter
+
+                fprintf(stderr, "amt -> val: %ld, tmp -> val: %ld\n", arraymintemp -> value, temp -> value);
 
                 while ((i >= k) && (arraymintemp -> value > temp -> value))
                 {

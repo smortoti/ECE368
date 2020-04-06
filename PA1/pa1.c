@@ -50,14 +50,13 @@ int main(int argc, char **argv)
 
         Array_Save_To_File(argv[3], array, size);
 
-        printf("%ld\n", num_comp);
+        fprintf(stdout, "%ld\n", num_comp);
 
         return 0;
 
     }
     else if (!(strcmp(argv[1], l)))
     {
-
 
         list = List_Load_From_File(argv[2]);
 
@@ -69,7 +68,7 @@ int main(int argc, char **argv)
 
         num_written = List_Save_To_File(argv[3], list);
 
-        printf("%ld\n", num_comp);
+        fprintf(stdout, "%ld\n", num_comp);
 
         return 0;
     }
