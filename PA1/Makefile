@@ -2,7 +2,6 @@ WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
 GCC = gcc -g -std=c99 $(WARNINGFLAGS)
 VAL = valgrind --leak-check=full --leak-check=full --show-leak-kinds=all
 
-
 SRCS = shell_array.c shell_list.c pa1.c
 OBJS = $(SRCS:%.c=%.o)
 
@@ -21,6 +20,7 @@ test1a: pa1
 
 test1l: pa1
 	./pa1 -l examples/1K.b output1Kl
+	diff output1Kl examples/1K.b
 
 test2a: pa1
 	./pa1 -a examples/15.b output15a

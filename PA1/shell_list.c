@@ -92,7 +92,8 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
     fprintf(stderr, "sequence success\n");
 
     sequence = (sequence - 1) / 3;
-    /* Shellsort algorithm using while loops to make up for array indexing. Any array indexing is used with a while loop to progress the linked list. */
+    /* Shellsort algorithm using while loops to make up for array indexing. 
+    Any array indexing is used with a while loop to progress the linked list. */
     for(k = sequence; k > 0; k = (k - 1) / 3) 
     {
         for(j = k; j < size; j++)
@@ -103,17 +104,17 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                 i++;
             }
 
-            fprintf(stderr, "i: %d k= %d i-k= %d\n", i, k, i - k);
+            //fprintf(stderr, "i: %d k= %d i-k= %d\n", i, k, i - k);
 
             while (l != (i - k))
             {
                 arraymintemp = arraymintemp -> next;
                 l++;
-		if (arraymintemp -> next == NULL)
-		{
+		        if (arraymintemp -> next == NULL)
+		        {
                   fprintf(stderr, "NULL\n");
-		  break;
-		}
+		          break;
+		        }
             }
 
             l = 0;
@@ -122,11 +123,13 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
 
             while ((i >= k) && (arraymintemp -> value > temp -> value))
             {
-                holder = temp -> value;
+                holder = temp -> value; // Swap values
                 temp -> value = arraymintemp -> value;
                 arraymintemp -> value = holder;
+
                 temp = nodelist;
                 arraymintemp = nodelist;
+
                 fprintf(stderr, "assignment success\n");
                 while (m != (i - k))
                 {
@@ -144,70 +147,11 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
             {
                 temp = temp -> next;
                 m++;
-                fprintf(stderr, "m increment: %d\n", m);
+                //fprintf(stderr, "m increment: %d\n", m);
             }
             m = 0;
             fprintf(stderr, "sort success\n");
         }
-        /*while(j < size)
-        {
-            j++;
-            while(i != j)
-            {
-                arraytemp = arraytemp -> next;
-                i++;
-            }
-            l = j;
-
-            while(m != (l - k))
-            {
-                arraymintemp = arraymintemp -> next;
-                m++;
-            }
-            m = 0;
-
-            while (l >= k && ((arraymintemp -> value) > (arraytemp -> value)))
-            {
-                while(o < l)
-                {
-                    arraytemp1 = arraytemp1 -> next;
-                    o++;
-                }
-                o = 0;
-                while (o < l - k)
-                {
-                    arraytemp2 = arraytemp2 -> next;
-                    o++;
-                }
-                o = 0;
-
-                tempholder = arraytemp1;
-                tempholder2 = nodelist;
-
-                while(tempholder2 -> next != arraytemp1)
-                {
-                    tempholder2 = tempholder2 -> next;
-                }
-
-                Node * tempholder3 = nodelist;
-
-                while (tempholder3 -> next != arraytemp2)
-                {
-                    tempholder3 = tempholder3 -> next;
-                }
-
-                arraytemp1 -> next = arraytemp2 -> next; // Swap statements
-                arraytemp2 -> next = tempholder -> next;
-                tempholder2 -> next = arraytemp2;
-                tempholder3 -> next = arraytemp1;
-
-                l = l - k;
-                (*n_comp)++; // Adds to number of comparisons
-
-            }
-            (*n_comp)++;
-
-        }*/
 
     }
     return (nodelist);
