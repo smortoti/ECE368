@@ -30,8 +30,11 @@ test2l: pa1
 	./pa1 -l examples/15.b output15l
 	diff output15l examples/15sa.b
 
-test1M: pa1
+test3a: pa1
 	./pa1 -a examples/1M.b output1Ma
+
+test3l: pa1
+	./pa1 -l examples/1M.b output1Ml
 
 clean: # remove all machine generated files
 	rm -f pa1 *.o output???

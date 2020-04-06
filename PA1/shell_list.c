@@ -68,15 +68,16 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
 {
     long sequence = 0;
     long size = 1;
-    Node * nodecount = nodelist;
     long k = 0;
     long j = 0;
-    Node * temp = nodelist;
     long i = 0;
     long l = 0;
     long m = 0;
+    long holder;
+
+    Node * nodecount = nodelist;
+    Node * temp = nodelist;
     Node * arraymintemp = nodelist;
-    int holder;
 
     while (nodecount -> next != NULL) // Finds size of linked list
     {
@@ -102,28 +103,23 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
         {
             if (i < size)
             {
-                while (i != j)
+                while (i != j) // increments temp and assigns i
                 {
                     temp = temp -> next;
                     i++;
                 }
 
-                //fprintf(stderr, "i: %d k= %d i-k= %d\n", i, k, i - k);
-
-                while (l != (i - k))
+                while (l != (i - k)) // assigns initial comparison for swapping loop
                 {
                     arraymintemp = arraymintemp -> next;
                     l++;
                     if (arraymintemp -> next == NULL)
                     {
-                    fprintf(stderr, "amt is NULL1\n");
-                    break;
+                        break;
                     }
                 }
 
-                l = 0;
-
-                fprintf(stderr, "i: %d, k: %d, amt -> value: %d, temp -> value: %d\n", i, k, arraymintemp -> value, temp -> value);
+                l = 0; // resets counter
 
                 while ((i >= k) && (arraymintemp -> value > temp -> value))
                 {
@@ -131,29 +127,26 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                     temp -> value = arraymintemp -> value;
                     arraymintemp -> value = holder;
 
-                    temp = nodelist;
+                    temp = nodelist; // Reassigns comparisons
                     arraymintemp = nodelist;
 
-                    //fprintf(stderr, "assignment success\n");
-                    fprintf(stderr, "m: %d i-k: %d\n", m, i-k);
                     while (m != (i - k))
                     {
                         temp = temp -> next;
-                        if (arraymintemp -> next == NULL)
-                        {
-                            fprintf(stderr, "amt is NULL2\n");
-                        }
                         arraymintemp = arraymintemp -> next;
                         m++;
                     }
+
                     m = 0;
                     (*n_comp)++;
                     i = i - k;
                 }
-                if (arraymintemp -> value <= temp -> value)
+
+                if (arraymintemp -> value <= temp -> value) // resets temp if failure to enter swapping loop
                 {
                     arraymintemp = nodelist;
                 }
+
                 (*n_comp)++;
                 temp = nodelist;
 
@@ -161,14 +154,11 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                 {
                     temp = temp -> next;
                     m++;
-                    //fprintf(stderr, "m increment: %d\n", m);
                 }
                 m = 0;
-                //fprintf(stderr, "sort success\n");
             }
         }
         k = (k - 1) / 3;
-
     }
     return (nodelist);
 }

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "shell_array.h"
 #include "shell_list.h"
+
 int main(int argc, char **argv)
 {
     if (argc != 4)
@@ -28,6 +29,7 @@ int main(int argc, char **argv)
         if (fptr == NULL)
         {
             fprintf(stderr, "%s", "fopen fail\n");
+            return EXIT_FAILURE;
         }
 
         fseek(fptr, 0, SEEK_END); // Find the position of the eof and use ftell to find the amount of bytes in the file
@@ -56,13 +58,14 @@ int main(int argc, char **argv)
     else if (!(strcmp(argv[1], l)))
     {
 
-        fprintf(stderr, "enter load\n");
 
         list = List_Load_From_File(argv[2]);
-        fprintf(stderr, "load success\n");
 
+        clock_t begin = clock();
         list = List_Shellsort(list, &num_comp);
-        fprintf(stderr, "shellsort success\n");
+        clock_t end = clock();
+        double timeSpend = (double)(end - begin) / CLOCKS_PER_SEC;
+        fprintf(stderr ,"list sorted in: %fs\n", timeSpend);
 
         num_written = List_Save_To_File(argv[3], list);
 
