@@ -96,65 +96,78 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
     sequence = (sequence - 1) / 3;
     /* Shellsort algorithm using while loops to make up for array indexing. 
     Any array indexing is used with a while loop to progress the linked list. */
-    for(k = sequence; k > 0; k = (k - 1) / 3) 
+    while(k > 0) 
     {
         for(j = k; j < size; j++)
         {
-            while (i != j)
+            if (i < size)
             {
-                temp = temp -> next;
-                i++;
-            }
-
-            //fprintf(stderr, "i: %d k= %d i-k= %d\n", i, k, i - k);
-
-            while (l != (i - k))
-            {
-                arraymintemp = arraymintemp -> next;
-                l++;
-		        if (arraymintemp -> next == NULL)
-		        {
-                  fprintf(stderr, "NULL\n");
-		          break;
-		        }
-            }
-
-            l = 0;
-
-           // fprintf(stderr, "mintemp success\n");
-
-            while ((i >= k) && (arraymintemp -> value > temp -> value))
-            {
-                holder = temp -> value; // Swap values
-                temp -> value = arraymintemp -> value;
-                arraymintemp -> value = holder;
-
-                temp = nodelist;
-                arraymintemp = nodelist;
-
-                //fprintf(stderr, "assignment success\n");
-                while (m != (i - k))
+                while (i != j)
                 {
                     temp = temp -> next;
+                    i++;
+                }
+
+                //fprintf(stderr, "i: %d k= %d i-k= %d\n", i, k, i - k);
+
+                while (l != (i - k))
+                {
                     arraymintemp = arraymintemp -> next;
+                    l++;
+                    if (arraymintemp -> next == NULL)
+                    {
+                    fprintf(stderr, "amt is NULL1\n");
+                    break;
+                    }
+                }
+
+                l = 0;
+
+                fprintf(stderr, "i: %d, k: %d, amt -> value: %d, temp -> value: %d\n", i, k, arraymintemp -> value, temp -> value);
+
+                while ((i >= k) && (arraymintemp -> value > temp -> value))
+                {
+                    holder = temp -> value; // Swap values
+                    temp -> value = arraymintemp -> value;
+                    arraymintemp -> value = holder;
+
+                    temp = nodelist;
+                    arraymintemp = nodelist;
+
+                    //fprintf(stderr, "assignment success\n");
+                    fprintf(stderr, "m: %d i-k: %d\n", m, i-k);
+                    while (m != (i - k))
+                    {
+                        temp = temp -> next;
+                        if (arraymintemp -> next == NULL)
+                        {
+                            fprintf(stderr, "amt is NULL2\n");
+                        }
+                        arraymintemp = arraymintemp -> next;
+                        m++;
+                    }
+                    m = 0;
+                    (*n_comp)++;
+                    i = i - k;
+                }
+                if (arraymintemp -> value <= temp -> value)
+                {
+                    arraymintemp = nodelist;
+                }
+                (*n_comp)++;
+                temp = nodelist;
+
+                while (m != i)
+                {
+                    temp = temp -> next;
                     m++;
+                    //fprintf(stderr, "m increment: %d\n", m);
                 }
                 m = 0;
-                (*n_comp)++;
-                i = i - k;
+                //fprintf(stderr, "sort success\n");
             }
-            (*n_comp)++;
-            temp = nodelist;
-
-            while (m != i)
-            {
-                temp = temp -> next;
-                m++;
-                //fprintf(stderr, "m increment: %d\n", m);
-            }
-            m = 0;
-            //fprintf(stderr, "sort success\n");
         }
+        k = (k - 1) / 3;
 
     }
     return (nodelist);
@@ -164,14 +177,14 @@ int List_Save_To_File(char * filename, Node * nodelist)
 {
     FILE * fptr = fopen(filename, "wb");
     int write_num = 0;
-    Node * tempnode = NULL;
+    Node * tempnode = nodelist;
 
     if (fptr == NULL) // Checks if fopen fails
     {
        return(EXIT_FAILURE);
     }
 
-    while(fwrite((void *)tempnode -> value, sizeof(long), 1, fptr))
+    while(tempnode != NULL && fwrite(&(tempnode -> value), sizeof(long), 1, fptr))
     {
         tempnode = tempnode -> next; // writes to file, advances node
         write_num++;
