@@ -78,20 +78,16 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
     long i = 0;
     long l = 0;
     long m = 0;
-    long * holder;
+    long holder;
 
     Node * nodecount = nodelist;
     Node * temp = nodelist;
     Node * arraymintemp = nodelist;
     Node * tempIminK = nodelist;
+    Node * prevTemp2 = NULL;
     Node * temp2 = nodelist;
+    Node * prevTempIminK = NULL;
 
-    while (temp != NULL)
-    {
-        fprintf(stderr, "%ld ", temp -> value);
-        temp = temp -> next;
-    }
-    fprintf(stderr, "\n\n");
     temp = nodelist;
 
     while (nodecount -> next != NULL) // Finds size of linked list
@@ -124,30 +120,55 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
             iminusk = i - k;
             
             tempIminK = nodelist;
+            prevTempIminK = NULL;
             while (b < iminusk)
             {
                 tempIminK = tempIminK -> next;
+                if(prevTempIminK == NULL)
+                {
+                    prevTempIminK = nodelist;
+                }
+                else
+                {
+                    prevTempIminK = prevTempIminK -> next;
+                }
+                
                 b++;
             }
             b = 0;
 
             while ((i >= k) && (tempIminK -> value > temp -> value))
             {
-                fprintf(stderr, "enter swap loop\n");
                 temp2 = nodelist;
+                prevTemp2 = NULL;
                 while (c < i)
                 {
                     temp2 = temp2 -> next;
+                    if(prevTemp2 == NULL)
+                    {
+                        prevTemp2 = nodelist;
+                    }
+                    else
+                    {
+                        prevTemp2 = prevTemp2 -> next;
+                    }
                     c++;
                 }
                 c = 0;
-                fprintf(stderr, "values to swap: amt -> val: %ld, tmp -> val: %ld\n", tempIminK -> value, temp2 -> value);
-                memcpy(holder, &(tempIminK -> value), sizeof(long));
-                fprintf(stderr, "check\n");
-                memcpy(&(tempIminK -> value), &(temp2 -> value), sizeof(long));
-                memcpy(&(temp2 -> value), holder, sizeof(long));
-                fprintf(stderr, "values after swap: amt -> val: %ld, tmp -> val: %ld\n\n", tempIminK -> value, temp2 -> value);
-
+                if (prevTempIminK == NULL)
+                {
+                    prevTemp2 -> next = tempIminK;
+                    tempIminK -> next = temp2 -> next;
+                    temp2 -> next = tempIminK -> next;
+                    nodelist = temp2;
+                }
+                else
+                {
+                    prevTempIminK -> next = temp2;
+                    prevTemp2 -> next = tempIminK;
+                    temp2 -> next = tempIminK -> next;
+                }
+                
                 i = iminusk;
                 (*n_comp)++;
             }
@@ -159,8 +180,8 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
                 d++;
             }
             d = 0;
-            holder = temp2 -> value;
-            temp2 -> value = temp -> value;
+            //holder = temp2 -> value;
+            //temp2 -> value = temp -> value;
             temp -> value = holder;
         }
     }
@@ -261,7 +282,6 @@ int List_Save_To_File(char * filename, Node * nodelist)
 
     while(tempnode != NULL && fwrite(&(tempnode -> value), sizeof(long), 1, fptr))
     {
-        fprintf(stderr, "%ld ", tempnode -> value);
         tempnode = tempnode -> next; // writes to file, advances node
         write_num++;
     }
