@@ -7,13 +7,22 @@ int main(int argc, char ** argv)
 {
     char m[] = "-m";
     char q[] = "-q";
+    long * array = NULL;
+    int size = 0;
+
+    array = Array_Load_From_File(argv[2], &size);
+
     if (!(strcmp(argv[1], m)))
     {
+        Merge_Sort(array, size);
 
+        return EXIT_SUCCESS;
     }
     else if (!(strcmp(argv[1], q)))
     {
+        Quick_Sort(array, size);
 
+        return EXIT_SUCCESS;
     }
     else
     {
