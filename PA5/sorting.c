@@ -2,45 +2,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-long *Array_Load_From_File(char* filename, int* size)
-{
-    FILE * fptr = fopen(filename, "r");
-    long * long_arr = NULL;
-    
-    if (fptr == NULL) // Check if fopen fails
-    {
-        *size = 0;
-        return(long_arr);
-    }
-
-    long_arr = malloc((sizeof(long)) * (*size)); // Define long_arr to hold the exact amount of long ints in the file
-    
-    if (long_arr == NULL) // Check if malloc fails
-    {
-        (*size) = 0;
-    }
-    
-    if ((*size) == 0) // Check if size is 0
-    {
-        return (long_arr);
-    }
-    
-    fread(long_arr, sizeof(long), *size, fptr); // Reads from file into array
-
-    fclose(fptr);
-
-    return(long_arr);
-
-}
-
-void splitArray(long * array, long * temp1, long * temp2, int * size1, int * size2)
-{
-
-}
-
 long * recombineArray(long * temp1, long * temp2, int * size1, int * size2)
 {
-    
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    long * newArray = malloc(sizeof(long) * (*size1 + *size2));
+
+    while (i < *size1 && j < *size2)
+    {
+        if (temp1[i] <= temp2[j])
+        {
+            newArray[k] = temp1[i];
+            k++;
+            i++;
+        }
+        else
+        {
+            newArray[k] = temp2[j];
+            k++;
+            j++;
+        }  
+    }
+
+    while (i < *size1)
+    {
+        newArray[k] = temp1[i];
+        i++;
+        k++;
+    }
+
+    while (j < *size2)
+    {
+        newArray[k] = temp2[j];
+        j++;
+        k++;
+    }
+
+    return newArray;
 }
 
 void Merge_Sort(long * array, int size)
@@ -50,44 +49,68 @@ void Merge_Sort(long * array, int size)
         return;
     }
 
-    long * temp1 = NULL;
-    long * temp2 = NULL;
-    int size1 = 0;
-    int size2 = 0;
+    int i = 0;
+    int middle = size / 2;
 
-    splitArray(array, temp1, temp2, &size1, &size2);
+    long * temp1 = malloc(sizeof(long) * middle);
+    long * temp2 = malloc(sizeof(long) * (size - middle));
 
-    Merge_Sort(temp1, size1);
-    Merge_Sort(temp2, size2);
+    for(i = 0; i < middle; i++)
+    {
+        temp1[i] = array[i];
+    }
 
-    array = recombineArray(temp1, temp2, size1, size2);
+    for(i = 0; i < (size - middle); i++)
+    {
+        temp2[i] = array[middle + i];
+    }
+
+    Merge_Sort(temp1, middle);
+    Merge_Sort(temp2, size - middle);
+
+    array = recombineArray(temp1, temp2, middle, size - middle);
+
+    free(temp1);
+    free(temp2);
 }
 
-int Array_Save_To_File(char * filename, long * array, int size)
+int partition(long * array, int size)
 {
-    FILE * fptr = fopen(filename, "wb");
-    int write_num = 0;
+    int pivot = array[size - 1];
+    int i = 0;
+    int j = 0;
+    long temp;
 
-    if (fptr == NULL) // Checks if fopen fails
+    for (j = 0; j < size; j++)
     {
-        size = 0;
+        if (array[j] < pivot)
+        {
+            temp = array[j];
+            array[j] = array[i];
+            array[i] = temp;
+            i++;
+        }
     }
 
-    if (array == NULL) // Checks if array is valid
-    {
-        size = 0;
-    }
+    temp = array[size];
+    array[size] = array[i + 1];
+    array[i + 1] = temp;
     
-    if ((size) == 0) // Checks valid size
+    return (i + 1);
+}
+
+void Quick_Sort(long * array, int size)
+{
+    if (size == 0 || size == 1)
     {
-        return(fwrite(array, sizeof(long), size, fptr)); // Creates empty output file if any error occurs
+        return;
     }
 
-    write_num = fwrite(array, sizeof(long), size, fptr); // Writes to the new output file
+    int partIdx = partition(array, size);
 
-    fclose(fptr); // Closes file
+    long * temp1 = malloc(sizeof(long) * partIdx);
+    long * temp2 = malloc(sizeof(long) * (size - partIdx));
 
-    free(array);
-
-    return(write_num);
+    Quick_Sort(temp1, partIdx);
+    Quick_Sort(temp2, size - partIdx);
 }
