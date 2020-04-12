@@ -5,6 +5,11 @@
 
 int main(int argc, char ** argv)
 {
+    if (argc != 4)
+    {
+        return EXIT_FAILURE;
+    }
+    
     char m[] = "-m";
     char q[] = "-q";
     long * array = NULL;
@@ -15,20 +20,19 @@ int main(int argc, char ** argv)
     if (!(strcmp(argv[1], m)))
     {
         Merge_Sort(array, size);
-
-        return EXIT_SUCCESS;
     }
     else if (!(strcmp(argv[1], q)))
     {
         Quick_Sort(array, size);
-
-        return EXIT_SUCCESS;
     }
     else
     {
         return EXIT_FAILURE;
     }
-    
+
+    Array_Save_To_File(argv[3], array, size);
+
+    return EXIT_SUCCESS;
 }
 
 long *Array_Load_From_File(char* filename, int* size)
