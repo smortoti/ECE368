@@ -3,60 +3,32 @@
 #include <stdio.h>
 #include "sorting.h"
 
-int main(int argc, char ** argv)
+
+long * Array_Load_From_File(char * filename, int * size)
 {
-    if (argc != 4)
-    {
-        return EXIT_FAILURE;
-    }
-    
-    char m[] = "-m";
-    char q[] = "-q";
-    long * array = NULL;
-    int size = 0;
-
-    array = Array_Load_From_File(argv[2], &size);
-
-    if (!(strcmp(argv[1], m)))
-    {
-        Merge_Sort(array, size);
-    }
-    else if (!(strcmp(argv[1], q)))
-    {
-        Quick_Sort(array, size);
-    }
-    else
-    {
-        return EXIT_FAILURE;
-    }
-
-    Array_Save_To_File(argv[3], array, size);
-
-    return EXIT_SUCCESS;
-}
-
-long *Array_Load_From_File(char* filename, int* size)
-{
-    FILE * fptr = fopen(filename, "r");
+    FILE * fptr = fopen(filename, "rb");
     long * long_arr = NULL;
-    
+
+    fseek(fptr, 0, SEEK_END);
+    long fileSize = ftell(fptr);
+    fseek(fptr, 0, SEEK_SET);
+
+    (*size) = fileSize / sizeof(long);
+
     if (fptr == NULL) // Check if fopen fails
     {
+        fprintf(stderr, "fptr is NULL\n");
         *size = 0;
         return(long_arr);
     }
 
-    long_arr = malloc((sizeof(long)) * (*size)); // Define long_arr to hold the exact amount of long ints in the file
-    
-    if (long_arr == NULL) // Check if malloc fails
-    {
-        (*size) = 0;
-    }
-    
     if ((*size) == 0) // Check if size is 0
     {
+        fprintf(stderr, "size is zero\n");
         return (long_arr);
     }
+
+    long_arr = malloc((sizeof(long)) * (*size)); // Define long_arr to hold the exact amount of long ints in the file
     
     fread(long_arr, sizeof(long), *size, fptr); // Reads from file into array
 
@@ -93,4 +65,50 @@ int Array_Save_To_File(char * filename, long * array, int size)
     free(array);
 
     return(write_num);
+}
+
+int main(int argc, char ** argv)
+{
+    if (argc != 4)
+    {
+        return EXIT_FAILURE;
+    }
+    
+    char m[] = "-m";
+    char q[] = "-q";
+    long * array = NULL;
+    int size;
+
+    array = Array_Load_From_File(argv[2], &size);
+
+   /* for(int i = 0; i < size; i++)
+    {
+        fprintf(stderr, "%ld ", array[i]);
+    }
+    fprintf(stderr, "\n");*/
+
+    if (!(strcmp(argv[1], m)))
+    {
+        fprintf(stderr, "merge\n");
+        Merge_Sort(array, size);
+    }
+    else if (!(strcmp(argv[1], q)))
+    {
+        fprintf(stderr, "quick\n");
+        Quick_Sort(array, size);
+    }
+    else
+    {
+        return EXIT_FAILURE;
+    }
+
+    /*for(int i = 0; i < size; i++)
+    {
+        fprintf(stderr, "%ld ", array[i]);
+    }
+    fprintf(stderr, "\n");*/
+
+    Array_Save_To_File(argv[3], array, size);
+
+    return EXIT_SUCCESS;
 }

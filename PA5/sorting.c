@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-long * recombineArray(long * temp1, long * temp2, int * size1, int * size2)
+long * recombineArray(long * temp1, long * temp2, int size1, int size2)
 {
     int i = 0;
     int j = 0;
     int k = 0;
-    long * newArray = malloc(sizeof(long) * (*size1 + *size2));
+    long * newArray = malloc(sizeof(long) * (size1 + size2));
 
-    while (i < *size1 && j < *size2)
+    while (i < size1 && j < size2)
     {
         if (temp1[i] <= temp2[j])
         {
@@ -25,14 +25,14 @@ long * recombineArray(long * temp1, long * temp2, int * size1, int * size2)
         }  
     }
 
-    while (i < *size1)
+    while (i < size1)
     {
         newArray[k] = temp1[i];
         i++;
         k++;
     }
 
-    while (j < *size2)
+    while (j < size2)
     {
         newArray[k] = temp2[j];
         j++;
@@ -74,43 +74,53 @@ void Merge_Sort(long * array, int size)
     free(temp2);
 }
 
-int partition(long * array, int size)
-{
-    int pivot = array[size - 1];
-    int i = 0;
-    int j = 0;
-    long temp;
+void swap(long * a, long * b) 
+{ 
+    long t = *a; 
+    *a = *b; 
+    *b = t; 
+} 
 
-    for (j = 0; j < size; j++)
+void quickSortHelp(long * array, int first, int last)
+{
+    if (first >= last) 
+    { 
+        return;
+    }
+
+    long pivot = array[first];
+    int low = first + 1;
+    int high = last;
+
+    while (low < high)
     {
-        if (array[j] < pivot)
+        while ((low < last) && (array[low] <= pivot))
         {
-            temp = array[j];
-            array[j] = array[i];
-            array[i] = temp;
-            i++;
+            low++;
+        }
+
+        while ((first < high) && (array[high] > pivot))
+        {
+            high--;
+        }
+
+        if (low < high)
+        {
+            swap(&array[low], &array[high]);
         }
     }
 
-    temp = array[size];
-    array[size] = array[i + 1];
-    array[i + 1] = temp;
-    
-    return (i + 1);
+    if (pivot > array[high])
+    {
+        swap(&array[first], &array[high]);
+    }
+
+    quickSortHelp(array, first, high - 1);
+    quickSortHelp(array, low, last);
+     
 }
 
 void Quick_Sort(long * array, int size)
 {
-    if (size == 0 || size == 1)
-    {
-        return;
-    }
-
-    int partIdx = partition(array, size);
-
-    long * temp1 = malloc(sizeof(long) * partIdx);
-    long * temp2 = malloc(sizeof(long) * (size - partIdx));
-
-    Quick_Sort(temp1, partIdx);
-    Quick_Sort(temp2, size - partIdx);
+    quickSortHelp(array, 0, size - 1);
 }
