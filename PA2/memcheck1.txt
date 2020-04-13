@@ -1,76 +1,113 @@
-==32350== Memcheck, a memory error detector
-==32350== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==32350== Using Valgrind-3.14.0-353a3587bb-20181007X and LibVEX; rerun with -h for copyright info
-==32350== Command: ./pa2 original/empty freqOutput6 headOutput6 codeOutput6 treeOutput6
-==32350== Parent PID: 32349
-==32350== 
---32350-- 
---32350-- Valgrind options:
---32350--    --dsymutil=yes
---32350--    --tool=memcheck
---32350--    --leak-check=full
---32350--    --verbose
---32350--    --show-leak-kinds=all
---32350--    --track-origins=yes
---32350--    --log-file=memcheck1.txt
---32350-- Contents of /proc/version:
---32350--   Linux version 3.10.0-1062.18.1.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-39) (GCC) ) #1 SMP Tue Mar 17 23:49:17 UTC 2020
---32350-- 
---32350-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-rdtscp-sse3-avx
---32350-- Page sizes: currently 4096, max supported 4096
---32350-- Valgrind library directory: /usr/lib64/valgrind
---32350-- Reading syms from /home/shay/a/lewis446/ECE368/ECE368/PA2/pa2
---32350-- Reading syms from /usr/lib64/ld-2.17.so
---32350--   Considering /usr/lib/debug/.build-id/5c/c1a53b747a7e4d21198723c2b633e54f3c06d9.debug ..
---32350--   .. build-id is valid
---32350-- Reading syms from /usr/lib64/valgrind/memcheck-amd64-linux
---32350--    object doesn't have a symbol table
---32350--    object doesn't have a dynamic symbol table
---32350-- Scheduler: using generic scheduler lock implementation.
---32350-- Reading suppressions file: /usr/lib64/valgrind/default.supp
-==32350== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-32350-by-lewis446-on-ecegrid-thin4.ecn.purdue.edu
-==32350== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-32350-by-lewis446-on-ecegrid-thin4.ecn.purdue.edu
-==32350== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-32350-by-lewis446-on-ecegrid-thin4.ecn.purdue.edu
-==32350== 
-==32350== TO CONTROL THIS PROCESS USING vgdb (which you probably
-==32350== don't want to do, unless you know exactly what you're doing,
-==32350== or are doing some strange experiment):
-==32350==   /usr/lib64/valgrind/../../bin/vgdb --pid=32350 ...command...
-==32350== 
-==32350== TO DEBUG THIS PROCESS USING GDB: start GDB like this
-==32350==   /path/to/gdb ./pa2
-==32350== and then give GDB the following command
-==32350==   target remote | /usr/lib64/valgrind/../../bin/vgdb --pid=32350
-==32350== --pid is optional if only one valgrind process is running
-==32350== 
---32350-- REDIR: 0x4019df0 (ld-linux-x86-64.so.2:strlen) redirected to 0x580c66c5 (???)
---32350-- REDIR: 0x4019bc0 (ld-linux-x86-64.so.2:index) redirected to 0x580c66df (???)
---32350-- Reading syms from /usr/lib64/valgrind/vgpreload_core-amd64-linux.so
---32350-- Reading syms from /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so
-==32350== WARNING: new redirection conflicts with existing -- ignoring it
---32350--     old: 0x04019df0 (strlen              ) R-> (0000.0) 0x580c66c5 ???
---32350--     new: 0x04019df0 (strlen              ) R-> (2007.0) 0x04c2d0e0 strlen
---32350-- REDIR: 0x4019d70 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c2e230 (strcmp)
---32350-- REDIR: 0x401aa30 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c31de0 (mempcpy)
---32350-- Reading syms from /usr/lib64/libc-2.17.so
---32350--   Considering /usr/lib/debug/.build-id/39/8944d32cf16a67af51067a326e6c0cc14f90ed.debug ..
---32350--   .. build-id is valid
---32350-- REDIR: 0x4ec70e0 (libc.so.6:strcasecmp) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---32350-- REDIR: 0x4ec3e60 (libc.so.6:strnlen) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---32350-- REDIR: 0x4ec93b0 (libc.so.6:strncasecmp) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---32350-- REDIR: 0x4ec68c0 (libc.so.6:memset) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---32350-- REDIR: 0x4ec6870 (libc.so.6:memcpy@GLIBC_2.2.5) redirected to 0x4a247a0 (_vgnU_ifunc_wrapper)
---32350-- REDIR: 0x4ec5850 (libc.so.6:__GI_strrchr) redirected to 0x4c2caa0 (__GI_strrchr)
---32350-- REDIR: 0x4ebca90 (libc.so.6:malloc) redirected to 0x4c29e1c (malloc)
---32350-- REDIR: 0x4edc8d0 (libc.so.6:__GI_strstr) redirected to 0x4c32070 (__strstr_sse2)
---32350-- REDIR: 0x4ebceb0 (libc.so.6:free) redirected to 0x4c2af16 (free)
---32350-- REDIR: 0x4ec6a90 (libc.so.6:__GI_mempcpy) redirected to 0x4c31b10 (__GI_mempcpy)
-==32350== 
-==32350== HEAP SUMMARY:
-==32350==     in use at exit: 0 bytes in 0 blocks
-==32350==   total heap usage: 7 allocs, 7 frees, 3,976 bytes allocated
-==32350== 
-==32350== All heap blocks were freed -- no leaks are possible
-==32350== 
-==32350== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==32350== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==171== Memcheck, a memory error detector
+==171== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==171== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==171== Command: ./pa2 original/gophers freqOutput6 headOutput6 codeOutput6 treeOutput6
+==171== Parent PID: 170
+==171== 
+--171-- 
+--171-- Valgrind options:
+--171--    --dsymutil=yes
+--171--    --tool=memcheck
+--171--    --leak-check=full
+--171--    --verbose
+--171--    --show-leak-kinds=all
+--171--    --track-origins=yes
+--171--    --log-file=memcheck1.txt
+--171-- Contents of /proc/version:
+--171--   Linux version 4.19.76-linuxkit (root@d203b39a3d78) (gcc version 8.3.0 (Alpine 8.3.0)) #1 SMP Thu Oct 17 19:31:58 UTC 2019
+--171-- 
+--171-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-sse3-avx-avx2-bmi
+--171-- Page sizes: currently 4096, max supported 4096
+--171-- Valgrind library directory: /usr/lib/valgrind
+--171-- Reading syms from /ECE368/ECE368/PA2/pa2
+--171-- Reading syms from /lib/x86_64-linux-gnu/ld-2.27.so
+--171--   Considering /lib/x86_64-linux-gnu/ld-2.27.so ..
+--171--   .. CRC mismatch (computed 1b7c895e wanted 2943108a)
+--171--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/ld-2.27.so ..
+--171--   .. CRC is valid
+--171-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--171--   Considering /usr/lib/valgrind/memcheck-amd64-linux ..
+--171--   .. CRC mismatch (computed 41ddb025 wanted 9972f546)
+--171--    object doesn't have a symbol table
+--171--    object doesn't have a dynamic symbol table
+--171-- Scheduler: using generic scheduler lock implementation.
+--171-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==171== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-171-by-???-on-630a66c6f46f
+==171== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-171-by-???-on-630a66c6f46f
+==171== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-171-by-???-on-630a66c6f46f
+==171== 
+==171== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==171== don't want to do, unless you know exactly what you're doing,
+==171== or are doing some strange experiment):
+==171==   /usr/lib/valgrind/../../bin/vgdb --pid=171 ...command...
+==171== 
+==171== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==171==   /path/to/gdb ./pa2
+==171== and then give GDB the following command
+==171==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=171
+==171== --pid is optional if only one valgrind process is running
+==171== 
+--171-- REDIR: 0x401f2f0 (ld-linux-x86-64.so.2:strlen) redirected to 0x580608c1 (???)
+--171-- REDIR: 0x401f0d0 (ld-linux-x86-64.so.2:index) redirected to 0x580608db (???)
+--171-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--171--   Considering /usr/lib/valgrind/vgpreload_core-amd64-linux.so ..
+--171--   .. CRC mismatch (computed 50df1b30 wanted 4800a4cf)
+--171--    object doesn't have a symbol table
+--171-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+--171--   Considering /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so ..
+--171--   .. CRC mismatch (computed f893b962 wanted 95ee359e)
+--171--    object doesn't have a symbol table
+==171== WARNING: new redirection conflicts with existing -- ignoring it
+--171--     old: 0x0401f2f0 (strlen              ) R-> (0000.0) 0x580608c1 ???
+--171--     new: 0x0401f2f0 (strlen              ) R-> (2007.0) 0x04c32db0 strlen
+--171-- REDIR: 0x401d360 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c33ee0 (strcmp)
+--171-- REDIR: 0x401f830 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c374f0 (mempcpy)
+--171-- Reading syms from /lib/x86_64-linux-gnu/libc-2.27.so
+--171--   Considering /lib/x86_64-linux-gnu/libc-2.27.so ..
+--171--   .. CRC mismatch (computed b1c74187 wanted 042cc048)
+--171--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libc-2.27.so ..
+--171--   .. CRC is valid
+--171-- REDIR: 0x4edac70 (libc.so.6:memmove) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9d40 (libc.so.6:strncpy) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edaf50 (libc.so.6:strcasecmp) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9790 (libc.so.6:strcat) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9d70 (libc.so.6:rindex) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edc7c0 (libc.so.6:rawmemchr) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edade0 (libc.so.6:mempcpy) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edac10 (libc.so.6:bcmp) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9d00 (libc.so.6:strncmp) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9800 (libc.so.6:strcmp) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edad40 (libc.so.6:memset) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ef80f0 (libc.so.6:wcschr) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9ca0 (libc.so.6:strnlen) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9870 (libc.so.6:strcspn) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edafa0 (libc.so.6:strncasecmp) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9840 (libc.so.6:strcpy) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edb0e0 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9da0 (libc.so.6:strpbrk) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed97c0 (libc.so.6:index) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ed9c70 (libc.so.6:strlen) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ee46c0 (libc.so.6:memrchr) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edaff0 (libc.so.6:strcasecmp_l) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edabe0 (libc.so.6:memchr) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4ef8eb0 (libc.so.6:wcslen) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4eda050 (libc.so.6:strspn) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edaf20 (libc.so.6:stpncpy) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edaef0 (libc.so.6:stpcpy) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edc7f0 (libc.so.6:strchrnul) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4edb040 (libc.so.6:strncasecmp_l) redirected to 0x4a2a6e0 (_vgnU_ifunc_wrapper)
+--171-- REDIR: 0x4fca3c0 (libc.so.6:__strrchr_avx2) redirected to 0x4c32730 (rindex)
+--171-- REDIR: 0x4ed3070 (libc.so.6:malloc) redirected to 0x4c2faa0 (malloc)
+--171-- REDIR: 0x4eda590 (libc.so.6:__GI_strstr) redirected to 0x4c37760 (__strstr_sse2)
+--171-- REDIR: 0x4ed3950 (libc.so.6:free) redirected to 0x4c30cd0 (free)
+--171-- REDIR: 0x4fcaab0 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4c37130 (mempcpy)
+--171-- REDIR: 0x4fca1d0 (libc.so.6:__strchrnul_avx2) redirected to 0x4c37020 (strchrnul)
+==171== 
+==171== HEAP SUMMARY:
+==171==     in use at exit: 0 bytes in 0 blocks
+==171==   total heap usage: 59 allocs, 59 frees, 34,048 bytes allocated
+==171== 
+==171== All heap blocks were freed -- no leaks are possible
+==171== 
+==171== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==171== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
