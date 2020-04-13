@@ -10,11 +10,11 @@ void merge(long * array, int l, int m, int r)
     int size1 = m - l + 1; 
     int size2 = r - m; 
   
-    /* create temp arrays */
+    // creates temp arrays
     long * temp1 = malloc(sizeof(long) * size1);
     long * temp2 = malloc(sizeof(long) * size2); 
   
-    /* Copy data to temp arrays L[] and R[] */
+    // copies data to temp arrays
     for (i = 0; i < size1; i++)
     {
         temp1[i] = array[l + i];
@@ -24,7 +24,7 @@ void merge(long * array, int l, int m, int r)
         temp2[j] = array[m + 1+ j]; 
     }
 
-    /* Merge the temp arrays back into arr[l..r]*/
+    
     i = 0; // Initial index of first subarray 
     j = 0; // Initial index of second subarray 
     k = l; // Initial index of merged subarray 
@@ -44,8 +44,7 @@ void merge(long * array, int l, int m, int r)
         k++; 
     } 
   
-    /* Copy the remaining elements of L[], if there 
-       are any */
+    // If there are any remaining elements from either temp array, add them to the merged array
     while (i < size1) 
     { 
         array[k] = temp1[i]; 
@@ -53,8 +52,6 @@ void merge(long * array, int l, int m, int r)
         k++; 
     } 
   
-    /* Copy the remaining elements of R[], if there 
-       are any */
     while (j < size2) 
     { 
         array[k] = temp2[j]; 
@@ -70,7 +67,7 @@ void mergeSortHelp(long * array, int l, int r)
 {
     if (l < r)
     {
-        int m = (l + r) / 2;
+        int m = (l + r) / 2; // find middle index
 
         mergeSortHelp(array, l, m);
         mergeSortHelp(array, m + 1, r);
@@ -84,7 +81,7 @@ void Merge_Sort(long * array, int size)
     mergeSortHelp(array, 0, size - 1);
 }
 
-void swap(long * a, long * b) 
+void swap(long * a, long * b) // function to swap nodes in an array
 { 
     long t = *a; 
     *a = *b; 
@@ -104,17 +101,17 @@ void quickSortHelp(long * array, int first, int last)
 
     while (low < high)
     {
-        while ((low < last) && (array[low] <= pivot))
+        while ((low < last) && (array[low] <= pivot)) // finds element that is smaller than pivot
         {
             low++;
         }
 
-        while ((first < high) && (array[high] > pivot))
+        while ((first < high) && (array[high] > pivot)) // finds element higher than pivot
         {
             high--;
         }
 
-        if (low < high)
+        if (low < high) // swaps elements if crossed indexes
         {
             swap(&array[low], &array[high]);
         }
