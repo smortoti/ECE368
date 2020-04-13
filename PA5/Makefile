@@ -12,10 +12,14 @@ pa5: $(OBJS)
 	$(GCC) -c $*.c 
 
 testmerge: test1m test2m test3m
+
 testquick: test1q test2q test3q
 
-testmemory: pa5
+testmemorymerge: pa5
 	$(VAL) --log-file=memcheck1.txt ./pa5 -m examples/10.b output10
+
+testmemoryquick: pa5
+	$(VAL) --log-file=memcheck1.txt ./pa5 -q examples/10.b output10
 
 test1m: pa5
 	./pa5 -m examples/10.b output10m

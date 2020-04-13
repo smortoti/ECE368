@@ -2,76 +2,83 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-long * recombineArray(long * temp1, long * temp2, int size1, int size2)
+void merge(long * array, int l, int m, int r)
 {
     int i = 0;
     int j = 0;
     int k = 0;
-    long * newArray = malloc(sizeof(long) * (size1 + size2));
-
-    while (i < size1 && j < size2)
+    int size1 = m - l + 1; 
+    int size2 = r - m; 
+  
+    /* create temp arrays */
+    long * temp1 = malloc(sizeof(long) * size1);
+    long * temp2 = malloc(sizeof(long) * size2); 
+  
+    /* Copy data to temp arrays L[] and R[] */
+    for (i = 0; i < size1; i++)
     {
-        if (temp1[i] <= temp2[j])
-        {
-            newArray[k] = temp1[i];
-            k++;
-            i++;
-        }
+        temp1[i] = array[l + i];
+    } 
+    for (j = 0; j < size2; j++) 
+    {
+        temp2[j] = array[m + 1+ j]; 
+    }
+
+    /* Merge the temp arrays back into arr[l..r]*/
+    i = 0; // Initial index of first subarray 
+    j = 0; // Initial index of second subarray 
+    k = l; // Initial index of merged subarray 
+
+    while (i < size1 && j < size2) 
+    { 
+        if (temp1[i] <= temp2[j]) 
+        { 
+            array[k] = temp1[i]; 
+            i++; 
+        } 
         else
-        {
-            newArray[k] = temp2[j];
-            k++;
-            j++;
-        }  
-    }
+        { 
+            array[k] = temp2[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+  
+    /* Copy the remaining elements of L[], if there 
+       are any */
+    while (i < size1) 
+    { 
+        array[k] = temp1[i]; 
+        i++; 
+        k++; 
+    } 
+  
+    /* Copy the remaining elements of R[], if there 
+       are any */
+    while (j < size2) 
+    { 
+        array[k] = temp2[j]; 
+        j++; 
+        k++; 
+    } 
+}
 
-    while (i < size1)
+void mergeSortHelp(long * array, int l, int r)
+{
+    if (l < r)
     {
-        newArray[k] = temp1[i];
-        i++;
-        k++;
-    }
+        int m = (l + r) / 2;
 
-    while (j < size2)
-    {
-        newArray[k] = temp2[j];
-        j++;
-        k++;
-    }
+        mergeSortHelp(array, l, m);
+        mergeSortHelp(array, m + 1, r);
 
-    return newArray;
+        merge(array, l, m, r);
+    }
 }
 
 void Merge_Sort(long * array, int size)
 {
-    if (size == 0 || size == 1)
-    {
-        return;
-    }
-
-    int i = 0;
-    int middle = size / 2;
-
-    long * temp1 = malloc(sizeof(long) * middle);
-    long * temp2 = malloc(sizeof(long) * (size - middle));
-
-    for(i = 0; i < middle; i++)
-    {
-        temp1[i] = array[i];
-    }
-
-    for(i = 0; i < (size - middle); i++)
-    {
-        temp2[i] = array[middle + i];
-    }
-
-    Merge_Sort(temp1, middle);
-    Merge_Sort(temp2, size - middle);
-
-    array = recombineArray(temp1, temp2, middle, size - middle);
-
-    free(temp1);
-    free(temp2);
+    mergeSortHelp(array, 0, size - 1);
 }
 
 void swap(long * a, long * b) 

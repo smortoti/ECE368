@@ -81,32 +81,18 @@ int main(int argc, char ** argv)
 
     array = Array_Load_From_File(argv[2], &size);
 
-   /* for(int i = 0; i < size; i++)
-    {
-        fprintf(stderr, "%ld ", array[i]);
-    }
-    fprintf(stderr, "\n");*/
-
     if (!(strcmp(argv[1], m)))
     {
-        fprintf(stderr, "merge\n");
         Merge_Sort(array, size);
     }
     else if (!(strcmp(argv[1], q)))
     {
-        fprintf(stderr, "quick\n");
         Quick_Sort(array, size);
     }
     else
     {
         return EXIT_FAILURE;
     }
-
-    /*for(int i = 0; i < size; i++)
-    {
-        fprintf(stderr, "%ld ", array[i]);
-    }
-    fprintf(stderr, "\n");*/
 
     Array_Save_To_File(argv[3], array, size);
 
