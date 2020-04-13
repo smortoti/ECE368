@@ -61,6 +61,9 @@ void merge(long * array, int l, int m, int r)
         j++; 
         k++; 
     } 
+
+    free(temp1);
+    free(temp2);
 }
 
 void mergeSortHelp(long * array, int l, int r)
