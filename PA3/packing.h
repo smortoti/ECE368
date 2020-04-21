@@ -23,7 +23,7 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound); // builds tre
 List * createNode(List * head, int label, int width, int height); // creates LL node
 Tree * constructTree(Tree ** treeArray, int * upper_bound); // constructs tree within top function
 
-Tree ** LLtoArray(List * head, int * size); // converts LL to array for easier build
+Tree ** LLtoArray(List * head, int size); // converts LL to array for easier build
 void freeLL(List * head); // frees LL
 
 void printPreOrder(char * filename, Tree * root); // prints tree with preorder traversal

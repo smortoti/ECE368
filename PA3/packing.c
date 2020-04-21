@@ -23,7 +23,7 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
     int label = 0;
     int width = 0;
     int height = 0;
-    int size = 1;
+    int size = 0;
 
     while(!(feof(fptr)))
     {
@@ -33,6 +33,7 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
             if(!(feof(fptr)))
             {
                 head = createNode(head, readTemp, 0, 0);
+                size++;
                 readTemp = fgetc(fptr); // read the newline char after branch label and advance the file stream
             }
         }
@@ -46,13 +47,14 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
                 if(readTemp != '\n') // ensures no nodes are added with newline character
                 {
                     head = createNode(head, label, width, height);
+                    size++;
                 }
 
             }
         }    
     }
 
-    treeArray = LLtoArray(head, &size); // creates an array of tree nodes from the read-in LL
+    treeArray = LLtoArray(head, size); // creates an array of tree nodes from the read-in LL
 
     if (treeArray == NULL) // checks if treeArray is NULL, i.e. from an empty file
     {
@@ -71,7 +73,7 @@ Tree * buildTreeFromPostOrder(char * filename, int * upper_bound)
     return(tree);
 }
 
-Tree ** LLtoArray(List * head, int * size)
+Tree ** LLtoArray(List * head, int size)
 {
     List * temp = head;
 
@@ -80,13 +82,14 @@ Tree ** LLtoArray(List * head, int * size)
         return NULL;
     }
     
-    while(temp -> next != NULL) // finds total nodes read-in
+    /*while(temp -> next != NULL) // finds total nodes read-in
     {
         temp = temp -> next;
         (*size)++; // use address to return out of function
-    }
+    }*/
 
-    Tree ** treeArray = malloc(sizeof(*treeArray) * (*size));
+    Tree ** treeArray = malloc(sizeof(*treeArray) * (size));
+
     if (treeArray == NULL)
     {
         fprintf(stderr, "treeArray is NULL\n");
@@ -94,7 +97,7 @@ Tree ** LLtoArray(List * head, int * size)
     int i = 0;
     temp = head;
 
-    for(i = 0; i < (*size); i++) // make copies of treeArray nodes from LL into an array
+    for(i = 0; i < size; i++) // make copies of treeArray nodes from LL into an array
     {
         treeArray[i] = malloc(sizeof(*treeArray[i]));
         treeArray[i] -> label = temp -> label;
