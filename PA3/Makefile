@@ -1,6 +1,6 @@
 WARNINGFLAGS = -Wall -Wshadow -Wvla --pedantic
 VAL = valgrind --leak-check=full --leak-check=full --show-leak-kinds=all
-GCC = gcc -g -O3 -std=c99 $(WARNINGFLAGS)
+GCC = gcc -O3 -std=c99 $(WARNINGFLAGS)
 
 SRCS = packing.c pa3.c
 OBJS = $(SRCS:%.c=%.o)
