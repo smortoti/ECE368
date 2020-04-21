@@ -81,12 +81,6 @@ Tree ** LLtoArray(List * head, int size)
     {
         return NULL;
     }
-    
-    /*while(temp -> next != NULL) // finds total nodes read-in
-    {
-        temp = temp -> next;
-        (*size)++; // use address to return out of function
-    }*/
 
     Tree ** treeArray = malloc(sizeof(*treeArray) * (size));
 
