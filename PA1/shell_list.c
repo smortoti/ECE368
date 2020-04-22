@@ -64,6 +64,21 @@ Node * List_Load_From_File(char * filename)
     return(listhold);
 }
 
+void swap(Node * head, Node * prevSwap1, Node * swap1, Node * swap2, Node * prevSwap2)
+{
+    if (prevSwap1 == NULL)
+    {
+        // head is swap1
+        head = swap2;
+        head -> next = swap1 -> next;
+        prevSwap2 -> next = swap1;
+        swap1 -> next = swap2 -> next;
+    }
+    prevSwap1 -> next = swap2;
+    prevSwap2 -> next = swap1;
+    swap2 -> next = swap1 -> next;
+    swap1 -> next = swap2 -> next;
+}
 Node * List_Shellsort(Node * nodelist, long * n_comp)
 {
     long sequence = 0;
