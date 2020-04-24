@@ -6,12 +6,11 @@
 
 long *Array_Load_From_File(char* filename, int* size)
 {
-    FILE * fptr = fopen(filename, "r");
+    FILE * fptr = fopen(filename, "rb");
     long * long_arr = NULL;
     
     if (fptr == NULL) // Check if fopen fails
     {
-     //   fprintf(stderr, "fopen failed\n");
         *size = 0;
         return(long_arr);
     }
@@ -20,7 +19,6 @@ long *Array_Load_From_File(char* filename, int* size)
     
     if (long_arr == NULL) // Check if malloc fails
     {
-    //    fprintf(stderr, "malloc failed\n");
         (*size) = 0;
     }
     

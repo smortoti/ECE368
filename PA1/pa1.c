@@ -42,11 +42,7 @@ int main(int argc, char **argv)
         fclose(fptr);
 
         array = Array_Load_From_File(argv[2], &size); // Array sorting
-        clock_t begin = clock();
         Array_Shellsort(array, size, &num_comp);
-        clock_t end = clock();
-        double timeSpend = (double)(end - begin) / CLOCKS_PER_SEC;
-        fprintf(stderr ,"list sorted in: %fs\n", timeSpend);
 
         Array_Save_To_File(argv[3], array, size);
 
@@ -59,16 +55,13 @@ int main(int argc, char **argv)
     {
 
         list = List_Load_From_File(argv[2]);
-
-        clock_t begin = clock();
         list = List_Shellsort(list, &num_comp);
-        clock_t end = clock();
-        double timeSpend = (double)(end - begin) / CLOCKS_PER_SEC;
-        fprintf(stderr ,"list sorted in: %fs\n", timeSpend);
 
         num_written = List_Save_To_File(argv[3], list);
 
         fprintf(stdout, "%ld\n", num_comp);
+
+		fclose(fptr);
 
         return 0;
     }

@@ -46,6 +46,7 @@ Node * List_Load_From_File(char * filename)
     }
 
     List * nodelist = malloc(sizeof(List));
+	Node * listholder = NULL;
     nodelist -> head = NULL;
     nodelist -> tail = NULL;
     long holder = 0;
@@ -57,11 +58,10 @@ Node * List_Load_From_File(char * filename)
 
     fclose(fptr);
 
-    Node * listhold = malloc(sizeof(Node));
-    listhold = nodelist -> head; // Creates temporary holder to return list and for freeineg memory
+    listholder = nodelist -> head; // Creates temporary holder to return list and for freeineg memory
     free(nodelist);
 
-    return(listhold);
+    return(listholder);
 }
 
 void swap(Node ** headRef, Node * prevSwap1, Node * swap1, Node * swap2, Node * prevSwap2)
@@ -88,25 +88,20 @@ Node * List_Shellsort(Node * head, long * n_comp)
     long sequence = 0;
     long size = 1;
     long a = 0;
-    long iminusk = 0;
     long b = 0;
     long c = 0;
     long d = 0;
     long k = 0;
     long j = 0;
     long i = 0;
-    long l = 0;
-    long m = 0;
-    long holder;
 
     Node * nodecount = head;
     Node * temp = head;
-    Node * arraymintemp = head;
     Node * tempIminK = head;
     Node * prevTemp2 = NULL;
     Node * temp2 = head;
     Node * prevTempIminK = NULL;
-    Node * prevTemp = NULL;
+	Node * prevTemp;
 
     temp = head;
 
@@ -139,11 +134,10 @@ Node * List_Shellsort(Node * head, long * n_comp)
             a = 0;
 
             i = j;
-            iminusk = i - k;
             tempIminK = head;
             prevTempIminK = NULL;
 
-            while (b < iminusk)
+	    	while (b < (i - k))
             {
                 prevTempIminK = tempIminK;
                 tempIminK = tempIminK -> next;              
@@ -151,12 +145,11 @@ Node * List_Shellsort(Node * head, long * n_comp)
             }
             b = 0;
 
-            fprintf(stderr, "i: %d k: %d i-k: %d\n", i, k, iminusk);
-
             while ((i >= k) && (tempIminK -> value > temp -> value))
             {
                 temp2 = head;
                 prevTemp2 = NULL;
+
                 while (c < i)
                 {
                     prevTemp2 = temp2;
@@ -164,19 +157,20 @@ Node * List_Shellsort(Node * head, long * n_comp)
                     c++;
                 }
                 c = 0;
+
                 swap(&head, prevTempIminK, tempIminK, temp2, prevTemp2);
-                fprintf(stderr, "i: %d k: %d i-k: %d\n", i, k, iminusk);
-                i = iminusk;
-                iminusk -= k;
+                i = i - k;
+
                 prevTempIminK = NULL;
                 tempIminK = head;
-                while (b < iminusk)
+                while (b < (i - k))
                 {
                     prevTempIminK = tempIminK;
                     tempIminK = tempIminK -> next;              
                     b++;
                 }
                 b = 0;
+
                 (*n_comp)++;
             }
             (*n_comp)++;
@@ -190,12 +184,20 @@ Node * List_Shellsort(Node * head, long * n_comp)
                 d++;
             }
             d = 0;
-
-            swap(&head, prevTemp2, temp2, prevTemp, temp);
         }
     }
 
     return (head);
+}
+
+void freeLL(Node * head)
+{
+	while(head != NULL)
+	{
+		Node * temp = head -> next;
+		free (head);
+		head = temp;
+	}
 }
 
 int List_Save_To_File(char * filename, Node * head)
@@ -212,11 +214,10 @@ int List_Save_To_File(char * filename, Node * head)
     while(tempnode != NULL)
     {
         fwrite(&(tempnode -> value), sizeof(long), 1, fptr);
-        fprintf(stderr, "loop8\n");
         tempnode = tempnode -> next; // writes to file, advances node
         write_num++;
     }
-    fprintf(stderr, "\n");
+    freeLL(head);
 
     fclose(fptr);
 
