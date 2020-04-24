@@ -64,22 +64,26 @@ Node * List_Load_From_File(char * filename)
     return(listhold);
 }
 
-void swap(Node * head, Node * prevSwap1, Node * swap1, Node * swap2, Node * prevSwap2)
+void swap(Node ** headRef, Node * prevSwap1, Node * swap1, Node * swap2, Node * prevSwap2)
 {
-    if (prevSwap1 == NULL)
+    Node * temp = NULL;
+
+    if (prevSwap1 != NULL)
     {
-        // head is swap1
-        head = swap2;
-        head -> next = swap1 -> next;
-        prevSwap2 -> next = swap1;
-        swap1 -> next = swap2 -> next;
+        prevSwap1 -> next = swap2;
     }
-    prevSwap1 -> next = swap2;
+    else
+    {
+        *headRef = swap2;
+    }
+
     prevSwap2 -> next = swap1;
+    temp = swap2 -> next;
     swap2 -> next = swap1 -> next;
-    swap1 -> next = swap2 -> next;
+    swap1 -> next = temp;
 }
-Node * List_Shellsort(Node * nodelist, long * n_comp)
+
+Node * List_Shellsort(Node * head, long * n_comp)
 {
     long sequence = 0;
     long size = 1;
@@ -95,23 +99,22 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
     long m = 0;
     long holder;
 
-    Node * nodecount = nodelist;
-    Node * temp = nodelist;
-    Node * arraymintemp = nodelist;
-    Node * tempIminK = nodelist;
+    Node * nodecount = head;
+    Node * temp = head;
+    Node * arraymintemp = head;
+    Node * tempIminK = head;
     Node * prevTemp2 = NULL;
-    Node * temp2 = nodelist;
+    Node * temp2 = head;
     Node * prevTempIminK = NULL;
+    Node * prevTemp = NULL;
 
-    temp = nodelist;
+    temp = head;
 
     while (nodecount -> next != NULL) // Finds size of linked list
     {
         nodecount = nodecount -> next;
         size++;
     }
-
-    //fprintf(stderr, "size: %ld\n", size);
 
     do // Generates sequence
     {
@@ -124,179 +127,92 @@ Node * List_Shellsort(Node * nodelist, long * n_comp)
     {
         for(j = k; j < size; j++)
         {
-            temp = nodelist;
+            temp = head;
+            prevTemp = NULL;
+
             while (a < j)
             {
+                prevTemp = temp;
                 temp = temp -> next;
                 a++;
             }
             a = 0;
+
             i = j;
             iminusk = i - k;
-            
-            tempIminK = nodelist;
+            tempIminK = head;
             prevTempIminK = NULL;
+
             while (b < iminusk)
             {
-                tempIminK = tempIminK -> next;
-                if(prevTempIminK == NULL)
-                {
-                    prevTempIminK = nodelist;
-                }
-                else
-                {
-                    prevTempIminK = prevTempIminK -> next;
-                }
-                
+                prevTempIminK = tempIminK;
+                tempIminK = tempIminK -> next;              
                 b++;
             }
             b = 0;
 
+            fprintf(stderr, "i: %d k: %d i-k: %d\n", i, k, iminusk);
+
             while ((i >= k) && (tempIminK -> value > temp -> value))
             {
-                temp2 = nodelist;
+                temp2 = head;
                 prevTemp2 = NULL;
                 while (c < i)
                 {
+                    prevTemp2 = temp2;
                     temp2 = temp2 -> next;
-                    if(prevTemp2 == NULL)
-                    {
-                        prevTemp2 = nodelist;
-                    }
-                    else
-                    {
-                        prevTemp2 = prevTemp2 -> next;
-                    }
                     c++;
                 }
                 c = 0;
-                if (prevTempIminK == NULL)
-                {
-                    prevTemp2 -> next = tempIminK;
-                    tempIminK -> next = temp2 -> next;
-                    temp2 -> next = tempIminK -> next;
-                    nodelist = temp2;
-                }
-                else
-                {
-                    prevTempIminK -> next = temp2;
-                    prevTemp2 -> next = tempIminK;
-                    temp2 -> next = tempIminK -> next;
-                }
-                
+                swap(&head, prevTempIminK, tempIminK, temp2, prevTemp2);
+                fprintf(stderr, "i: %d k: %d i-k: %d\n", i, k, iminusk);
                 i = iminusk;
+                iminusk -= k;
+                prevTempIminK = NULL;
+                tempIminK = head;
+                while (b < iminusk)
+                {
+                    prevTempIminK = tempIminK;
+                    tempIminK = tempIminK -> next;              
+                    b++;
+                }
+                b = 0;
                 (*n_comp)++;
             }
             (*n_comp)++;
-            temp2 = nodelist;
+
+            prevTemp2 = NULL;
+            temp2 = head;
             while (d < i)
             {
+                prevTemp2 = temp2;
                 temp2 = temp2 -> next;
                 d++;
             }
             d = 0;
-            //holder = temp2 -> value;
-            //temp2 -> value = temp -> value;
-            temp -> value = holder;
+
+            swap(&head, prevTemp2, temp2, prevTemp, temp);
         }
     }
 
-    /*fprintf(stderr, "sequence success\n");
-
-    sequence = (sequence - 1) / 3;
-    k = sequence;
-    /* Shellsort algorithm using while loops to make up for array indexing. 
-    Any array indexing is used with a while loop to progress the linked list.
-
-    while (temp != NULL)
-    {
-        fprintf(stderr, "%ld ", temp -> value);
-        temp = temp -> next;
-    }
-    fprintf(stderr, "\n\n");
-
-    
-
-    temp = nodelist;
-
-    while(k > 0) 
-    {
-        for(j = k; j < size; j++)
-        {
-            while (i != j) // increments temp and assigns i
-            {
-                temp = temp -> next;
-                i++;
-            }
-
-            while (l != (i - k)) // assigns initial comparison for swapping loop
-            {
-                arraymintemp = arraymintemp -> next;
-                l++;
-                if (arraymintemp -> next == NULL)
-                {
-                    break;
-                }
-            }
-
-            l = 0; // resets counter
-
-            while ((i >= k) && (arraymintemp -> value > temp -> value))
-            {
-                fprintf(stderr, "values to swap: amt -> val: %ld, tmp -> val: %ld\n", arraymintemp -> value, temp -> value);
-                holder = temp -> value; // Swap values
-                temp -> value = arraymintemp -> value;
-                arraymintemp -> value = holder;
-                fprintf(stderr, "values after swap: amt -> val: %ld, tmp -> val: %ld\n\n", arraymintemp -> value, temp -> value);
-
-                temp = nodelist; // Reassigns comparisons
-                arraymintemp = nodelist;
-
-                while (m != (i - k))
-                {
-                    temp = temp -> next;
-                    arraymintemp = arraymintemp -> next;
-                    m++;
-                }
-
-                m = 0;
-                (*n_comp)++;
-                i = i - k;
-            }
-
-            if (arraymintemp -> value <= temp -> value) // resets temp if failure to enter swapping loop
-            {
-                arraymintemp = nodelist;
-            }
-
-            (*n_comp)++;
-            temp = nodelist;
-
-            while (m != i)
-            {
-                temp = temp -> next;
-                m++;
-            }
-            m = 0;
-        }
-        k = (k - 1) / 3;
-    }*/
-    return (nodelist);
+    return (head);
 }
 
-int List_Save_To_File(char * filename, Node * nodelist)
+int List_Save_To_File(char * filename, Node * head)
 {
     FILE * fptr = fopen(filename, "wb");
     int write_num = 0;
-    Node * tempnode = nodelist;
+    Node * tempnode = head;
 
     if (fptr == NULL) // Checks if fopen fails
     {
        return(EXIT_FAILURE);
     }
 
-    while(tempnode != NULL && fwrite(&(tempnode -> value), sizeof(long), 1, fptr))
+    while(tempnode != NULL)
     {
+        fwrite(&(tempnode -> value), sizeof(long), 1, fptr);
+        fprintf(stderr, "loop8\n");
         tempnode = tempnode -> next; // writes to file, advances node
         write_num++;
     }
