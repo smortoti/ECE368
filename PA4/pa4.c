@@ -36,10 +36,12 @@ int main(int argc, char ** argv)
                 if (mode == 'i')
                 {
                     newNode = createNode(key);
+					fprintf(stderr, "insertnode\n");
                     root = insertNode(root, newNode);
                 }
                 else
                 {
+					fprintf(stderr, "deletenode\n");
                     deleteNode(root, key);  
                 }
             }
