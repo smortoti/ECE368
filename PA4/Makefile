@@ -12,13 +12,26 @@ pa4: $(OBJS)
 	$(GCC) -c $*.c 
 
 testeval: test1e test2e test3e
+testbuild: test1b test2b test3b test4b
 
 testmemory: pa4
 	$(VAL) --log-file=memcheck1.txt ./pa4 -b examples-2/ops0.b tree0b
 
 test1b: pa4
-	./pa4 -b examples-2/ops3.b tree0b
+	./pa4 -b examples-2/ops3.b tree3b
+	diff examples-2/tree3.b tree3b
+
+test2b: pa4
+	./pa4 -b examples-2/ops0.b tree0b
 	diff examples-2/tree0.b tree0b
+
+test3b: pa4
+	./pa4 -b examples-2/ops1.b tree1b
+	diff examples-2/tree1.b tree1b
+
+test4b: pa4
+	./pa4 -b examples-2/ops2.b tree2b
+	diff examples-2/tree2.b tree2b
 
 test1e: pa4
 	./pa4 -e examples-2/invalidtree0.b

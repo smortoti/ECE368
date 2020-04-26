@@ -57,10 +57,10 @@ int getHeight(Tnode * root)
         return 0;
     }
 
-    int heightLeft =  getHeight(root -> left);
+    int heightLeft = getHeight(root -> left);
     int heightRight = getHeight(root -> right);
 
-    if (leftHeight > rightHeight)
+    if (heightLeft > heightRight)
     {
         return (heightLeft + 1);
     }
@@ -80,73 +80,6 @@ Tnode * createNode(int key)
     newNode -> right = NULL;
 
     return newNode;
-}
-
-Tnode * insertNode(Tnode * root, Tnode * newNode)
-{
-	if (root == NULL)
-	{
-		return newNode;
-	}
-
-	if (newNode -> key <= root -> key)
-	{
-		root -> left = insertNode(root -> left, newNode);
-	}
-
-	else
-	{
-		root -> right = insertNode(root -> right, newNode);
-	}
-
-	int leftBal, rightBal = 0;
-	getHeight(root, &leftBal, &rightBal);
-	root -> balance = leftBal - rightBal;
-
-	if (root -> balance > 1 && newNode -> key < root -> left -> key)
-	{
-		return CCWRotate(root);
-
-	}
-	
-	if (root -> balance < -1 && newNode -> key > root -> right -> key)
-	{
-		return CWRotate(root);
-	}
-
-	if (root -> balance > 1 && newNode -> key > root -> left -> key)
-	{
-		root -> left = CWRotate(root -> left)
-		return CCWRotate(root);
-	}
-
-	if (root -> balance < -1 && newNode -> key < root -> right -> key)
-	{
-		root -> right = CCWRotate(root -> right);
-		return CWRotate(root);
-	}
-
-	return root;
-}
-         
-void destroyTree(Tnode * root) // frees tree
-{
-    if (root == NULL)
-    {
-        return;
-    }
-    destroyTree(root -> left);
-    destroyTree(root -> right);
-    free(root); // ensures branch is destroyed after recursion
-}
-
-int getBalance(Tnode * root)
-{
-	if (root == NULL)
-	{
-		return 0;
-	}
-	return (getHeight(root -> left) - getHeight(root -> right));
 }
 
 Tnode * CCWRotate(Tnode * node)
@@ -190,6 +123,75 @@ Tnode * CWRotate(Tnode * node)
 
 	return right;
 }
+
+Tnode * insertNode(Tnode * root, Tnode * newNode)
+{
+	if (root == NULL)
+	{
+		return newNode;
+	}
+
+	if (newNode -> key <= root -> key)
+	{
+		root -> left = insertNode(root -> left, newNode);
+	}
+
+	else
+	{
+		root -> right = insertNode(root -> right, newNode);
+	}
+
+	int leftHeight = getHeight(root -> left);
+	int rightHeight = getHeight(root -> right);
+	
+	root -> balance = leftHeight - rightHeight;
+
+	if (root -> balance > 1 && newNode -> key < root -> left -> key)
+	{
+		return CCWRotate(root);
+
+	}
+	
+	if (root -> balance < -1 && newNode -> key > root -> right -> key)
+	{
+		return CWRotate(root);
+	}
+
+	if (root -> balance > 1 && newNode -> key > root -> left -> key)
+	{
+		root -> left = CWRotate(root -> left);
+		return CCWRotate(root);
+	}
+
+	if (root -> balance < -1 && newNode -> key < root -> right -> key)
+	{
+		root -> right = CCWRotate(root -> right);
+		return CWRotate(root);
+	}
+
+	return root;
+}
+         
+void destroyTree(Tnode * root) // frees tree
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    destroyTree(root -> left);
+    destroyTree(root -> right);
+    free(root); // ensures branch is destroyed after recursion
+}
+
+int getBalance(Tnode * root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	return (getHeight(root -> left) - getHeight(root -> right));
+}
+
 
 Tnode * successor(Tnode * root)
 {

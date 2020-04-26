@@ -12,12 +12,12 @@ Tnode * createNode(int key);
 void printPreOrder(char * filename, Tnode * root);
 void printPreOrderHelp(FILE * fptr, Tnode * root);
 
-Tnode * CCWRotate(Tnode * root, Tnode * prevUnbal);
-Tnode * CWRotate(Tnode * root, Tnode * prevUnbal);
+Tnode * CCWRotate(Tnode * root);
+Tnode * CWRotate(Tnode * root);
 
 Tnode * buildPreOrder(int * key_array, char * pattern_array, int index);
 
-void deleteNode(Tnode * root, int toDelete);
+Tnode * deleteNode(Tnode * root, int toDelete);
 
 void destroyTree(Tnode * root);
 
