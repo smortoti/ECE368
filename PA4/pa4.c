@@ -40,7 +40,7 @@ int main(int argc, char ** argv)
                 }
                 else
                 {
-                   // deleteNode(root, key);  
+                    deleteNode(root, key);  
                 }
             }
         }
