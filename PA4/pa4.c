@@ -12,7 +12,6 @@ int main(int argc, char ** argv)
 
     if (!(strcmp(argv[1], b)))
     {
-        fprintf(stderr, "enter b\n");
         FILE * fptr = fopen(argv[2], "rb");
 
         if (fptr == NULL)
@@ -36,12 +35,10 @@ int main(int argc, char ** argv)
                 if (mode == 'i')
                 {
                     newNode = createNode(key);
-					fprintf(stderr, "insertnode\n");
                     root = insertNode(root, newNode);
                 }
                 else
                 {
-					fprintf(stderr, "deletenode\n");
                     deleteNode(root, key);  
                 }
             }
@@ -123,6 +120,7 @@ int main(int argc, char ** argv)
             isBal(root, &balEval);
 
             fprintf(stdout, "%d,%d,%d\n", out1, BSTeval, balEval);
+			destroyTree(root);
             fclose(fptr);
             free(pattern_array);
             free(key_array);
@@ -132,6 +130,7 @@ int main(int argc, char ** argv)
         else
         {
             fclose(fptr);
+			destroyTree(root);
             free(pattern_array);
             free(key_array);
             fprintf(stdout, "%d,%d,%d\n", out1, out2, out3);

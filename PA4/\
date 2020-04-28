@@ -15,7 +15,7 @@ testeval: test1e test2e test3e test4e
 testbuild: test0b test1b test2b test3b
 
 testmemory: pa4
-	$(VAL) --log-file=memcheck1.txt ./pa4 -e examples-2/invalidtree2.b tree0b
+	$(VAL) --log-file=memcheck1.txt ./pa4 -b examples-2/ops0.b tree0b
 
 test3b: pa4
 	./pa4 -b examples-2/ops3.b tree3b
@@ -44,9 +44,6 @@ test3e: pa4
 
 test4e: pa4
 	./pa4 -e examples-2/invalidtree4.b
-
-test5e: pa4
-	./pa4 -e examples-2/tree0.b
 
 test: pa3
 	./pa3 examples/1K.po KOutputpr KOutputdi KOutputpc

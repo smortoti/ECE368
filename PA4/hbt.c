@@ -18,7 +18,6 @@ void isBST(Tnode * node, int * BSTeval)
         if (node -> left -> key > node -> key)
         {
             (*BSTeval) = 0;
-            return;
         }
     }
 
@@ -27,12 +26,13 @@ void isBST(Tnode * node, int * BSTeval)
         if (node -> right -> key <= node -> key)
         {
             (*BSTeval) = 0;
-            return;
         }
     }
 
     isBST(node -> left, BSTeval);
     isBST(node -> right, BSTeval);
+
+	return;
 }  
 
 void isBal(Tnode * root, int * balEval)
@@ -41,6 +41,8 @@ void isBal(Tnode * root, int * balEval)
     {
         return;
     }
+
+	getBalance(root);
 
     if ((root -> balance < -1) || (root -> balance > 1))
     {
@@ -56,7 +58,7 @@ int getHeight(Tnode * root)
 {
     if (root == NULL)
     {
-        return 0;
+        return -1;
     }
 
     int heightLeft = getHeight(root -> left);
@@ -84,7 +86,7 @@ Tnode * createNode(int key)
     return newNode;
 }
 
-Tnode * CCWRotate(Tnode * node)
+Tnode * CWRotate(Tnode * node)
 {
 	Tnode * left = node -> left;
 	Tnode * rightSub = left -> right;
@@ -92,20 +94,20 @@ Tnode * CCWRotate(Tnode * node)
 	left -> right = node;
 	node -> left = rightSub;
 
-	int leftHeight = getHeight(node -> left);
-	int rightHeight = getHeight(node -> right);
+	getBalance(node);
+	getBalance(left);
 
-	node -> balance = leftHeight - rightHeight;
 
-	leftHeight = getHeight(left -> left);
-	rightHeight = getHeight(left -> right);
+	if (node -> balance != 0 || left -> balance != 0)
+	{
+		fprintf(stderr, "node: %d, left: %d\n", node -> balance, left -> balance);
 
-	left -> balance = leftHeight - rightHeight;
+	}
 
     return left;
 }
 
-Tnode * CWRotate(Tnode * node)
+Tnode * CCWRotate(Tnode * node)
 {
 	Tnode * right = node -> right;
 	Tnode * leftSub = right -> left;
@@ -113,16 +115,14 @@ Tnode * CWRotate(Tnode * node)
 	right -> left = node;
 	node -> right = leftSub;
 
-	int leftHeight = getHeight(node -> left);
-	int rightHeight = getHeight(node -> right);
+	getBalance(node);
+	getBalance(right);
 
-	node -> balance = leftHeight - rightHeight;
+	if (node -> balance != 0 || right -> balance != 0)
+	{
+		fprintf(stderr, "node: %d, right: %d\n", node -> balance, right -> balance);
 
-	leftHeight = getHeight(right -> left);
-	rightHeight = getHeight(right -> right);
-	
-	right -> balance = leftHeight - rightHeight;
-
+	}
 	return right;
 }
 
@@ -132,7 +132,7 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
 	{
 		return newNode;
 	}
-
+	
 	if (newNode -> key <= root -> key)
 	{
 		root -> left = insertNode(root -> left, newNode);
@@ -143,32 +143,32 @@ Tnode * insertNode(Tnode * root, Tnode * newNode)
 		root -> right = insertNode(root -> right, newNode);
 	}
 
-	int leftHeight = getHeight(root -> left);
-	int rightHeight = getHeight(root -> right);
-	
-	root -> balance = leftHeight - rightHeight;
+	getBalance(root);
 
-	if (root -> balance > 1 && newNode -> key < root -> left -> key)
+	if (root -> balance < -1)
 	{
-		return CCWRotate(root);
-
-	}
-	
-	if (root -> balance < -1 && newNode -> key > root -> right -> key)
-	{
-		return CWRotate(root);
-	}
-
-	if (root -> balance > 1 && newNode -> key > root -> left -> key)
-	{
-		root -> left = CWRotate(root -> left);
-		return CCWRotate(root);
+		if (root -> right != NULL)
+		{
+			if (root -> right -> balance > 0)
+			{
+				root -> right = CWRotate(root -> right);
+			}
+			
+			root = CCWRotate(root);
+		}
 	}
 
-	if (root -> balance < -1 && newNode -> key < root -> right -> key)
+	else if (root -> balance > 1)
 	{
-		root -> right = CCWRotate(root -> right);
-		return CWRotate(root);
+		if (root -> left != NULL)
+		{
+			if (root -> left -> balance < 0)
+			{
+				root -> left = CCWRotate(root -> left);
+			}
+
+			root = CWRotate(root);
+		}
 	}
 
 	return root;
@@ -191,7 +191,10 @@ int getBalance(Tnode * root)
 	{
 		return 0;
 	}
-	return (getHeight(root -> left) - getHeight(root -> right));
+
+	root -> balance = getHeight(root -> left) - getHeight(root -> right);
+
+	return (root -> balance);
 }
 
 
@@ -247,7 +250,6 @@ void printPreOrderHelp(FILE * fptr, Tnode * root)
             pattern = 0x03;
         }
     }
-	fprintf(stderr, "key: %d bal: %d\n", root -> key, root -> balance);
 
     fwrite(&(root -> key), sizeof(int), 1, fptr);
     fwrite(&pattern, sizeof(char), 1, fptr);
@@ -276,32 +278,27 @@ Tnode * deleteNode(Tnode * root, int toDelete)
 
 	else
 	{
-		fprintf(stderr, "enter delete\n");
 		if ((root -> left == NULL) || (root -> right == NULL))
 		{
 			Tnode * temp = root -> left ? root -> left : root -> right;
 
 			if (temp == NULL)
 			{
-				fprintf(stderr, "temp is Null\n");
-				temp = root;
-				root = NULL;
+				free (root);
+				return NULL;
 			}
 			else
 			{
-				fprintf(stderr, "copy over\n");
-				*root = *temp;
+				free (root);
+				return temp;
 			}
-			
-			free(temp);
 		}
 		else
 		{
-			fprintf(stderr, "find predecessor\n");
 			Tnode * temp = predecessor(root -> left);
 
 			root -> key = temp -> key;
-			root -> right = deleteNode(root -> right, temp -> key);
+			root -> left = deleteNode(root -> left, temp -> key);
 		}
 	}
 
@@ -310,31 +307,38 @@ Tnode * deleteNode(Tnode * root, int toDelete)
 		return root;
 	}
 
-	int leftHeight = getHeight(root -> left);
-	int rightHeight = getHeight(root -> right);
+	getBalance(root);
 
-	root -> balance = leftHeight - rightHeight;
-
-	if (root -> balance > 1 && getBalance(root -> left) >= 0)
+	if (root -> balance > 1)
 	{
-		return CCWRotate(root);
+		if (root -> left != NULL)
+		{	
+			if (root -> left -> balance > -1)
+			{
+				root = CWRotate(root);
+			}
+			else
+			{
+				root -> left = CCWRotate(root -> left);
+				root = CWRotate(root);
+			}
+		}
 	}
 
-	if (root -> balance > 1 && getBalance(root -> left) < 0)
+	else if (root -> balance < -1)
 	{
-		root -> left = CWRotate(root -> left);
-		return CCWRotate(root);
-	}
-
-	if (root -> balance < -1 && getBalance(root -> right) <= 0)
-	{
-		return CWRotate(root);
-	}
-
-	if (root -> balance < -1 && getBalance(root -> right) > 0)
-	{
-		root -> right = CCWRotate(root -> right);
-		return CWRotate(root);
+		if (root -> right != NULL)
+		{
+			if (root -> right -> balance < 1)
+			{
+				root = CCWRotate(root);
+			}
+			else
+			{
+				root -> right = CWRotate(root -> right);
+				root = CCWRotate(root);
+			}
+		}
 	}
 
 	return root;
