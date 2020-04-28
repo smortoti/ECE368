@@ -193,7 +193,7 @@ int getBalance(Tnode * root)
 }
 
 
-Tnode * successor(Tnode * root)
+Tnode * predecessor(Tnode * root)
 {
 	Tnode * current = root;
 
@@ -245,6 +245,7 @@ void printPreOrderHelp(FILE * fptr, Tnode * root)
             pattern = 0x03;
         }
     }
+	fprintf(stderr, "key: %d bal: %d\n", root -> key, root -> balance);
 
     fwrite(&(root -> key), sizeof(int), 1, fptr);
     fwrite(&pattern, sizeof(char), 1, fptr);
@@ -273,17 +274,20 @@ Tnode * deleteNode(Tnode * root, int toDelete)
 
 	else
 	{
+		fprintf(stderr, "enter delete\n");
 		if ((root -> left == NULL) || (root -> right == NULL))
 		{
 			Tnode * temp = root -> left ? root -> left : root -> right;
 
 			if (temp == NULL)
 			{
+				fprintf(stderr, "temp is Null\n");
 				temp = root;
 				root = NULL;
 			}
 			else
 			{
+				fprintf(stderr, "copy over\n");
 				*root = *temp;
 			}
 			
@@ -291,7 +295,8 @@ Tnode * deleteNode(Tnode * root, int toDelete)
 		}
 		else
 		{
-			Tnode * temp = successor(root -> right);
+			fprintf(stderr, "find predecessor\n");
+			Tnode * temp = predecessor(root);
 
 			root -> key = temp -> key;
 			root -> right = deleteNode(root -> right, temp -> key);
