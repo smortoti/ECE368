@@ -1,7 +1,7 @@
 #include "hbt.h"
 
 void isBST(Tnode * root, int * BSTeval);
-int isBal(Tnode * root);
+void isBal(Tnode * root, int * balEval);
 
 void findHeights(Tnode * root, int * leftBal, int * rightBal);
 

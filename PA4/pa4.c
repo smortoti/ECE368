@@ -70,6 +70,7 @@ int main(int argc, char ** argv)
         long ncount = 0;
         int key = 0;
         int BSTeval = 1;
+		int balEval = 1;
 
         Tnode * root = NULL;
 
@@ -119,9 +120,9 @@ int main(int argc, char ** argv)
         if(out1 == 1)
         {
             isBST(root, &BSTeval);
-            out3 = isBal(root);
+            isBal(root, &balEval);
 
-            fprintf(stdout, "%d,%d,%d\n", out1, BSTeval, out3);
+            fprintf(stdout, "%d,%d,%d\n", out1, BSTeval, balEval);
             fclose(fptr);
             free(pattern_array);
             free(key_array);

@@ -35,19 +35,21 @@ void isBST(Tnode * node, int * BSTeval)
     isBST(node -> right, BSTeval);
 }  
 
-int isBal(Tnode * root)
+void isBal(Tnode * root, int * balEval)
 {
     if (root == NULL)
     {
-        return 1;
+        return;
     }
 
-    if ((root -> balance != -1) || (root -> balance != 0) || (root -> balance != 1))
+    if ((root -> balance < -1) || (root -> balance > 1))
     {
-        return 0;
+		*balEval = 0;
+        return;
     }
 
-    return (isBal(root -> left) && (isBal(root -> right)));
+    isBal(root -> left, balEval);
+	isBal(root -> right, balEval);
 }
 
 int getHeight(Tnode * root)
@@ -197,9 +199,9 @@ Tnode * predecessor(Tnode * root)
 {
 	Tnode * current = root;
 
-	while (current -> left != NULL)
+	while (current -> right != NULL)
 	{
-		current = current -> left;
+		current = current -> right;
 	}
 
 	return current;
@@ -296,7 +298,7 @@ Tnode * deleteNode(Tnode * root, int toDelete)
 		else
 		{
 			fprintf(stderr, "find predecessor\n");
-			Tnode * temp = predecessor(root);
+			Tnode * temp = predecessor(root -> left);
 
 			root -> key = temp -> key;
 			root -> right = deleteNode(root -> right, temp -> key);
